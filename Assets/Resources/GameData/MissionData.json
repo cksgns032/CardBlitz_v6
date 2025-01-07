@@ -1,0 +1,90 @@
+[
+  {
+    "ID": 1,
+    "TYPE": "day",
+    "NAME": "승리하기!!",
+    "STORY": "상대방과 겨뤄서 3승!!",
+    "CURRENT": 0,
+    "GOAL": 3,
+    "REWARDTYPE": "GOLD",
+    "REWARD": 500,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 2,
+    "TYPE": "day",
+    "NAME": "출석 체크",
+    "STORY": "한번만 출석하자...",
+    "CURRENT": 0,
+    "GOAL": 1,
+    "REWARDTYPE": "GEM",
+    "REWARD": 3,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 3,
+    "TYPE": "day",
+    "NAME": "경제 활성화",
+    "STORY": "상점에서 물건을 사볼까?",
+    "CURRENT": 0,
+    "GOAL": 10,
+    "REWARDTYPE": "GEM",
+    "REWARD": 10,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 4,
+    "TYPE": "day",
+    "NAME": "일일 퀘스트 클리어",
+    "STORY": "모든 일일 퀘스트를 클리어 해봅시다",
+    "CURRENT": 0,
+    "GOAL": 3,
+    "REWARDTYPE": "GOLD",
+    "REWARD": 1000,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 5,
+    "TYPE": "week",
+    "NAME": "젬 사용",
+    "STORY": "상점에서 젬 사용하기",
+    "CURRENT": 0,
+    "GOAL": 3000,
+    "REWARDTYPE": "GEM",
+    "REWARD": 500,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 6,
+    "TYPE": "week",
+    "NAME": "연승하기",
+    "STORY": "3연승 가능한가요?",
+    "CURRENT": 0,
+    "GOAL": 3,
+    "REWARDTYPE": "GEM",
+    "REWARD": 300,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 7,
+    "TYPE": "week",
+    "NAME": "3성 몬스터 소환",
+    "STORY": "3성 몬스터 20번 소환",
+    "CURRENT": 0,
+    "GOAL": 20,
+    "REWARDTYPE": "GEM",
+    "REWARD": 500,
+    "ISCLEAR": "FALSE"
+  },
+  {
+    "ID": 8,
+    "TYPE": "week",
+    "NAME": "주간 퀘스트 클리어",
+    "STORY": "모든 주간 퀘스트를 클리어 해봅시다",
+    "CURRENT": 0,
+    "GOAL": 3,
+    "REWARDTYPE": "GEM",
+    "REWARD": 1000,
+    "ISCLEAR": "FALSE"
+  }
+]
