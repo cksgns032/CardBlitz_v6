@@ -15,43 +15,48 @@ public class GameUI : MonoBehaviour
 
     public void Init()
     {
-        // °á°ú ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         resultTxt = gameObject.transform.Find("ResultText").GetComponent<Text>();
         resultTxt.gameObject.SetActive(false);
         resultAni = resultTxt.gameObject.GetComponent<Animation>();
 
-        // ³» Á¤º¸
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         myProfile = gameObject.transform.Find("MyProfile").GetComponentInChildren<GameProfile>();
-        myProfile.Init();
-        myProfile.GetColor(UserData.team);
+        if (myProfile)
+        {
+            myProfile.Init();
+            myProfile.GetColor(UserData.team);
+        }
 
-        // Àû ÆÀ ¼¼ÆÃ
+        // ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         enemyColor = UserData.team == Team.Red ? Team.Blue : Team.Red;
-        // Àû Á¤º¸
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         enemyProfile = gameObject.transform.Find("EnemyProfile").GetComponentInChildren<GameProfile>();
-        if (cardGroup) 
-        { 
-            enemyProfile.Init(); 
-            enemyProfile.GetColor(enemyColor); 
+        if (enemyProfile)
+        {
+            enemyProfile.Init();
+            enemyProfile.GetColor(enemyColor);
         }
 
         cardGroup = gameObject.GetComponentInChildren<CardGroup>(true);
-        if (cardGroup) { 
-            cardGroup.Init(); 
+        if (cardGroup)
+        {
+            cardGroup.Init();
         }
 
         shuffleBtn = gameObject.transform.Find("Shuffle").GetComponent<Button>();
         shuffleBtn.onClick.AddListener(cardGroup.Shuffle);
 
         Timer = gameObject.GetComponentInChildren<GameTimer>(true);
-        if (Timer) { 
-            Timer.Init(); 
+        if (Timer)
+        {
+            Timer.Init();
         }
     }
-    #region °ÔÀÌÁö °ü¸®
+    #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void UseCost(Team team, int useCost)
     {
-        if(team == UserData.team)
+        if (team == UserData.team)
         {
             myProfile.UpdateGauge(useCost);
         }
@@ -60,15 +65,15 @@ public class GameUI : MonoBehaviour
             enemyProfile.UpdateGauge(useCost);
         }
     }
-    #endregion °ÔÀÌÁö °ü¸®
-    #region Å¸ÀÓ °ü¸®
+    #endregion ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    #region Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void UpdateTime(float timeNum)
     {
         Timer.UpdateTimer(timeNum);
     }
-    #endregion Å¸ÀÓ °ü¸®
+    #endregion Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    // °á°ú ³ªÅ¸³¿
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
     public void Result(RESULT result)
     {
         resultTxt.gameObject.SetActive(true);
@@ -93,7 +98,7 @@ public class GameUI : MonoBehaviour
     }
     public void UpdateTower(Team hitTeam, float attack)
     {
-        if(hitTeam == UserData.team)
+        if (hitTeam == UserData.team)
         {
             myProfile.SetTowerHp(attack);
         }
@@ -102,7 +107,7 @@ public class GameUI : MonoBehaviour
             enemyProfile.SetTowerHp(attack);
         }
     }
-    
+
     public GameProfile MyProfile()
     {
         return myProfile;
@@ -111,13 +116,13 @@ public class GameUI : MonoBehaviour
     {
         return enemyProfile;
     }
-    public void CargeGauge()
+    public void ChargeGauge()
     {
-        if(myProfile)
+        if (myProfile)
         {
             myProfile.UpdateGauge(1);
         }
-        if(enemyProfile)
+        if (enemyProfile)
         {
             enemyProfile.UpdateGauge(1);
         }

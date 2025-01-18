@@ -5,15 +5,15 @@ using UnityEngine.AI;
 
 public class GameManager : SingleTon<GameManager>
 {
-    // À¯ÀúÀÇ Ä«µå Á¤º¸¸¦ °¡Á®¿Í¼­ ·£´ýÇÑ 5ÀåÀ» ¼±º° ¹èÆ÷
-    // °ÔÀÓÀÇ Å¸ÀÌ¸Ó Á¶Àý 
-    // °ÔÀÓ °á°ú ³ªÅ¸³¿
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 5ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½
     GameMap map;
     GameUI gameUI;
     Fade fade;
 
-    List<Player> myList = new List<Player>();// ¾Æ±º ¿ÀºêÁ§Æ® ¸®½ºÆ®
-    List<Player> enemyList = new List<Player>();// Àû±º ¿ÀºêÁ§Æ® ¸®½ºÆ®
+    List<Player> myList = new List<Player>();// ï¿½Æ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
+    List<Player> enemyList = new List<Player>();// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®
 
     bool isClaer = false;
     float timeNum = 100;
@@ -22,31 +22,31 @@ public class GameManager : SingleTon<GameManager>
 
     void Start()
     {
-        // ¸Å´ÏÀú ÃÊ±âÈ­
+        // ï¿½Å´ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         AudioManager.Instance.LoadSound(AudioManager.Type.BGM, "BattleSound");
         AudioManager.Instance.PlayBgm(true, "BattleSound");
         PoolingManager.Instance.Init();
-        // ±âº»Àû ÇÁ¸®Æé ÃÊ±âÈ­
+        // ï¿½âº»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
         fade = GameObject.FindAnyObjectByType<Fade>();
         if (fade != null)
         {
             fade.FadeIn();
         }
         gameUI = GameObject.FindAnyObjectByType<GameUI>();
-        if(gameUI)
+        if (gameUI)
         {
             gameUI.Init();
-            gameUI.UpdateTime(timeNum);
         }
         GameObject mapPos = GameObject.Find("MapPos");
         GameObject mapObj = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Map"), mapPos.GetComponent<Transform>());
         map = mapObj.GetComponent<GameMap>();
         map.Init();
         CardFill();
+        GaugeFill();
     }
     public GameMap GetGameMap()
     {
-        if(map == null)
+        if (map == null)
         {
             GameObject mapPos = GameObject.Find("MapPos");
             map = mapPos.GetComponentInChildren<GameMap>();
@@ -68,7 +68,7 @@ public class GameManager : SingleTon<GameManager>
             gameUI.Result(RESULT.DRAW);
         }
     }
-    // ½ºÆùÀ§Ä¡¿¡ À¯´Ö ¼ÒÈ¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     public void CreateHero(string objTag, string objName, Team team, int useCost)
     {
         Player monObj = Instantiate<Player>(Resources.Load<Player>("Prefabs/Monster/" + objName));
@@ -89,17 +89,17 @@ public class GameManager : SingleTon<GameManager>
         }
         monObj.gameObject.layer = LayerMask.NameToLayer("HERO");
         monObj.gameObject.tag = "Player";
-        monObj.Init(team);
+        monObj.Init();
         monObj.AgentMaskSet(objTag, team);
-        // ¿ÀºêÁ§Æ®ÀÇ À§Ä¡, Á¤º¸¸¦ º¸³¿
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         //TCPClient.Instance.CreateObj(MonName, tagName);
 
-        // ³» ÆÀÀÌ ¼ÒÈ¯À» ÇßÀ» ¶§
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         if (team == UserData.team)
         {
             myList.Add(monObj);
         }
-        // Àû ÆÀÀÌ ¼ÒÈ¯À» ÇßÀ» ¶§
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         else
         {
             enemyList.Add(monObj);
@@ -114,7 +114,7 @@ public class GameManager : SingleTon<GameManager>
     {
         return enemyList;
     }
-    #region °ÔÀÓ °á°ú 
+    #region ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
     public void ResultGame(RESULT result)
     {
         for (int i = 0; i < myList.Count; i++)
@@ -137,15 +137,15 @@ public class GameManager : SingleTon<GameManager>
     {
         return isClaer;
     }
-    #endregion °ÔÀÓ °á°ú
+    #endregion ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 
-    #region ¸Þ´º ÂÊÀ¸·Î Åä½º
-    public void UpdateHp(Team hitTeam,float attack)
+    #region ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ä½º
+    public void UpdateHp(Team hitTeam, float attack)
     {
-        gameUI.UpdateTower(hitTeam,attack);
+        gameUI.UpdateTower(hitTeam, attack);
     }
-    #endregion ¸Þ´º ÂÊÀ¸·Î Åä½º
-    #region °ÔÀÌÁö Ãß°¡
+    #endregion ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ä½º
+    #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     public void GaugeFill()
     {
         StartCoroutine(GaugeFill(gaugeTime));
@@ -155,11 +155,11 @@ public class GameManager : SingleTon<GameManager>
         while (GameManager.Instance.GetClear() == false)
         {
             yield return new WaitForSeconds(cardTime);
-            gameUI.CargeGauge();
+            gameUI.ChargeGauge();
         }
     }
-    #endregion °ÔÀÌÁö Ãß°¡
-    #region Ä«µå Ãß°¡
+    #endregion ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+    #region Ä«ï¿½ï¿½ ï¿½ß°ï¿½
     public void CardFill()
     {
         StartCoroutine(CardFill(cardTime));
@@ -172,9 +172,9 @@ public class GameManager : SingleTon<GameManager>
             gameUI.CargeCard();
         }
     }
-    #endregion Ä«µå Ãß°¡
-    #region °ÔÀÓ ¹öÇÁ
-    // ÀÌ¼Ó Áõ°¡ ¹öÇÁ
+    #endregion Ä«ï¿½ï¿½ ï¿½ß°ï¿½
+    #region ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void LastBuffe()
     {
         cardTime = 1.5f;
@@ -193,5 +193,5 @@ public class GameManager : SingleTon<GameManager>
             }
         }
     }
-    #endregion °ÔÀÓ ¹öÇÁ
+    #endregion ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }

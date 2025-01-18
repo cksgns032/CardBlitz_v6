@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -10,19 +11,25 @@ public class Player : MonoBehaviour
     NavMeshAgent agent;
     Rigidbody rigid;
     Animator ani;
-    [SerializeField] PlayerAttackRange attackRangeCom ;
-    [SerializeField] Collider[] enemyList;
+    [SerializeField] PlayerAttackRange attackRangeCom;
     EventButton btnEvent;
     [SerializeField] HeroData info = new HeroData();
     [SerializeField] List<Buff> buffList = new List<Buff>();
+    [SerializeField] List<Player> enemyList = new List<Player>();
 
-    bool isDie = false;// »ı »ç ¿©ºÎ
-    bool isCharge = false;// Á¡·É ¿©ºÎ
-
-    public void Init(Team team)
+    bool isDie = false;
+    bool isCharge = false;
+    WaitForSeconds waitAttack;
+    Coroutine attackCoroutine;
+    float attackDelay;
+    public void Init()
     {
         damageObj = transform.Find("DamagePos").gameObject;
         attackRangeCom = GetComponentInChildren<PlayerAttackRange>(true);
+        if (attackRangeCom)
+        {
+            attackRangeCom.Init();
+        }
 
         agent = GetComponent<NavMeshAgent>();
         if (agent)
@@ -40,61 +47,49 @@ public class Player : MonoBehaviour
             rigid.isKinematic = true;
         }
 
-        // todo : ³» ¸ó½ºÅÍ ÀÌ¸§À» °¡Áö°í ¸ó½ºÅÍ Å×ÀÌºí ÀĞ¾î¼­ ´É·ÁÄ¡ Àû¿ë
+        // todo : ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½Ğ¾î¼­ ï¿½É·ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         SetStat();
     }
-    public void SetTriggerLyaer()
+    public void SetTarget()
     {
-        // layer trigger Controll
-        for (int i = 0; i < 32; i++)
+        // ëª©í‘œ ì§€ì  ì„¤ì • ë° ì´ë™
+        if (agent.enabled == true)
         {
-            string layerName = LayerMask.LayerToName(i);
-            if (!string.IsNullOrEmpty(layerName)) // ºñ¾î ÀÖÁö ¾ÊÀº ·¹ÀÌ¾î¸¸ Ãâ·Â
+            if (enemyList.Count > 0)
             {
-                if(layerName == "HERO")
+                agent.SetDestination(enemyList[0].transform.position);
+            }
+            else
+            {
+                if (gameObject.layer == LayerMask.NameToLayer("HERO"))
                 {
-                    continue;
+                    GameObject obj = GameObject.Find("EnemyGoal");
+                    agent.SetDestination(obj.transform.position);
                 }
-                bool isTrigger = true;
-                if (layerName == "ENEMY")
+                else if (gameObject.layer == LayerMask.NameToLayer("ENEMY"))
                 {
-                    isTrigger = false;
+                    GameObject obj = GameObject.Find("MyGoal");
+                    agent.SetDestination(obj.transform.position);
                 }
-                int myLayer = LayerMask.NameToLayer("HERO");
-                int otherLayer = LayerMask.NameToLayer(layerName);
-                Physics.IgnoreLayerCollision(myLayer, otherLayer, isTrigger);
             }
         }
-    }
-    public void ReMoveBuff(Buff buff)
-    {
-        foreach(Buff bf in buffList)
-        {
-            if(buff == bf)
-            {
-                buffList.Remove(bf);
-                break;
-            }
-        }
-    }
-    public void AddBuff(BuffData data)
-    {
-        Buff buff = new Buff();
-        buff.SetBuff(data, this);
-        buffList.Add(buff);
     }
     public void SetStat()
     {
         info.hp = 100;
-        info.attack = 100;
         info.defence = 1;
+        info.attack = 100;
+        info.attackSpeed = 5;
+        waitAttack = new WaitForSeconds(info.attackSpeed);
         info.attackCnt = 1;
         info.attackRange = 10;
         info.moveSpeed = 1f;
+        attackDelay = 0;
         agent.speed = info.moveSpeed;
+        agent.stoppingDistance = info.attackRange;
+        ani.SetFloat("Blend", agent.speed);
     }
-    // ¶óÀÎ Á¤ÇÏ´Â ÇÔ¼ö
-    public void AgentMaskSet(string type,Team team)
+    public void AgentMaskSet(string type, Team team)
     {
         int areaNum;
         switch (type)
@@ -102,7 +97,7 @@ public class Player : MonoBehaviour
             case "TOP":
                 areaNum = NavMesh.GetAreaFromName("TOP");
                 agent.areaMask = 1 << areaNum;
-                if(UserData.team == team)
+                if (UserData.team == team)
                     transform.position = GameObject.FindGameObjectWithTag("TOPSPAWN").transform.position;
                 else
                     transform.position = GameObject.FindGameObjectWithTag("ETOPSPAWN").transform.position;
@@ -127,8 +122,8 @@ public class Player : MonoBehaviour
         }
         agent.enabled = true;
         rigid.isKinematic = false;
+        SetTarget();
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (GameManager.Instance.GetClear())
@@ -136,8 +131,8 @@ public class Player : MonoBehaviour
         if (other.gameObject.tag == "EVENTBUTTON")
         {
             btnEvent = other.gameObject.GetComponent<EventButton>();
-            // Â÷Â¡ ÁßÀÎÁö ÀÌ¹Ì ³» ÆÀÀÌ Á¡·ÉÀ» Çß´ÂÁö
-            if(btnEvent.CheckState() == false && btnEvent.GetColor() != UserData.team)
+            // ï¿½ï¿½Â¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½ï¿½ï¿½
+            if (btnEvent.CheckState() == false && btnEvent.GetColor() != UserData.team)
             {
                 isCharge = true;
                 btnEvent.Charging(isCharge);
@@ -152,14 +147,17 @@ public class Player : MonoBehaviour
     {
         if (GameManager.Instance.GetClear())
             return;
-        // ¹öÆ° Á¡·É
+        // ìš°ì„ ìˆœìœ„ 
+        // ìœ ë‹› ê³µê²© < ë²„íŠ¼ ì ë ¹ 
+
+        // ì´ë²¤íŠ¸ ë²„íŠ¼ ì ë ¹
         if (other.gameObject.tag == "EVENTBUTTON" && isCharge)
         {
             EventButton eventCom = other.gameObject.GetComponent<EventButton>();
             if (eventCom != null)
             {
                 if (eventCom.GetColor() != UserData.team)
-                {                 
+                {
                     if (eventCom.ChargeImage(1 * Time.deltaTime, LayerMask.LayerToName(gameObject.layer)))
                     {
                         isCharge = false;
@@ -168,53 +166,28 @@ public class Player : MonoBehaviour
                 }
             }
         }
-    }
-    public void Attack()
-    {
-        if (GameManager.Instance.GetClear())
-            return;
-        Debug.Log("Attack");
-        // °¡±î¿î ¼øÀ¸·Î ¸®½ºÆ®¸¦ Á¤·Ä ÈÄ 
-        //enemyList.Sort(EnemySort);
-        // °ø°İ ¼ö ¸¸Å­ for¹®À» µ¹·ÁÁà¾ßÇÔ
-        for(int i = 0; i < enemyList.Length; i++)
+        // ìœ ë‹› ê³µê²©
+        if (!isCharge && enemyList.Count > 0)
         {
-            if (i >= info.attackCnt)
-                return;
-            else
+            if (attackCoroutine == null)
             {
-                Debug.Log(enemyList[0].gameObject.name);
-                // ¼º
-                if (enemyList[i].gameObject.tag == "EnemyTower")
-                {
-                    Team hitTeam = Team.Red == UserData.team ? Team.Blue : Team.Red;
-                    GameManager.Instance.UpdateHp(hitTeam,info.attack);
-                }
-                // ¸ó½ºÅÍ
-                else if (enemyList[i].gameObject.tag == "Player")
-                {
-                    if (enemyList[i].GetComponent<Player>().isDie == false)
-                        enemyList[i].GetComponent<Player>().Damage(info.attack);
-                }
+                attackCoroutine = StartCoroutine(IEAttack());
             }
         }
-        /*for (int i = 0; i < info.attackCnt; i++)
+    }
+    #region enemyList
+    public bool CheckList(Player player)
+    {
+        foreach (Player data in enemyList)
         {
-            Debug.Log(enemyList[0].gameObject.name);
-            // ¼º
-            if (enemyList[i].gameObject.tag == "EnemyTower")
+            if (data == player)
             {
-               GameManager.Instance.UpdateHp(info.attack);
+                return false;
             }
-            // ¸ó½ºÅÍ
-            else if(enemyList[i].gameObject.tag == "Player")
-            {
-                if (enemyList[i].GetComponent<Player>().isDie == false)
-                    enemyList[i].GetComponent<Player>().Damage(info.attack);
-            }
-        }*/
-    }   
-    int EnemySort(GameObject left, GameObject right)
+        }
+        return true;
+    }
+    int EnemySort(Player left, Player right)
     {
         float leftDis = Vector3.Distance(this.gameObject.transform.position, left.transform.position);
         float rightDis = Vector3.Distance(this.gameObject.transform.position, right.transform.position);
@@ -222,26 +195,100 @@ public class Player : MonoBehaviour
         {
             return -1;
         }
+        else if (leftDis == rightDis)
+        {
+            return 0;
+        }
         else
         {
             return 1;
+        }
+    }
+    public void AddEemyList(Player enemyPlayer)
+    {
+        if (CheckList(enemyPlayer))
+        {
+            enemyList.Add(enemyPlayer);
+            // ë‚´ ìœ„ì¹˜ ê¸°ì¤€ìœ¼ë¡œ sort
+            enemyList.Sort(EnemySort);
+            SetTarget();
+        }
+    }
+    public void RemoveEnemyList(Player enemyPlayer)
+    {
+        foreach (Player player in enemyList)
+        {
+            if (player == enemyPlayer)
+            {
+                enemyList.Remove(player);
+                SetTarget();
+                break;
+            }
+        }
+    }
+    #endregion enemyList
+    #region attack
+    IEnumerator IEAttack()
+    {
+        if (GameManager.Instance.GetClear())
+        {
+            StopCoroutine(attackCoroutine);
+            yield return null;
+        }
+        while (enemyList.Count > 0)
+        {
+            Attack();
+            yield return waitAttack;
+        }
+    }
+    public void Attack()
+    {
+        if (GameManager.Instance.GetClear())
+            return;
+        if (attackDelay > info.attackSpeed)
+        {
+            // ê³µê²© ê°€ëŠ¥ ìœ ë‹›ì²´í¬ ê³µê²©
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                if (i >= info.attackCnt)
+                    return;
+                else
+                {
+                    Debug.Log("real Attack");
+                    ani.SetTrigger("Attack");
+                    // íƒ€ì›Œ ê³µê²©
+                    if (enemyList[i].gameObject.tag == "EnemyTower")
+                    {
+                        Team hitTeam = Team.Red == UserData.team ? Team.Blue : Team.Red;
+                        GameManager.Instance.UpdateHp(hitTeam, info.attack);
+                    }
+                    // ëª¬ìŠ¤í„° ê³µê²©
+                    else if (enemyList[i].gameObject.tag == "Player")
+                    {
+                        if (enemyList[i].GetComponent<Player>().isDie == false)
+                        {
+                            //enemyList[i].GetComponent<Player>().Damage(info.attack);
+                        }
+                    }
+                    attackDelay = 0;
+                }
+            }
         }
     }
     public void Damage(float damage)
     {
         GameObject obj = PoolingManager.Instance.Pool.Get();
         DamageTxt txt = obj.GetComponent<DamageTxt>();
-        if(txt != null)
+        if (txt != null)
         {
-            txt.Setting(damageObj.transform.position,damage);
+            txt.Setting(damageObj.transform.position, damage);
         }
-        // ÀÚ±âÀÇ ÇÇ°¡ ´â¾Æ¾ß µÈ´Ù damage¸¸Å­
-        if(info.hp - damage > 0)
+        // ì£½ëŠ”ì§€ í™•ì¸
+        if (info.hp - damage > 0)
         {
             info.hp -= (int)damage;
             ani.SetTrigger("Hit");
         }
-        // ¸¸¾à ÇÇ°¡ 0ÀÌÇÏ¸é 
         else
         {
             Die();
@@ -252,13 +299,6 @@ public class Player : MonoBehaviour
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
         isDie = true;
-        for(int i = 0; i < enemyList.Length; i++)
-        {
-            /*if (enemyList[i] == gameObject)
-            {
-                enemyList.RemoveAt(i);
-            }*/
-        }
         if (isCharge)
         {
             isCharge = false;
@@ -266,6 +306,26 @@ public class Player : MonoBehaviour
         }
         ani.SetTrigger("Death");
     }
+    #endregion attack
+    #region buff
+    public void ReMoveBuff(Buff buff)
+    {
+        foreach (Buff bf in buffList)
+        {
+            if (buff == bf)
+            {
+                buffList.Remove(bf);
+                break;
+            }
+        }
+    }
+    public void AddBuff(BuffData data)
+    {
+        Buff buff = new Buff();
+        buff.SetBuff(data, this);
+        buffList.Add(buff);
+    }
+    #endregion buff
     void Go()
     {
         if (gameObject.layer == LayerMask.NameToLayer("ENEMY"))
@@ -285,30 +345,8 @@ public class Player : MonoBehaviour
     {
         if (isDie == true || GameManager.Instance.GetClear())
             return;
-        // ÀÌµ¿ ¸ñÇ¥ ¼³Á¤
-        if (agent.hasPath == false && agent.enabled == true)
-        {
-            if (gameObject.layer == LayerMask.NameToLayer("HERO"))
-            {
-                GameObject obj = GameObject.Find("EnemyGoal");
-                agent.SetDestination(obj.transform.position);
-            }
-            else if (gameObject.layer == LayerMask.NameToLayer("ENEMY"))
-            {
-                GameObject obj = GameObject.Find("MyGoal");
-                agent.SetDestination(obj.transform.position);
-            }
-        }
 
-        // Àû Ã£±â
-        /*LayerMask layerNum = LayerMask.GetMask("ENEMY");
-        enemyList = Physics.OverlapSphere(transform.position, info.attackRange, layerNum);
-        if (agent.enabled == true && enemyList.Length > 0 && isCharge == false)
-        {
-            agent.isStopped = true;
-            agent.velocity = Vector3.zero;
-            ani.SetTrigger("Attack");
-        }*/
+        attackDelay += Time.deltaTime;
     }
     // test
     /*private void OnDrawGizmos()

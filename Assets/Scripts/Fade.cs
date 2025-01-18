@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Fade : UIBase
 {
     Image bg;
-
+    public Coroutine fadeCoroutine;
     // Start is called before the first frame update
     public override void Init(PopUp_Name uiname)
     {
@@ -26,26 +26,27 @@ public class Fade : UIBase
     public void FadeIn()
     {
         Draw(true);
-        StartCoroutine(IEFade(Color.black, new Color(0,0,0,0), 2f, false));
+        fadeCoroutine = StartCoroutine(IEFade(Color.black, new Color(0, 0, 0, 0), 2f, false));
     }
     public void FadeOut()
     {
         Draw(true);
-        StartCoroutine(IEFade(new Color(0, 0, 0, 0), Color.black, 1f,true));
+        fadeCoroutine = StartCoroutine(IEFade(new Color(0, 0, 0, 0), Color.black, 1f, true));
     }
-    IEnumerator IEFade(Color startColor, Color endColor, float delayTime, bool active )
+    IEnumerator IEFade(Color startColor, Color endColor, float delayTime, bool active)
     {
         bg.gameObject.SetActive(true);
         bg.color = startColor;
         float elapsed = 0;
-        while(true)
+        while (true)
         {
             elapsed += Time.deltaTime / delayTime;
             bg.color = Color.Lerp(startColor, endColor, elapsed);
-            if(elapsed >= 1.0f)
+            if (elapsed >= 1.0f)
             {
-                if(!active)
+                if (!active)
                 {
+                    StopCoroutine(fadeCoroutine);
                     Close();
                 }
                 break;

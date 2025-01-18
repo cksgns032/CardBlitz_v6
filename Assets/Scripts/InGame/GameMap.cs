@@ -42,9 +42,10 @@ public class GameMap : MonoBehaviour
     }
     // layer = teamload
     //  tag  = objtag
-    // ¶óÀÎ ¼±ÅÃ
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void HitLine(string objTag)
     {
+        Debug.Log(objTag);
         switch (objTag)
         {
             case "TOP":
@@ -99,7 +100,7 @@ public class GameMap : MonoBehaviour
         }
         //TCPClient.Instance.SendPack(GameProtocolType.CREATEOBJ, objTag, "DarkNight", UserData.team);
     }
-    // ¹Ù´Ú »ö º¯È­
+    // ï¿½Ù´ï¿½ ï¿½ï¿½ ï¿½ï¿½È­
     public void ResetColor(string objtag)
     {
         switch (objtag)

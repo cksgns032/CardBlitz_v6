@@ -6,7 +6,6 @@ public class Title : SceneBaseManager
 {
     Animation tap;
     Animation titleIdle;
-    Fade fade;
 
     // Start is called before the first frame update
     void Start()
@@ -28,31 +27,17 @@ public class Title : SceneBaseManager
         titleIdle = GetComponent<Animation>();
         titleIdle.Play();
 
-        fade = (Fade)UIManager.Instance.GetPopUp(PopUp_Name.Fade,false);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             AudioManager.Instance.PlaySfx(AudioManager.Sfx.Click, "Click");
-            StartCoroutine(IENextScene());
+            SceneLoadManager.Instance.LoadSceneMode("LobbyScene");
         }
     }
-    IEnumerator IENextScene()
-    {
-        yield return new WaitForSeconds(1);
-        if(fade)
-        {
-            fade.FadeOut();
-        }
-        yield return new WaitForSeconds(1);
 
-        AsyncOperation asyn = SceneManager.LoadSceneAsync("LobbyScene");
-        while (!asyn.isDone)
-        {
-            yield return null;
-        }
-    }
 }

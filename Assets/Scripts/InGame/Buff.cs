@@ -4,16 +4,16 @@ using UnityEngine;
 public class Buff : MonoBehaviour
 {
     float buffTime;
-    // ¹öÇÁ ³»¿ë
-    int hp;// ÇÇ
-    int defence;// ¹æ¾î·Â
-    float moveSpeed;// ÀÌµ¿¼Óµµ
-    float attackSpeed;// °ø°Ý¼Óµµ
-    float attackRange;// °ø°Ý¹üÀ§
-    int attackCnt;// °ø°Ý°¡´É ¼ö
-    float attack;// °ø°Ý·Â
-    float criPercent;// Å©¸®Æ¼ÄÃ È®·ü
-    float criAdd;// Å©¸®Æ¼ÄÃ µ¥¹ÌÁö °ö¼À
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    int hp;// ï¿½ï¿½
+    int defence;// ï¿½ï¿½ï¿½ï¿½
+    float moveSpeed;// ï¿½Ìµï¿½ï¿½Óµï¿½
+    float attackSpeed;// ï¿½ï¿½ï¿½Ý¼Óµï¿½
+    float attackRange;// ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½
+    int attackCnt;// ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ ï¿½ï¿½
+    float attack;// ï¿½ï¿½ï¿½Ý·ï¿½
+    float criPercent;// Å©ï¿½ï¿½Æ¼ï¿½ï¿½ È®ï¿½ï¿½
+    float criAdd;// Å©ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     float currentTime;
 
     WaitForSeconds wait = new WaitForSeconds(0.1f);
@@ -38,12 +38,10 @@ public class Buff : MonoBehaviour
         currentTime = 0;
         DeActivation();
     }
-    
-
     // Update is called once per frame
     void DeActivation()
     {
-        if(player && !player.GetState())
+        if (player && !player.GetState())
         {
             player.ReMoveBuff(this);
         }

@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndDragHandler, IDragHandler
 {
-    // Ä«µå µ¥ÀÌÅÍ ¹Þ¾Æ ¿À±â
-    // ÄÚ½ºÆ®, Å¸ÀÔ, °ø°Ý·Â, ÇÇ, ÀÌ¸§
+    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // ï¿½Ú½ï¿½Æ®, Å¸ï¿½ï¿½, ï¿½ï¿½ï¿½Ý·ï¿½, ï¿½ï¿½, ï¿½Ì¸ï¿½
     string cardName;
     int selectCardNum;
 
@@ -16,7 +16,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     RectTransform rectCom;
     Vector2 rectVec2;
 
-    // µå·¡±×
+    // ï¿½å·¡ï¿½ï¿½
     public void OnDrag(PointerEventData eventData)
     {
         SelectLine();
@@ -27,7 +27,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         BtnClick();
         cardGroup.DeSelect();
     }
-    // Å¬¸¯
+    // Å¬ï¿½ï¿½
     public void OnPointerDown(PointerEventData eventData)
     {
         if (GameManager.Instance.GetClear())
@@ -44,7 +44,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     {
         cardGroup = GetComponentInParent<CardGroup>();
         rectCom = GetComponent<RectTransform>();
-        rectVec2 = new Vector2(rectCom.anchoredPosition.x,rectCom.anchoredPosition.y);
+        rectVec2 = new Vector2(rectCom.anchoredPosition.x, rectCom.anchoredPosition.y);
     }
     public void Setting(CardInfo cardInfo)
     {
@@ -52,17 +52,17 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         switch (cardinfo.id)
         {
             case "0":
-                cardName = "Catcher";
+                cardName = "Thumbnail_Unit_Archer";
                 break;
             case "1":
-                cardName = "Fishguard";
+                cardName = "Thumbnail_Unit_Buffer";
                 break;
             case "2":
-                cardName = "Monkeydong";
+                cardName = "Thumbnail_Unit_Knight_OneHandLongSword";
                 break;
         }
         charImg = gameObject.transform.GetChild(0).GetComponent<Image>();
-        Sprite imga = Resources.Load<Sprite>("Image/Charactor/" + cardName);
+        Sprite imga = Resources.Load<Sprite>("Texture/Charactor/" + cardName);
         charImg.sprite = imga;
     }
     public CardInfo GetCardInfo()
@@ -104,8 +104,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
                 cardGroup.UseCard();
             }
         }
-        if(hit.transform != null)
+        if (hit.transform != null)
+        {
+            Debug.Log(hit.transform.gameObject.name);
             map.ResetColor(hit.transform.gameObject.tag);
+        }
+
         selectCardNum = 0;
     }
     void SelectLine()
@@ -123,7 +127,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     }
     public void UpPosition()
     {
-        gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectVec2.x,rectVec2.y+60);
+        gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectVec2.x, rectVec2.y + 60);
     }
     public void DownPosition()
     {

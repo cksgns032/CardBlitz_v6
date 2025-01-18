@@ -28,7 +28,7 @@ public class LobbyScene : MonoBehaviour
         if (shop) shop.gameObject.SetActive(shop.GetState() == state);
         UIManager.Instance.AllClose();
         SendData sendData = new SendData();
-        sendData.SetData(ObserveData.ChangeMain,state);
+        sendData.SetData(ObserveData.ChangeMain, state);
         ObserverManager.Instance.Notify(sendData);
     }
     public void GameStart()
@@ -37,19 +37,9 @@ public class LobbyScene : MonoBehaviour
 
         //UIManager.Instance.OpenPopUp(PopUp_Name.Loading);
 
-        StartCoroutine(IENextScene());
+        SceneLoadManager.Instance.LoadSceneMode("GameScene");
 
         //TCPClient.Instance.SendPack(GameProtocolType.Ready,UserData.uniqueID);
-    }
-    IEnumerator IENextScene()
-    {
-        UIManager.Instance.OpenPopUp(PopUp_Name.Fade);
-        yield return new WaitForSeconds(1);
-        AsyncOperation asyn = SceneManager.LoadSceneAsync("GameScene");
-        while (!asyn.isDone)
-        {
-            yield return null;
-        }
     }
     public void Home()
     {
@@ -58,6 +48,6 @@ public class LobbyScene : MonoBehaviour
 
     public void Notify()
     {
-        
+
     }
 }

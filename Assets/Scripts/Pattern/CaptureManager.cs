@@ -32,6 +32,7 @@ public class CaptureManager : MonoBehaviour
 
     public GameObject[] obj;
     public int cnt = 0;
+    public GameObject parent;
 
     private void Start()
     {
@@ -76,9 +77,9 @@ public class CaptureManager : MonoBehaviour
     }
     IEnumerator AllCaptureImage()
     {
-        while(cnt < obj.Length)
+        while (cnt < obj.Length)
         {
-            var nowobj = Instantiate(obj[cnt].gameObject);
+            var newobj = Instantiate(obj[cnt].gameObject, parent.transform);
 
             yield return null;
 
@@ -98,10 +99,10 @@ public class CaptureManager : MonoBehaviour
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
             File.WriteAllBytes(path + name + extention, data);
-            
+
             yield return null;
 
-            DestroyImmediate(nowobj);
+            DestroyImmediate(newobj);
             cnt++;
 
             yield return null;
@@ -110,7 +111,7 @@ public class CaptureManager : MonoBehaviour
 
     public void SettingColor()
     {
-        switch(grade)
+        switch (grade)
         {
             case Grade.Normal:
                 cam.backgroundColor = Color.white;

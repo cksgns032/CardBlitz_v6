@@ -54603,9 +54603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRangeCom: {fileID: 0}
   enemyList: []
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 256
+  buffList: []
 --- !u!195 &6291750451193141769
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -71495,6 +71493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 726984982772494994}
   - component: {fileID: 1800311119016024480}
+  - component: {fileID: 7167059762180125565}
   m_Layer: 0
   m_Name: AttackRange
   m_TagString: Untagged
@@ -71538,3 +71537,15 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &7167059762180125565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6302637530226276302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd2000d3242c254fa15db14c5f554eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -4,24 +4,19 @@ using UnityEngine.UI;
 
 public class GameProfile : MonoBehaviour
 {
-    [SerializeField] Image thumbnail;
-    [SerializeField] Text nick;
-    [SerializeField] Slider hp;
-    [SerializeField] Slider gauge;
-    [SerializeField] Text gaugeNum;
+    public Image thumbnail;
+    public Text nick;
+    public Slider hp;
+    public Slider gauge;
+    public Text gaugeNum;
 
     // Start is called before the first frame update
     public void Init()
     {
-        thumbnail = GetComponentInChildren<Image>();
-        nick = GetComponentInChildren<Text>();
-        nick.text = "nick";
-        hp = gameObject.transform.Find("Hp").GetComponent<Slider>();
-        hp.value = 1;
-        gauge = gameObject.transform.Find("Gauge").GetComponent<Slider>();
-        gauge.maxValue = 5;
-        gauge.value = UserData.gauge = 0;
-        gaugeNum = gauge.transform.Find("GaugeNume").GetComponent<Text>();
+        // todo : hard coding delete
+        hp.value = 1;// hard code
+        gauge.maxValue = 5;// hard code
+        gauge.value = UserData.gauge;// hard code
         gaugeNum.text = gauge.value.ToString();
     }
     public void GetColor(Team team)
@@ -39,7 +34,7 @@ public class GameProfile : MonoBehaviour
             num = 0;
             GameManager.Instance.ResultGame(RESULT.LOSE);
         }
-        
+
         hp.value = num;
     }
     public Slider GetGauge()

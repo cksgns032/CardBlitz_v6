@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 5413854358808737997}
   - component: {fileID: 5460184972009520503}
   - component: {fileID: 1887972933440648677}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Bottom(Center)
   m_TagString: BOTTOM
   m_Icon: {fileID: 0}
@@ -1365,7 +1365,7 @@ GameObject:
   - component: {fileID: 5413854359099921056}
   - component: {fileID: 5460184972288251674}
   - component: {fileID: 4854821867613035217}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Top(Center)
   m_TagString: TOP
   m_Icon: {fileID: 0}
@@ -3143,7 +3143,7 @@ GameObject:
   - component: {fileID: 5413854359938483877}
   - component: {fileID: 5460184973193921311}
   - component: {fileID: 5913139819560176328}
-  m_Layer: 3
+  m_Layer: 7
   m_Name: Middle(Center)
   m_TagString: MIDDLE
   m_Icon: {fileID: 0}
@@ -6732,7 +6732,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.1
+  m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
@@ -29903,7 +29903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1782384603142300, guid: c89d5d5fb55337a4d9f1cba480cff8e2, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1782384603142300, guid: c89d5d5fb55337a4d9f1cba480cff8e2, type: 3}
       propertyPath: m_IsActive
@@ -29923,7 +29923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4138511184629900, guid: c89d5d5fb55337a4d9f1cba480cff8e2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.6
+      value: -4.53
       objectReference: {fileID: 0}
     - target: {fileID: 4138511184629900, guid: c89d5d5fb55337a4d9f1cba480cff8e2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -29993,7 +29993,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 191400, guid: 988860f9d4d3e594c9d6807d2a51e007, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 191400, guid: 988860f9d4d3e594c9d6807d2a51e007, type: 3}
+      propertyPath: m_TagString
+      value: EnemyTower
       objectReference: {fileID: 0}
     - target: {fileID: 420880, guid: 988860f9d4d3e594c9d6807d2a51e007, type: 3}
       propertyPath: m_RootOrder
@@ -30063,7 +30067,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 191400, guid: 988860f9d4d3e594c9d6807d2a51e007, type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 191400, guid: 988860f9d4d3e594c9d6807d2a51e007, type: 3}
+      propertyPath: m_TagString
+      value: MyTower
       objectReference: {fileID: 0}
     - target: {fileID: 420880, guid: 988860f9d4d3e594c9d6807d2a51e007, type: 3}
       propertyPath: m_RootOrder
