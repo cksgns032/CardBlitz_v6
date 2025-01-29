@@ -5,44 +5,41 @@ using UnityEngine.AI;
 
 public class GameManager : SingleTon<GameManager>
 {
-    // ������ ī�� ������ �����ͼ� ������ 5���� ���� ����
-    // ������ Ÿ�̸� ���� 
-    // ���� ��� ��Ÿ��
     GameMap map;
     GameUI gameUI;
     Fade fade;
 
-    List<Player> myList = new List<Player>();// �Ʊ� ������Ʈ ����Ʈ
-    List<Player> enemyList = new List<Player>();// ���� ������Ʈ ����Ʈ
+    List<Player> myList = new List<Player>();
+    List<Player> enemyList = new List<Player>();
 
     bool isClaer = false;
-    float timeNum = 100;
+    float gameTime = 100;
     float cardTime = 3;
     float gaugeTime = 3;
 
     void Start()
     {
-        // �Ŵ��� �ʱ�ȭ
+        // Audio
         AudioManager.Instance.LoadSound(AudioManager.Type.BGM, "BattleSound");
         AudioManager.Instance.PlayBgm(true, "BattleSound");
         PoolingManager.Instance.Init();
-        // �⺻�� ������ �ʱ�ȭ
+        // Fade
         fade = GameObject.FindAnyObjectByType<Fade>();
         if (fade != null)
         {
             fade.FadeIn();
         }
+        // UI
         gameUI = GameObject.FindAnyObjectByType<GameUI>();
         if (gameUI)
         {
             gameUI.Init();
         }
+        // Map
         GameObject mapPos = GameObject.Find("MapPos");
         GameObject mapObj = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Map"), mapPos.GetComponent<Transform>());
         map = mapObj.GetComponent<GameMap>();
         map.Init();
-        CardFill();
-        GaugeFill();
     }
     public GameMap GetGameMap()
     {
@@ -57,18 +54,18 @@ public class GameManager : SingleTon<GameManager>
     {
         if (isClaer)
             return;
-        if (isClaer == false && timeNum > 0)
+        if (isClaer == false && gameTime > 0)
         {
-            timeNum -= Time.deltaTime;
-            gameUI.UpdateTime(timeNum);
+            gameTime -= Time.deltaTime;
+            gameUI.UpdateTime(gameTime);
         }
-        else if (isClaer == false && timeNum <= 0)
+        else if (isClaer == false && gameTime <= 0)
         {
             isClaer = true;
             gameUI.Result(RESULT.DRAW);
         }
     }
-    // ������ġ�� ���� ��ȯ
+    // 몬스터 생성(todo : 몬스터 풀링을 만들어서 거기서 관리)
     public void CreateHero(string objTag, string objName, Team team, int useCost)
     {
         Player monObj = Instantiate<Player>(Resources.Load<Player>("Prefabs/Monster/" + objName));
@@ -114,7 +111,8 @@ public class GameManager : SingleTon<GameManager>
     {
         return enemyList;
     }
-    #region ���� ��� 
+
+    #region Game Result
     public void ResultGame(RESULT result)
     {
         for (int i = 0; i < myList.Count; i++)
@@ -137,45 +135,18 @@ public class GameManager : SingleTon<GameManager>
     {
         return isClaer;
     }
-    #endregion ���� ���
+    #endregion Game Result
 
-    #region �޴� ������ �佺
-    public void UpdateHp(Team hitTeam, float attack)
+    #region Game UI
+    public GameUI GetGameUI()
     {
-        gameUI.UpdateTower(hitTeam, attack);
+        return gameUI;
     }
-    #endregion �޴� ������ �佺
-    #region ������ �߰�
-    public void GaugeFill()
-    {
-        StartCoroutine(GaugeFill(gaugeTime));
-    }
-    IEnumerator GaugeFill(float cardTime)
-    {
-        while (GameManager.Instance.GetClear() == false)
-        {
-            yield return new WaitForSeconds(cardTime);
-            gameUI.ChargeGauge();
-        }
-    }
-    #endregion ������ �߰�
-    #region ī�� �߰�
-    public void CardFill()
-    {
-        StartCoroutine(CardFill(cardTime));
-    }
-    IEnumerator CardFill(float delayTime)
-    {
-        while (GameManager.Instance.GetClear() == false)
-        {
-            yield return new WaitForSeconds(delayTime);
-            gameUI.CargeCard();
-        }
-    }
-    #endregion ī�� �߰�
-    #region ���� ����
+    #endregion Game UI
+
+    #region Fever Time
     // �̼� ���� ����
-    public void LastBuffe()
+    public void FeverTime()
     {
         cardTime = 1.5f;
         gaugeTime = 1.5f;
@@ -193,5 +164,19 @@ public class GameManager : SingleTon<GameManager>
             }
         }
     }
-    #endregion ���� ����
+    #endregion Fever Time
+    #region Any Time
+    public float GetCardTime()
+    {
+        return cardTime;
+    }
+    public float GetGaugeTime()
+    {
+        return gaugeTime;
+    }
+    public float GetTimer()
+    {
+        return gameTime;
+    }
+    #endregion
 }

@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public enum Type
 {
-    TOP,// »ı»ê¼Óµµ Áõ°¡(¾Æ±º)
-    MIDDLE,// ÀÌ¼Ó »ó½Â(¾Æ±º)
-    BOTTOM,// ¹æ¾î·Â °¨¼Ò(Àû)
+    TOP,// ï¿½ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Æ±ï¿½)
+    MIDDLE,// ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½(ï¿½Æ±ï¿½)
+    BOTTOM,// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½)
 }
 public class EventButton : MonoBehaviour
 {
@@ -27,8 +27,9 @@ public class EventButton : MonoBehaviour
     {
         img.enabled = true;
         img.fillAmount += num;
-        if(img.fillAmount == 1)
+        if (img.fillAmount == 1)
         {
+            // ì ë ¹ì„ í•´ì„œ ë²„í”„ë¥¼ ì£¼ê¸° ìœ„í•´
             for (int i = 0; i < GameManager.Instance.GetMyList().Count; i++)
             {
                 GameManager.Instance.GetMyList()[i].SetStat();
@@ -37,11 +38,11 @@ public class EventButton : MonoBehaviour
             {
                 GameManager.Instance.GetEnemyList()[i].SetStat();
             }
-            // ½ºÀ§Ä¡ ÆÀ »öÀ¸·Î º¯°æ
+            // ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             switch (team)
             {
                 case "ENEMY":
-                    if(UserData.team == Team.Blue)
+                    if (UserData.team == Team.Blue)
                     {
                         mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
                         getColor = Team.Red;
@@ -76,7 +77,7 @@ public class EventButton : MonoBehaviour
     public void Charging(bool state)
     {
         charging = state;
-        if(state == false)
+        if (state == false)
         {
             img.fillAmount = 0;
         }

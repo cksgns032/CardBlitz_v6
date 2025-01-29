@@ -6,7 +6,6 @@ using UnityEngine;
 public class UIBase : MonoBehaviour
 {
     protected PopUp_Name uiName;
-    protected PopUp_Type uiType;
     protected PopUp_State state;
     public PopUp_State GetState()
     {

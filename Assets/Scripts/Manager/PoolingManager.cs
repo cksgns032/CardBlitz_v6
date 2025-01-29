@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -9,7 +7,7 @@ public class PoolingManager : SingleTon<PoolingManager>
     int maxPoolSize = 15;
     GameObject obj;
     public IObjectPool<GameObject> Pool { get; private set; }
-    
+
     public void Init()
     {
         Pool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool,
@@ -20,7 +18,7 @@ public class PoolingManager : SingleTon<PoolingManager>
             txt.Pool.Release(txt.gameObject);
         }
     }
-    // 생성
+
     private GameObject CreatePooledItem()
     {
         Transform parant = FindFirstObjectByType<GameUI>().transform.Find("DamageTextGroup");
@@ -29,19 +27,16 @@ public class PoolingManager : SingleTon<PoolingManager>
         return poolGo;
     }
 
-    // 사용
     private void OnTakeFromPool(GameObject poolGo)
     {
         poolGo.SetActive(true);
     }
 
-    // 반환
     private void OnReturnedToPool(GameObject poolGo)
     {
         poolGo.SetActive(false);
     }
 
-    // 삭제
     private void OnDestroyPoolObject(GameObject poolGo)
     {
         Destroy(poolGo);

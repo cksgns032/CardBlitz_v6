@@ -15,6 +15,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     CardGroup cardGroup;
     RectTransform rectCom;
     Vector2 rectVec2;
+    Animation ani;
 
     // �巡��
     public void OnDrag(PointerEventData eventData)
@@ -45,6 +46,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         cardGroup = GetComponentInParent<CardGroup>();
         rectCom = GetComponent<RectTransform>();
         rectVec2 = new Vector2(rectCom.anchoredPosition.x, rectCom.anchoredPosition.y);
+        ani = GetComponent<Animation>();
     }
     public void Setting(CardInfo cardInfo)
     {
@@ -64,6 +66,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         charImg = gameObject.transform.GetChild(0).GetComponent<Image>();
         Sprite imga = Resources.Load<Sprite>("Texture/Charactor/" + cardName);
         charImg.sprite = imga;
+        ani.Play(ani.clip.name);
     }
     public CardInfo GetCardInfo()
     {

@@ -16,14 +16,13 @@ public class GameTimer : MonoBehaviour
         {
             return;
         }
-        //num -= Time.deltaTime;
         string str1 = string.Format("{0:00}", (int)(timeNum / 60 % 60));
         string str2 = string.Format("{0:00}", (int)(timeNum % 60));
         timeText.text = str1 + ":" + str2;
         if (timeNum == 60)
         {
-            GameManager.Instance.LastBuffe();
+            GameManager.Instance.FeverTime();
         }
-        
+
     }
 }

@@ -38,10 +38,9 @@ public class Buff : MonoBehaviour
         currentTime = 0;
         DeActivation();
     }
-    // Update is called once per frame
     void DeActivation()
     {
-        if (player && !player.GetState())
+        if (player && !player.IsDie())
         {
             player.ReMoveBuff(this);
         }

@@ -1,4 +1,3 @@
-#region 로비
 public struct SendData
 {
     public ObserveData observeData;
@@ -13,18 +12,17 @@ public enum ObserveData
 {
     ChangeMain,
 }
+
+#region lobby
 public enum LobbyType
 {
     HOME,
     CARD,
     SHOP,
 }
-public enum PopUp_Type
-{
-    Popup,
-    UserInfo,
-    Count,
-}
+#endregion
+
+#region common
 public enum PopUp_Name
 {
     Option,
@@ -37,7 +35,8 @@ public enum PopUp_State
     Close,
 }
 #endregion
-#region 인게임 
+
+#region game
 public enum RESULT
 {
     WIN,
@@ -50,19 +49,20 @@ public enum Team
     Blue = 1,
     None = 2,
 }
+public enum StateType
+{
+    Idle,
+    Move,
+    Charge,
+    Attack,
+    Hit,
+    Die,
+}
 public enum AttackType
 {
     None,
     Ground,
     Midair,
     All,
-}
-public enum MosterState
-{
-    Move,
-    Charge,
-    Attack,
-    Hit,
-    Die,
 }
 #endregion

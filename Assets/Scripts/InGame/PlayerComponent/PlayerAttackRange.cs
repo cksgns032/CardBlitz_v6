@@ -1,22 +1,20 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttackRange : MonoBehaviour
 {
-    Animator ani;
     SphereCollider sphereCollider;
     Player playerCom;
+    PlayerState state;
 
     public void Init()
     {
-        ani = GetComponentInParent<Animator>(true);
         sphereCollider = GetComponent<SphereCollider>();
         playerCom = GetComponentInParent<Player>();
+        state = GetComponentInParent<PlayerState>();
     }
     // 들어왔을 때 리스트에 넣어줌
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ontrigger enter");
         if (GameManager.Instance.GetClear())
             return;
         Player player = other.GetComponent<Player>();
@@ -24,6 +22,10 @@ public class PlayerAttackRange : MonoBehaviour
         if (player && other.gameObject.tag == "Player" && other.gameObject.layer == enemyLayer)
         {
             playerCom.AddEemyList(player);
+            if (state.GetCurrentType() != StateType.Charge && state.GetCurrentType() != StateType.Attack)
+            {
+                state.TransState(StateType.Attack);
+            }
         }
     }
 }
