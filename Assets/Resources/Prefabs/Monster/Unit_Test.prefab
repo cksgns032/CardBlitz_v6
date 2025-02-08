@@ -54602,8 +54602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRangeCom: {fileID: 0}
-  enemyList: []
   buffList: []
+  enemyList: []
 --- !u!195 &6291750451193141769
 NavMeshAgent:
   m_ObjectHideFlags: 0

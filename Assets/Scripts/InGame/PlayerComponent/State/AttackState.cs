@@ -10,11 +10,11 @@ public class AttackState : MonoBehaviour, IState
     List<Player> enemyList;
     Animator ani;
     HeroData stat;
-    public AttackState(Player data)
+    public void Init(Player data)
     {
         player = data;
-        stateCom = GetComponent<PlayerState>();
-        ani = GetComponentInChildren<Animator>();
+        stateCom = data.GetState();
+        ani = player.gameObject.GetComponentInChildren<Animator>();
     }
     public void Enter()
     {
@@ -34,7 +34,7 @@ public class AttackState : MonoBehaviour, IState
         }
     }
 
-    public void Update()
+    public void StateUpdate()
     {
         if (player.IsDie() == true || GameManager.Instance.GetClear())
         {

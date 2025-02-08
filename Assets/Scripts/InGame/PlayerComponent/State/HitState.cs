@@ -10,12 +10,12 @@ public class HitState : MonoBehaviour, IState
     NavMeshAgent agent;
     PlayerState stateCom;
 
-    public HitState(Player data)
+    public void Init(Player data)
     {
         player = data;
-        stateCom = GetComponent<PlayerState>();
-        ani = GetComponentInChildren<Animator>();
-        agent = GetComponent<NavMeshAgent>();
+        stateCom = data.GetState();
+        ani = player.gameObject.GetComponentInChildren<Animator>();
+        agent = player.gameObject.GetComponent<NavMeshAgent>();
     }
     public void Enter()
     {
@@ -31,7 +31,7 @@ public class HitState : MonoBehaviour, IState
 
     }
 
-    public void Update()
+    public void StateUpdate()
     {
 
     }

@@ -1,3 +1,6 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
 public class PlayerState
 {
     private IState oldState;
@@ -15,12 +18,36 @@ public class PlayerState
     public void Init(Player playerCom)
     {
         player = playerCom;
-        idleState = new IdleState(player);
-        moveState = new MoveState(player);
-        attackState = new AttackState(player);
-        hitState = new HitState(player);
-        chargeState = new ChargeState(player);
-        dieState = new DieState(player);
+        idleState = player.AddComponent<IdleState>();
+        if (idleState)
+        {
+            idleState.Init(player);
+        }
+        moveState = player.AddComponent<MoveState>();
+        if (moveState)
+        {
+            moveState.Init(player);
+        }
+        attackState = player.AddComponent<AttackState>();
+        if (attackState)
+        {
+            attackState.Init(player);
+        }
+        hitState = player.AddComponent<HitState>();
+        if (hitState)
+        {
+            hitState.Init(player);
+        }
+        chargeState = player.AddComponent<ChargeState>();
+        if (chargeState)
+        {
+            chargeState.Init(player);
+        }
+        dieState = player.AddComponent<DieState>();
+        if (dieState)
+        {
+            dieState.Init(player);
+        }
     }
     public void TransState(StateType state)
     {
@@ -40,7 +67,7 @@ public class PlayerState
     {
         if (currentState != null)
         {
-            currentState.Update();
+            currentState.StateUpdate();
         }
     }
     public IState GetCurrentState(StateType state)

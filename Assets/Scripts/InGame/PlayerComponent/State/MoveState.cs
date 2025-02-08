@@ -6,11 +6,11 @@ public class MoveState : ButtonSearch, IState
 {
     NavMeshAgent agent;
 
-    public MoveState(Player data)
+    public void Init(Player data)
     {
         player = data;
-        stateCom = GetComponent<PlayerState>();
-        agent = GetComponent<NavMeshAgent>();
+        stateCom = data.GetState();
+        agent = player.gameObject.GetComponent<NavMeshAgent>();
     }
     public void Enter()
     {
@@ -24,7 +24,7 @@ public class MoveState : ButtonSearch, IState
     {
 
     }
-    public void Update()
+    public void StateUpdate()
     {
         if (player.IsDie() == true || GameManager.Instance.GetClear())
         {
@@ -43,7 +43,7 @@ public class MoveState : ButtonSearch, IState
             }
             else
             {
-                if (gameObject.layer == LayerMask.NameToLayer("HERO"))
+                if (player.gameObject.layer == LayerMask.NameToLayer("HERO"))
                 {
                     GameObject obj = GameObject.Find("EnemyGoal");
                     agent.SetDestination(obj.transform.position);

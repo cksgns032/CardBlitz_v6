@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -48,7 +51,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         rectVec2 = new Vector2(rectCom.anchoredPosition.x, rectCom.anchoredPosition.y);
         ani = GetComponent<Animation>();
     }
-    public void Setting(CardInfo cardInfo)
+    public void Setting(CardInfo cardInfo, bool active)
     {
         cardinfo = cardInfo;
         switch (cardinfo.id)
@@ -66,7 +69,46 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         charImg = gameObject.transform.GetChild(0).GetComponent<Image>();
         Sprite imga = Resources.Load<Sprite>("Texture/Charactor/" + cardName);
         charImg.sprite = imga;
+        gameObject.SetActive(active);
+    }
+    async public void PlayAni(int delayTime)
+    {
+        await Task.Delay(delayTime);
+        gameObject.SetActive(true);
         ani.Play(ani.clip.name);
+        GameUI gameUI = GameManager.Instance.GetGameUI();
+        if (gameUI != null)
+        {
+            Button shuffle = gameUI.GetShuffle();
+            if (shuffle != null)
+            {
+                StartCoroutine(MoveAlongParabola(shuffle.transform.position, transform.parent.position, 5, 0.5f));
+            }
+        }
+    }
+    IEnumerator MoveAlongParabola(Vector3 start, Vector3 end, float height, float time)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < time)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / time;  // 0~1 보간 값
+
+            // XZ 평면에서 직선 보간
+            Vector3 linear = Vector3.Lerp(start, end, t);
+
+            // 포물선 높이 계산 (포물선 공식)
+            float arc = height * Mathf.Sin(Mathf.PI * t);
+
+            // 새로운 위치 적용
+            transform.position = new Vector3(linear.x, linear.y + arc, linear.z);
+
+            yield return null;
+        }
+
+        // 이동 완료 후 정확한 목표 위치 설정
+        transform.position = end;
     }
     public CardInfo GetCardInfo()
     {
@@ -109,7 +151,6 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         }
         if (hit.transform != null)
         {
-            Debug.Log(hit.transform.gameObject.name);
             map.ResetColor(hit.transform.gameObject.tag);
         }
 

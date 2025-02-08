@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class CardGroup : MonoBehaviour
 {
-    Card[] cards;
+    List<Card> cards = new List<Card>();
     List<Card> select;
     public void Init()
     {
-        //Ä«µå »ý¼º
         for (int i = 0; i < 3; i++)
         {
             CardInfo cardInfo = new CardInfo();
@@ -15,8 +14,19 @@ public class CardGroup : MonoBehaviour
             cardInfo.id = i.ToString();
             UserData.gameDeck.Add(cardInfo);
         }
-        cards = GetComponentsInChildren<Card>(true);
-        foreach(Card card in cards)
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            Transform child = gameObject.transform.GetChild(i);
+            if (child != null)
+            {
+                Card card = child.GetComponentInChildren<Card>();
+                if (card != null)
+                {
+                    cards.Add(card);
+                }
+            }
+        }
+        foreach (Card card in cards)
         {
             card.Init();
         }
@@ -25,71 +35,73 @@ public class CardGroup : MonoBehaviour
     }
     public void Shuffle()
     {
-        UserData.gem = 9999;
-        for (var i = 0; i < cards.Length; i++)
+        for (var i = 0; i < cards.Count; i++)
         {
             if (cards[i].gameObject.activeSelf == true)
             {
-                int num = UnityEngine.Random.Range(0, UserData.gameDeck.Count);
-                cards[i].Setting(UserData.gameDeck[num]);
+                int num = Random.Range(0, UserData.gameDeck.Count);
+                cards[i].Setting(UserData.gameDeck[num], false);
+                UserData.HandCards[i] = UserData.gameDeck[num];
+                cards[i].PlayAni((i + 1) * 800);
             }
         }
     }
-    // Ä«µå Ãß°¡
+    // Ä«ï¿½ï¿½ ï¿½ß°ï¿½
     public void AddCard()
     {
         bool isFull = true;
-        foreach(Card card in this.cards)
+        foreach (CardInfo i in UserData.HandCards)
         {
-            if(card.gameObject.activeSelf == false)
+            if (i == null)
             {
                 isFull = false;
                 break;
             }
         }
-        if(!isFull)
+        if (!isFull)
         {
-            // Ä«µå È°¼ºÈ­
-            for (int i = 1; i < this.cards.Length; i++)
+            // Ä«ï¿½ï¿½ È°ï¿½ï¿½È­
+            for (int i = 1; i < this.cards.Count; i++)
             {
                 if (cards[i].gameObject.activeSelf == true)
                 {
                     cards[i - 1].gameObject.SetActive(true);
                     int num = UnityEngine.Random.Range(0, UserData.gameDeck.Count);
-                    cards[i - 1].Setting(UserData.gameDeck[num]);
+                    cards[i - 1].Setting(UserData.gameDeck[num], false);
+                    UserData.HandCards[i - 1] = UserData.gameDeck[num];
+                    cards[i - 1].PlayAni(0);
                     break;
                 }
             }
         }
     }
 
-    // ¼±ÅÃÇÒ Ä«µå
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½
     public int SelectCard(Card obj)
     {
         select = new List<Card>();
         select.Add(obj);
         obj.UpPosition();
         //cursorArrow.anchoredPosition = obj.gameObject.GetComponent<RectTransform>().anchoredPosition;
-        for (int i = 0; i < cards.Length; i++)
+        for (int i = 0; i < cards.Count; i++)
         {
-            if(obj.gameObject == cards[i].gameObject)
+            if (obj.gameObject == cards[i].gameObject)
             {
-                // ¿ÞÂÊÀÌ ÀÖ³Ä
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö³ï¿½
                 bool isleft = false;
-                // ¿À¸¥ÂÊÀÌ ÀÖ³Ä
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö³ï¿½
                 bool isright = false;
-                // ¿ÞÂÊ¿¡ °°Àº°Ô ÀÖ³Ä
+                // ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö³ï¿½
                 bool getleft = false;
-                // ¿À¸¥ÂÊ¿¡ °°Àº°Ô ÀÖ³Ä
+                // ï¿½ï¿½ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö³ï¿½
                 bool getright = false;
 
-                Debug.Log(obj.gameObject.name);
-                // Áß¾Ó ±âÁØ
-                // ¿ÞÂÊ È®ÀÎ
-                if (i-1>=0)
+                // ï¿½ß¾ï¿½ ï¿½ï¿½ï¿½ï¿½
+                // ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+                if (i - 1 >= 0)
                 {
                     //CardInfo card = cards[i - 1].GetCardInfo();
-                    if (cards[i-1].GetCardInfo() != null && obj.GetCardInfo().id == cards[i - 1].GetCardInfo().id)
+                    if (cards[i - 1].GetCardInfo() != null && obj.GetCardInfo().id == cards[i - 1].GetCardInfo().id)
                     {
                         cards[i - 1].UpPosition();
                         getleft = true;
@@ -97,7 +109,7 @@ public class CardGroup : MonoBehaviour
                     }
                     isleft = true;
                 }
-                // ¿À¸¥ÂÊ È®ÀÎ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                 if (i + 1 < 5)
                 {
                     if (cards[i + 1].GetCardInfo() != null && obj.GetCardInfo().id == cards[i + 1].GetCardInfo().id)
@@ -109,8 +121,8 @@ public class CardGroup : MonoBehaviour
                     isright = true;
                 }
 
-                // °¡»ýÀÌ ±âÁØ
-                // ¿ÞÂÊÀÌ ¾øÀ» ¶§
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
                 if (isleft == false && isright == true && getright == true)
                 {
                     if (cards[i + 2] != null)
@@ -123,7 +135,7 @@ public class CardGroup : MonoBehaviour
                         }
                     }
                 }
-                // ¿À¸¥ÂÊÀÌ ¾øÀ» ¶§
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
                 else if (isright == false && isleft == true && getleft == true)
                 {
                     if (cards[i - 2] != null)
@@ -135,12 +147,12 @@ public class CardGroup : MonoBehaviour
                         }
                     }
                 }
-                // µÎ¹øÂ° ±¸¿ª±îÁö
+                // ï¿½Î¹ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if (select.Count < 3)
                 {
-                    if(getleft)
+                    if (getleft)
                     {
-                        if(i-2 >= 0)
+                        if (i - 2 >= 0)
                         {
                             if (cards[i - 2].GetCardInfo() != null && obj.GetCardInfo().id == cards[i - 2].GetCardInfo().id)
                             {
@@ -149,9 +161,9 @@ public class CardGroup : MonoBehaviour
                             }
                         }
                     }
-                    else if(getright)
+                    else if (getright)
                     {
-                        if(i+2 < 5)
+                        if (i + 2 < 5)
                         {
                             if (cards[i + 2].GetCardInfo() != null && obj.GetCardInfo().id == cards[i + 2].GetCardInfo().id)
                             {
@@ -165,7 +177,7 @@ public class CardGroup : MonoBehaviour
         }
         return select.Count;
     }
-    // Ä«µå Á¤À§Ä¡
+    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡
     public void DeSelect()
     {
         for (int i = 0; i < select.Count; i++)
@@ -173,21 +185,22 @@ public class CardGroup : MonoBehaviour
             select[i].DownPosition();
         }
     }
-    // Ä«µå µ¥ÀÌÅÍ Á¤¸®
+    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void UseCard()
     {
-        // °¡Áö°í ÀÖ´Â µ¥ÀÌÅÍ : ¼±ÅÃÇÑ Ä«µå ¸®½ºÆ® , °¡Áö°í ÀÖ´Â Ä«µå ¸®½ºÆ®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® , ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
         for (int k = 0; k < select.Count; k++)
         {
             select[k].gameObject.SetActive(false);
         }
-        // ¹Ì»ç¿ë Ä«µå Á¤·Ä
-        for (var j = 0; j < cards.Length - 1; j++)
+        // ï¿½Ì»ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        for (int j = 0; j < cards.Count - 1; j++)//
         {
             if (cards[j].gameObject.activeSelf == true && cards[j + 1].gameObject.activeSelf == false)
             {
                 cards[j + 1].gameObject.SetActive(true);
-                cards[j + 1].Setting(cards[j].GetCardInfo());
+                cards[j + 1].Setting(cards[j].GetCardInfo(), true);
+                UserData.HandCards[j + 1] = cards[j].GetCardInfo();
                 cards[j].gameObject.SetActive(false);
                 cards[j].ResetCardInfo();
                 for (int i = j; i >= 0; i--)
@@ -195,12 +208,20 @@ public class CardGroup : MonoBehaviour
                     if (cards[i].gameObject.activeSelf == true)
                     {
                         cards[i + 1].gameObject.SetActive(true);
-                        cards[i + 1].Setting(cards[i].GetCardInfo());
+                        cards[i + 1].Setting(cards[i].GetCardInfo(), true);
+                        UserData.HandCards[i + 1] = cards[i].GetCardInfo();
                         cards[i].gameObject.SetActive(false);
                         cards[i].ResetCardInfo();
                     }
                 }
             }
-        } 
+        }
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (cards[i].gameObject.activeSelf == false)
+            {
+                UserData.HandCards[i] = null;
+            }
+        }
     }
 }

@@ -7,11 +7,11 @@ public class DieState : MonoBehaviour, IState
     NavMeshAgent agent;
     PlayerState stateCom;
     Animator ani;
-    public DieState(Player data)
+    public void Init(Player data)
     {
         player = data;
-        stateCom = GetComponent<PlayerState>();
-        ani = GetComponentInChildren<Animator>();
+        stateCom = data.GetState();
+        ani = player.gameObject.GetComponentInChildren<Animator>();
     }
     public void Enter()
     {
@@ -23,7 +23,7 @@ public class DieState : MonoBehaviour, IState
 
     }
 
-    public void Update()
+    public void StateUpdate()
     {
 
     }

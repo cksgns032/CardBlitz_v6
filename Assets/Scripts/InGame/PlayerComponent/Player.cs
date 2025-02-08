@@ -18,12 +18,6 @@ public class Player : MonoBehaviour
 
     public void Init()
     {
-        attackRangeCom = GetComponentInChildren<PlayerAttackRange>(true);
-        if (attackRangeCom)
-        {
-            attackRangeCom.Init();
-        }
-
         agent = GetComponent<NavMeshAgent>();
         if (agent)
         {
@@ -42,10 +36,15 @@ public class Player : MonoBehaviour
 
         // todo : �� ���� �̸��� ������ ���� ���̺� �о �ɷ�ġ ����
         SetStat();
-        stateCom = GetComponent<PlayerState>();
+        stateCom = new PlayerState();
         if (stateCom != null)
         {
             stateCom.Init(this);
+        }
+        attackRangeCom = GetComponentInChildren<PlayerAttackRange>(true);
+        if (attackRangeCom)
+        {
+            attackRangeCom.Init();
         }
     }
     public List<Player> GetEnemyList()
@@ -158,8 +157,12 @@ public class Player : MonoBehaviour
     }
     public void Hit(float damage)
     {
-        stateCom.TransState(StateType.Hit);
-        stateCom.Damage(damage);
+        if (stateCom != null)
+        {
+            stateCom.TransState(StateType.Hit);
+            stateCom.Damage(damage);
+        }
+
     }
     #region buff
     public void ReMoveBuff(Buff buff)
@@ -200,7 +203,12 @@ public class Player : MonoBehaviour
     {
         Destroy(gameObject);
     }
+    public PlayerState GetState()
+    {
+        return stateCom;
+    }
     // public void EditorGizmo(Transform transform)
+
     // {
     //     Color c = new Color(0, 0, 0.7f, 0.4f);
 

@@ -2,17 +2,18 @@ using System.Collections.Generic;
 
 public static class UserData
 {
-    // À¯Àú µ¥ÀÌÅÍ
-    public static int uniqueID;// °íÀ¯ ¾ÆÀÌµð
-    public static string name;// ´Ð³×ÀÓ
-    public static string thumbnail;// ½æ³×ÀÏ
-    public static int level;// ·¹º§
-    public static int gold;// °ñµå
-    public static int gem;// Áª
-    public static float soundVolume = 1;// ÀÌÆåÆ® ¼Ò¸®
-    public static float bgmVolume = 1;// ¹è°æ ¼Ò¸®
-    // ÀÎ°ÔÀÓ 
-    public static Team team;// »¡°£ÆÀ , ÆÄ¶õÆÀ
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public static int uniqueID;// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
+    public static string name;// ï¿½Ð³ï¿½ï¿½ï¿½
+    public static string thumbnail;// ï¿½ï¿½ï¿½ï¿½ï¿½
+    public static int level;// ï¿½ï¿½ï¿½ï¿½
+    public static int gold;// ï¿½ï¿½ï¿½
+    public static int gem;// ï¿½ï¿½
+    public static float soundVolume = 1;// ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ò¸ï¿½
+    public static float bgmVolume = 1;// ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½
+    // ï¿½Î°ï¿½ï¿½ï¿½ 
+    public static Team team;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ , ï¿½Ä¶ï¿½ï¿½ï¿½
     public static List<CardInfo> gameDeck = new List<CardInfo>();
-    public static float gauge;// À¯Àú ¸¶³ª
+    public static CardInfo[] HandCards = new CardInfo[5];
+    public static float gauge;// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }

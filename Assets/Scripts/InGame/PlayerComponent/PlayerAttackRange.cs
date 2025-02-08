@@ -10,7 +10,7 @@ public class PlayerAttackRange : MonoBehaviour
     {
         sphereCollider = GetComponent<SphereCollider>();
         playerCom = GetComponentInParent<Player>();
-        state = GetComponentInParent<PlayerState>();
+        state = playerCom.GetState();
     }
     // 들어왔을 때 리스트에 넣어줌
     private void OnTriggerEnter(Collider other)

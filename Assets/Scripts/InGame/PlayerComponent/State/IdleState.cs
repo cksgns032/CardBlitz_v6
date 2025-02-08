@@ -4,11 +4,11 @@ using UnityEngine.AI;
 public class IdleState : ButtonSearch, IState
 {
     NavMeshAgent agent;
-    public IdleState(Player data)
+    public void Init(Player data)
     {
         player = data;
-        stateCom = GetComponent<PlayerState>();
-        agent = GetComponent<NavMeshAgent>();
+        stateCom = data.GetState();
+        agent = player.gameObject.GetComponent<NavMeshAgent>();
     }
     public void Enter()
     {
@@ -22,7 +22,7 @@ public class IdleState : ButtonSearch, IState
 
     }
 
-    public void Update()
+    public void StateUpdate()
     {
 
     }

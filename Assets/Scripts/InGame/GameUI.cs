@@ -38,6 +38,8 @@ public class GameUI : MonoBehaviour
             enemyProfile.GetColor(enemyColor);
         }
 
+        shuffleBtn = gameObject.transform.Find("Shuffle").GetComponent<Button>();
+
         // card
         cardGroup = gameObject.GetComponentInChildren<CardGroup>(true);
         if (cardGroup)
@@ -45,7 +47,6 @@ public class GameUI : MonoBehaviour
             cardGroup.Init();
         }
 
-        shuffleBtn = gameObject.transform.Find("Shuffle").GetComponent<Button>();
         shuffleBtn.onClick.AddListener(cardGroup.Shuffle);
 
         // timer
@@ -155,4 +156,8 @@ public class GameUI : MonoBehaviour
         }
     }
     #endregion
+    public Button GetShuffle()
+    {
+        return shuffleBtn;
+    }
 }

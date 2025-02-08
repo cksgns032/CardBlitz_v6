@@ -6,11 +6,11 @@ public class ChargeState : MonoBehaviour, IState
     Player player;
     NavMeshAgent agent;
     PlayerState stateCom;
-    public ChargeState(Player data)
+    public void Init(Player data)
     {
         player = data;
-        stateCom = GetComponent<PlayerState>();
-        agent = GetComponent<NavMeshAgent>();
+        stateCom = data.GetState();
+        agent = player.gameObject.GetComponent<NavMeshAgent>();
     }
     public void Enter()
     {
@@ -29,7 +29,7 @@ public class ChargeState : MonoBehaviour, IState
         }
     }
 
-    public void Update()
+    public void StateUpdate()
     {
         if (player.IsDie() == true || GameManager.Instance.GetClear())
         {
