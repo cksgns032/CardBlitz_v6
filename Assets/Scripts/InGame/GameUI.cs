@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +13,8 @@ public class GameUI : MonoBehaviour
     CardGroup cardGroup;
     Button shuffleBtn;
     GameTimer Timer;
-
     Team enemyColor;
+    Coroutine cardChargeCoroutine;
 
     public void Init()
     {
@@ -85,17 +87,33 @@ public class GameUI : MonoBehaviour
     }
     public void CardFill()
     {
-        StartCoroutine(CardFill(GameManager.Instance.GetCardTime()));
+        cardChargeCoroutine = StartCoroutine(IECardFill());
     }
-    IEnumerator CardFill(float delayTime)
+    public void StopCardFill()
     {
-        while (GameManager.Instance.GetClear() == false)
+        if (cardChargeCoroutine != null)
         {
-            yield return new WaitForSeconds(delayTime);
-            CargeCard();
+            StopCoroutine(cardChargeCoroutine);
+            cardChargeCoroutine = null;
         }
     }
-    public void CargeCard()
+    IEnumerator IECardFill()
+    {
+        float elapsedTime = 0f;
+        float cargeTime = GameManager.Instance.GetCardTime();
+
+        while (elapsedTime < cargeTime && GameManager.Instance.GetClear() == false)
+        {
+            elapsedTime += Time.deltaTime;
+            if (elapsedTime >= cargeTime)
+            {
+                elapsedTime = 0f;
+                ChargeCard();
+            }
+            yield return null;
+        }
+    }
+    public void ChargeCard()
     {
         cardGroup.AddCard();
     }
@@ -142,7 +160,7 @@ public class GameUI : MonoBehaviour
         }
         Invoke("LobbyGo", 5);
     }
-    #endregion
+    #endregion result
     #region Tower
     public void UpdateTower(Team hitTeam, float attack)
     {
@@ -155,7 +173,7 @@ public class GameUI : MonoBehaviour
             enemyProfile.SetTowerHp(attack);
         }
     }
-    #endregion
+    #endregion Tower
     public Button GetShuffle()
     {
         return shuffleBtn;

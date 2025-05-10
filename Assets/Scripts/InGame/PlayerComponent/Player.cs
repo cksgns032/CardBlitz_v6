@@ -1,20 +1,27 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System;
 
 public class Player : MonoBehaviour
 {
-    //CapsuleCollider colder;
+    // component
     NavMeshAgent agent;
     Rigidbody rigid;
     Animator ani;
-    PlayerState stateCom;
-    [SerializeField] PlayerAttackRange attackRangeCom;
+    // hero
     EventButton btnEvent;
     [SerializeField] HeroData info = new HeroData();
-    [SerializeField] List<Buff> buffList = new List<Buff>();
+    PlayerState stateCom;
+    // attack
+    [SerializeField] PlayerAttackRange attackRangeCom;
+    Coroutine attackCoroutine;
     [SerializeField] List<Player> enemyList = new List<Player>();
+    [SerializeField] List<Buff> buffList = new List<Buff>();
     bool isDie = false;
+    bool isTest = false;
 
     public void Init()
     {
@@ -47,6 +54,37 @@ public class Player : MonoBehaviour
             attackRangeCom.Init();
         }
     }
+    public void TestInit()
+    {
+        isTest = true;
+        agent = GetComponent<NavMeshAgent>();
+        if (agent)
+        {
+            agent.enabled = true;
+        }
+        ani = GetComponentInChildren<Animator>();
+        if (ani != null)
+        {
+            ani.enabled = true;
+        }
+        rigid = GetComponent<Rigidbody>();
+        if (rigid)
+        {
+            rigid.isKinematic = true;
+        }
+
+        SetStat();
+        stateCom = new PlayerState();
+        if (stateCom != null)
+        {
+            stateCom.Init(this);
+        }
+        attackRangeCom = GetComponentInChildren<PlayerAttackRange>(true);
+        if (attackRangeCom)
+        {
+            attackRangeCom.gameObject.SetActive(false);
+        }
+    }
     public List<Player> GetEnemyList()
     {
         return enemyList;
@@ -57,10 +95,11 @@ public class Player : MonoBehaviour
         info.defence = 1;
         info.attack = 100;
         info.attackSpeed = 5;
-        //waitAttack = new WaitForSeconds(info.attackSpeed);
+        info.attackSpeed = 10;
         info.attackCnt = 1;
         info.attackRange = 10;
-        info.moveSpeed = 1f;
+        agent.stoppingDistance = info.attackRange;
+        info.moveSpeed = isTest ? 0f : 1f;
         agent.speed = info.moveSpeed;
         agent.stoppingDistance = info.attackRange;
         ani.SetFloat("Blend", agent.speed);
@@ -140,7 +179,7 @@ public class Player : MonoBehaviour
             enemyList.Add(enemyPlayer);
             // 내 위치 기준으로 sort
             enemyList.Sort(EnemySort);
-            stateCom.TransState(StateType.Move);
+            stateCom.TransState(StateType.Attack);
         }
     }
     public void RemoveEnemyList(Player enemyPlayer)
@@ -162,7 +201,6 @@ public class Player : MonoBehaviour
             stateCom.TransState(StateType.Hit);
             stateCom.Damage(damage);
         }
-
     }
     #region buff
     public void ReMoveBuff(Buff buff)
@@ -175,12 +213,14 @@ public class Player : MonoBehaviour
                 break;
             }
         }
+        Debug.Log(buffList);
     }
     public void AddBuff(BuffData data)
     {
         Buff buff = new Buff();
         buff.SetBuff(data, this);
         buffList.Add(buff);
+        Debug.Log(buffList);
     }
     #endregion buff
     public void SetEventButton(EventButton button)
@@ -197,6 +237,11 @@ public class Player : MonoBehaviour
     }
     public bool IsDie()
     {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
         return isDie;
     }
     public void Destroy()
@@ -206,6 +251,32 @@ public class Player : MonoBehaviour
     public PlayerState GetState()
     {
         return stateCom;
+    }
+    public void AttackCoolTime()
+    {
+        if (info.attackSpeed >= 0)
+        {
+            attackCoroutine = StartCoroutine(IEAttackCoolTime());
+        }
+    }
+    IEnumerator IEAttackCoolTime()
+    {
+        float elapsedTime = 0f;
+        float buffAttackSpeed = 0f;
+        List<Buff> attackSpeedBuffList = buffList.Where(x => x.attackSpeed > 0).ToList();
+        foreach (var buff in attackSpeedBuffList)
+        {
+            buffAttackSpeed += info.attackSpeed * buff.attackSpeed;
+        }
+        while (elapsedTime < Math.Max(0, info.attackSpeed - buffAttackSpeed))
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        if (enemyList.Count > 0)
+        {
+            stateCom.TransState(StateType.Attack);
+        }
     }
     // public void EditorGizmo(Transform transform)
 

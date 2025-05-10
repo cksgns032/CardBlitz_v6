@@ -30,21 +30,22 @@ public class CardGroup : MonoBehaviour
         {
             card.Init();
         }
-
-        Shuffle();
     }
     public void Shuffle()
     {
+        GameUI gameUI = GameManager.Instance.GetGameUI();
+        gameUI.StopCardFill();
         for (var i = 0; i < cards.Count; i++)
         {
-            if (cards[i].gameObject.activeSelf == true)
+            if (cards[i].gameObject.activeSelf == true && cards[i].GetIsUse())
             {
                 int num = Random.Range(0, UserData.gameDeck.Count);
                 cards[i].Setting(UserData.gameDeck[num], false);
                 UserData.HandCards[i] = UserData.gameDeck[num];
-                cards[i].PlayAni((i + 1) * 800);
+                cards[i].PlayAni(i * 100);
             }
         }
+        gameUI.CardFill();
     }
     // ī�� �߰�
     public void AddCard()
@@ -60,16 +61,15 @@ public class CardGroup : MonoBehaviour
         }
         if (!isFull)
         {
-            // ī�� Ȱ��ȭ
-            for (int i = 1; i < this.cards.Count; i++)
+            for (int i = 0; i < this.cards.Count; i++)
             {
-                if (cards[i].gameObject.activeSelf == true)
+                if (cards[i].gameObject.activeSelf == false && cards[i].GetIsUse() == false)
                 {
-                    cards[i - 1].gameObject.SetActive(true);
+                    cards[i].gameObject.SetActive(true);
                     int num = UnityEngine.Random.Range(0, UserData.gameDeck.Count);
-                    cards[i - 1].Setting(UserData.gameDeck[num], false);
-                    UserData.HandCards[i - 1] = UserData.gameDeck[num];
-                    cards[i - 1].PlayAni(0);
+                    cards[i].Setting(UserData.gameDeck[num], false);
+                    UserData.HandCards[i] = UserData.gameDeck[num];
+                    cards[i].PlayAni(0);
                     break;
                 }
             }
@@ -191,6 +191,7 @@ public class CardGroup : MonoBehaviour
         // ������ �ִ� ������ : ������ ī�� ����Ʈ , ������ �ִ� ī�� ����Ʈ
         for (int k = 0; k < select.Count; k++)
         {
+            select[k].SetUse(false);
             select[k].gameObject.SetActive(false);
         }
         // �̻�� ī�� ����
@@ -198,6 +199,7 @@ public class CardGroup : MonoBehaviour
         {
             if (cards[j].gameObject.activeSelf == true && cards[j + 1].gameObject.activeSelf == false)
             {
+                cards[j + 1].SetUse(true);
                 cards[j + 1].gameObject.SetActive(true);
                 cards[j + 1].Setting(cards[j].GetCardInfo(), true);
                 UserData.HandCards[j + 1] = cards[j].GetCardInfo();
@@ -210,6 +212,7 @@ public class CardGroup : MonoBehaviour
                         cards[i + 1].gameObject.SetActive(true);
                         cards[i + 1].Setting(cards[i].GetCardInfo(), true);
                         UserData.HandCards[i + 1] = cards[i].GetCardInfo();
+                        cards[i].SetUse(false);
                         cards[i].gameObject.SetActive(false);
                         cards[i].ResetCardInfo();
                     }

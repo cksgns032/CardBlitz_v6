@@ -8,6 +8,8 @@ public class GameMap : MonoBehaviour
     List<GameObject> MiddleList = new List<GameObject>();
     List<GameObject> BottomList = new List<GameObject>();
 
+    public Player testMon;
+
     string currentTag = string.Empty;
     Color currentColor;
     public void Init()
@@ -39,13 +41,16 @@ public class GameMap : MonoBehaviour
                 }
             }
         }
+        if (testMon)
+        {
+            testMon.TestInit();
+        }
     }
     // layer = teamload
     //  tag  = objtag
     // ���� ����
     public void HitLine(string objTag)
     {
-        Debug.Log(objTag);
         switch (objTag)
         {
             case "TOP":

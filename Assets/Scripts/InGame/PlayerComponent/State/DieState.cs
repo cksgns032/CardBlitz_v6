@@ -11,7 +11,7 @@ public class DieState : MonoBehaviour, IState
     {
         player = data;
         stateCom = data.GetState();
-        ani = player.gameObject.GetComponentInChildren<Animator>();
+        ani = gameObject.GetComponent<Animator>();
     }
     public void Enter()
     {
@@ -31,7 +31,7 @@ public class DieState : MonoBehaviour, IState
     {
         if (agent == null)
         {
-            agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+            agent = GetComponent<NavMeshAgent>();
         }
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
@@ -45,6 +45,6 @@ public class DieState : MonoBehaviour, IState
             }
             player.SetEventButton(null);
         }
-        ani.SetTrigger("Death");
+        ani.SetTrigger("Die");
     }
 }

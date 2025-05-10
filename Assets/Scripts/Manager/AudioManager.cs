@@ -4,7 +4,7 @@ using UnityEngine;
 public class AudioManager : SingleTon<AudioManager>
 {
     //public static AudioManager instance;
-    
+
     [Header("#BGM")]
     public List<AudioClip> bgmClips = new List<AudioClip>();
     public float bgmVolume;
@@ -16,15 +16,14 @@ public class AudioManager : SingleTon<AudioManager>
     public float sfxVolume;
     public int channels = 16;
     AudioSource[] sfxPlayers;
-    int channelIndex;// ÇöÀç 
+    int channelIndex;// ï¿½ï¿½ï¿½ï¿½ 
 
-    public enum Type { BGM, SFX}
-    public enum Sfx {Click, Dead, Hit, LevelUp, Lose, Select, Win}
+    public enum Type { BGM, SFX }
+    public enum Sfx { Click, Dead, Hit, LevelUp, Lose, Select, Win }
 
     private void OnEnable()
     {
-        Debug.Log("enable");
-        // ¹è°æÀ½ ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ê±ï¿½È­
         GameObject bgmObject = new GameObject("BgmPlayer");
         bgmObject.transform.parent = transform;
         bgmPlayer = bgmObject.AddComponent<AudioSource>();
@@ -33,7 +32,7 @@ public class AudioManager : SingleTon<AudioManager>
         bgmPlayer.volume = bgmVolume = 0;//UserData.bgmVolume = 0;
         bgmEffect = Camera.main.GetComponent<AudioHighPassFilter>();
 
-        // È¿°úÀ½ ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+        // È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ê±ï¿½È­
         GameObject sfxObject = new GameObject("SfxPlayer");
         sfxObject.transform.parent = transform;
         sfxPlayers = new AudioSource[channels];
@@ -49,10 +48,10 @@ public class AudioManager : SingleTon<AudioManager>
 
     public void LoadSound(Type type, string soundName)
     {
-        AudioClip soundClip =  Resources.Load<AudioClip>("Sound/" + soundName);
-        if(soundClip != null)
+        AudioClip soundClip = Resources.Load<AudioClip>("Sound/" + soundName);
+        if (soundClip != null)
         {
-            if(type == Type.BGM)
+            if (type == Type.BGM)
             {
                 if (bgmClips.Count == 0)
                     bgmClips.Add(soundClip);
@@ -67,7 +66,7 @@ public class AudioManager : SingleTon<AudioManager>
                     }
                 }
             }
-            else if(type == Type.SFX)
+            else if (type == Type.SFX)
             {
                 if (sfxClip.Count == 0)
                 {
@@ -84,7 +83,7 @@ public class AudioManager : SingleTon<AudioManager>
                     }
                 }
             }
-            
+
         }
     }
 
@@ -92,9 +91,9 @@ public class AudioManager : SingleTon<AudioManager>
     {
         if (isPlay)
         {
-            for(int i = 0; i < bgmClips.Count; i++)
+            for (int i = 0; i < bgmClips.Count; i++)
             {
-                if(bgmClips[i].name == clipName)
+                if (bgmClips[i].name == clipName)
                 {
                     bgmPlayer.clip = bgmClips[i];
                     bgmPlayer.Play();
@@ -140,12 +139,11 @@ public class AudioManager : SingleTon<AudioManager>
     {
         UserData.bgmVolume = value;
         bgmPlayer.volume = value;
-        Debug.Log("bgmset");
     }
     public void SoundVolume(float value)
     {
         UserData.soundVolume = value;
-        for(int i = 0; i < sfxPlayers.Length; i++)
+        for (int i = 0; i < sfxPlayers.Length; i++)
         {
             sfxPlayers[i].volume = value;
         }

@@ -15,13 +15,18 @@ public struct HeroData
 public struct BuffData
 {
     public float buffTime;
-    public int hp;
-    public int defence;
+    public int hpInt;
+    public float hpPercent;
+    public int defenceInt;
+    public float defencePercent;
     public float moveSpeed;
     public float attackSpeed;
     public float attackRange;
     public int attackCnt;
-    public float attack;
+    public float attackInt;
+    public float attackPercent;
+    public float criInt;
     public float criPercent;
-    public float criAdd;
+    public float criDamageInt;
+    public float criDamagePercent;
 }

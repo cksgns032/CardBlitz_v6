@@ -43,7 +43,9 @@ public class HitState : MonoBehaviour, IState
         {
             txt.Setting(damageObj.transform.position, damage);
         }
-        if (stat.hp - damage > 0)
+        stat.hp -= (int)damage;
+        Debug.Log($"hp : {stat.hp}");
+        if (stat.hp > 0)
         {
             stat.hp -= (int)damage;
             ani.SetTrigger("Hit");

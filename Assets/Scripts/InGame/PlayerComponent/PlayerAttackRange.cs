@@ -22,10 +22,6 @@ public class PlayerAttackRange : MonoBehaviour
         if (player && other.gameObject.tag == "Player" && other.gameObject.layer == enemyLayer)
         {
             playerCom.AddEemyList(player);
-            if (state.GetCurrentType() != StateType.Charge && state.GetCurrentType() != StateType.Attack)
-            {
-                state.TransState(StateType.Attack);
-            }
         }
     }
 }

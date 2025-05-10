@@ -4,11 +4,12 @@ using UnityEngine;
 public class Buff : MonoBehaviour
 {
     float buffTime;
+    BuffData buffData;
     // ���� ����
     int hp;// ��
     int defence;// ����
     float moveSpeed;// �̵��ӵ�
-    float attackSpeed;// ���ݼӵ�
+    public float attackSpeed;// ���ݼӵ�
     float attackRange;// ���ݹ���
     int attackCnt;// ���ݰ��� ��
     float attack;// ���ݷ�
@@ -16,12 +17,13 @@ public class Buff : MonoBehaviour
     float criAdd;// ũ��Ƽ�� ������ ����
     float currentTime;
 
-    WaitForSeconds wait = new WaitForSeconds(0.1f);
+    //WaitForSeconds wait = new WaitForSeconds(0.1f);
     WaitForSecondsRealtime waitReal = new WaitForSecondsRealtime(0.1f);
     Player player;
 
     public void SetBuff(BuffData data, Player player)
     {
+        buffData = data;
         this.player = player;
     }
     public void StartActivation()

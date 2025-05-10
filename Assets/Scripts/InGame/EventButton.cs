@@ -1,12 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Type
-{
-    TOP,// ����ӵ� ����(�Ʊ�)
-    MIDDLE,// �̼� ���(�Ʊ�)
-    BOTTOM,// ���� ����(��)
-}
 public class EventButton : MonoBehaviour
 {
     Image img;
@@ -14,10 +8,41 @@ public class EventButton : MonoBehaviour
 
     bool charging = false;
     Team getColor = Team.None;
-    public Type posType;
-    // Start is called before the first frame update
+    EventButtonType buttonType = EventButtonType.NONE;
     public void Init()
     {
+        BuffData data = new BuffData();
+        data.buffTime = 999;
+        switch (gameObject.tag)
+        {
+            case "TOP":
+                {
+                    // 공격력 증가
+                    data.attackPercent = 1.5f;
+                    buttonType = EventButtonType.TOP;
+                }
+                break;
+            case "MIDDLE":
+                {
+                    // 방어력 증가
+                    data.defencePercent = 1.5f;
+
+                    buttonType = EventButtonType.MIDDLE;
+                }
+                break;
+            case "BOTTOM":
+                {
+                    // 이속 증가가
+                    data.moveSpeed = 2f;
+
+                    buttonType = EventButtonType.BOTTOM;
+                }
+                break;
+            default:
+                buttonType = EventButtonType.NONE;
+                break;
+        }
+
         mesh = gameObject.transform.Find("Button 01").GetComponent<MeshRenderer>();
         img = gameObject.GetComponentInChildren<Canvas>(true).GetComponentInChildren<Image>(true);
         img.enabled = true;

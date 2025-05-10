@@ -1,62 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AttackState : MonoBehaviour, IState
 {
     Player player;
-    Coroutine attackCoroutine;
+
     PlayerState stateCom;
     List<Player> enemyList;
     Animator ani;
     HeroData stat;
+    NavMeshAgent agent;
     public void Init(Player data)
     {
         player = data;
         stateCom = data.GetState();
         ani = player.gameObject.GetComponentInChildren<Animator>();
+        agent = player.gameObject.GetComponent<NavMeshAgent>();
     }
     public void Enter()
     {
-        if (attackCoroutine == null)
-        {
-            attackCoroutine = StartCoroutine(IEAttack());
-        }
-        stat = player.GetStat();
+        Attack();
+        agent.isStopped = true;
     }
-
     public void Exit()
     {
-        if (attackCoroutine != null)
-        {
-            StopCoroutine(attackCoroutine);
-            attackCoroutine = null;
-        }
     }
-
     public void StateUpdate()
     {
         if (player.IsDie() == true || GameManager.Instance.GetClear())
         {
             return;
-        }
-        if (player.GetEnemyList().Count <= 0)
-        {
-            stateCom.TransState(StateType.Move);
-        }
-    }
-    IEnumerator IEAttack()
-    {
-        if (GameManager.Instance.GetClear())
-        {
-            Exit();
-            yield return null;
-        }
-        enemyList = player.GetEnemyList();
-        while (enemyList.Count > 0)
-        {
-            Attack();
-            yield return stat.attackSpeed;
         }
     }
     public void Attack()
@@ -66,13 +42,22 @@ public class AttackState : MonoBehaviour, IState
             return;
         }
         // 공격 가능 유닛체크 공격
+        enemyList = player.GetEnemyList();
+        ani.SetTrigger("Attack");
+    }
+    public void EndAttackEvent()// 애니메이션 이벤트트
+    {
+        stateCom.TransState(StateType.Idle);
+    }
+    public void AttackEvent()// 애니메이션 이벤트
+    {
         for (int i = 0; i < enemyList.Count; i++)
         {
+            stat = player.GetStat();
             if (i >= stat.attackCnt)
                 return;
             else
             {
-                ani.SetTrigger("Attack");
                 // 타워 공격
                 if (enemyList[i].gameObject.tag == "EnemyTower")
                 {
@@ -89,6 +74,7 @@ public class AttackState : MonoBehaviour, IState
                     Player enemy = enemyList[i].GetComponent<Player>();
                     if (!enemy.IsDie())
                     {
+                        Debug.Log($"Damage : {stat.attack}");
                         enemy.Hit(stat.attack);
                     }
                 }

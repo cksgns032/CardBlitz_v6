@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UIManager : SingleTon<UIManager>
 {
@@ -17,7 +15,7 @@ public class UIManager : SingleTon<UIManager>
         int totalCnt = (int)PopUp_Name.Count;
         for (int i = 0; i < totalCnt; i++)
         {
-            if(popUpDictionary.ContainsKey(i) == false)
+            if (popUpDictionary.ContainsKey(i) == false)
             {
                 popUpDictionary.Add(i, Resources.Load<UIBase>($"Prefabs/PopUpPrefabs/{Enum.GetName(typeof(PopUp_Name), i)}"));
             }
@@ -31,7 +29,7 @@ public class UIManager : SingleTon<UIManager>
             if (findObject == null)
             {
                 GameObject popUp = sceneBase.GetPopUpLayer();
-                UIBase clone = Instantiate<UIBase>(obj,popUp.GetComponent<Transform>());
+                UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
                 clone.name = Enum.GetName(typeof(PopUp_Name), key);
                 clone.Init(key);
             }
@@ -43,7 +41,7 @@ public class UIManager : SingleTon<UIManager>
         if (popUpDictionary.TryGetValue((int)key, out UIBase obj))
         {
             Transform findObject = CheckNew(Enum.GetName(typeof(PopUp_Name), key));
-            if(findObject == null)
+            if (findObject == null)
             {
                 GameObject popUp = sceneBase.GetPopUpLayer();
                 UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
@@ -73,16 +71,16 @@ public class UIManager : SingleTon<UIManager>
     {
         UIBase valueBase = null;
         popUpDictionary.TryGetValue((int)popName, out valueBase);
-        if(valueBase)
+        if (valueBase)
         {
             valueBase.Close();
         }
     }
     public void AllClose()
     {
-        foreach(var key in popUpDictionary)
+        foreach (var key in popUpDictionary)
         {
-            if(key.Value.GetState() == PopUp_State.Open)
+            if (key.Value.GetState() == PopUp_State.Open)
             {
                 key.Value.Close();
             }

@@ -42,7 +42,7 @@ public class ChargeState : MonoBehaviour, IState
         {
             if (btn.ChargeImage(1 * Time.deltaTime, LayerMask.LayerToName(gameObject.layer)))
             {
-                player.SetEventButton(null);
+                player.SetEventButton(btn);
                 stateCom.TransState(StateType.Move);
             }
         }

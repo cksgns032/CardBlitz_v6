@@ -65,4 +65,11 @@ public enum AttackType
     Midair,
     All,
 }
+public enum EventButtonType
+{
+    NONE,
+    TOP,// ����ӵ� ����(�Ʊ�)
+    MIDDLE,// �̼� ���(�Ʊ�)
+    BOTTOM,// ���� ����(��)
+}
 #endregion

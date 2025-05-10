@@ -48,7 +48,7 @@ public class MoveState : ButtonSearch, IState
                     GameObject obj = GameObject.Find("EnemyGoal");
                     agent.SetDestination(obj.transform.position);
                 }
-                else if (gameObject.layer == LayerMask.NameToLayer("ENEMY"))
+                else if (player.gameObject.layer == LayerMask.NameToLayer("ENEMY"))
                 {
                     GameObject obj = GameObject.Find("MyGoal");
                     agent.SetDestination(obj.transform.position);

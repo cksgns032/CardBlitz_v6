@@ -19,7 +19,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     RectTransform rectCom;
     Vector2 rectVec2;
     Animation ani;
-
+    Coroutine cardCoroutine;
+    bool isUse;
     // �巡��
     public void OnDrag(PointerEventData eventData)
     {
@@ -50,6 +51,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         rectCom = GetComponent<RectTransform>();
         rectVec2 = new Vector2(rectCom.anchoredPosition.x, rectCom.anchoredPosition.y);
         ani = GetComponent<Animation>();
+        isUse = false;
+        gameObject.SetActive(false);
+    }
+    public bool GetIsUse()
+    {
+        return isUse;
     }
     public void Setting(CardInfo cardInfo, bool active)
     {
@@ -74,6 +81,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     async public void PlayAni(int delayTime)
     {
         await Task.Delay(delayTime);
+        if (gameObject == null || ani == null)
+        {
+            return;
+        }
         gameObject.SetActive(true);
         ani.Play(ani.clip.name);
         GameUI gameUI = GameManager.Instance.GetGameUI();
@@ -82,7 +93,12 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
             Button shuffle = gameUI.GetShuffle();
             if (shuffle != null)
             {
-                StartCoroutine(MoveAlongParabola(shuffle.transform.position, transform.parent.position, 5, 0.5f));
+                if (cardCoroutine != null)
+                {
+                    StopCoroutine(cardCoroutine);
+                    cardCoroutine = null;
+                }
+                cardCoroutine = StartCoroutine(MoveAlongParabola(shuffle.transform.position, transform.parent.position, 5, 0.5f));
             }
         }
     }
@@ -109,6 +125,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
 
         // 이동 완료 후 정확한 목표 위치 설정
         transform.position = end;
+        isUse = true;
     }
     public CardInfo GetCardInfo()
     {
@@ -176,5 +193,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     public void DownPosition()
     {
         gameObject.GetComponent<RectTransform>().anchoredPosition = rectVec2;
+    }
+    public void SetUse(bool Use)
+    {
+        isUse = Use;
     }
 }

@@ -16,14 +16,20 @@ public class IdleState : ButtonSearch, IState
         {
             agent.isStopped = true;
         }
+        if (player)
+        {
+            player.AttackCoolTime();
+        }
     }
     public void Exit()
     {
 
     }
-
     public void StateUpdate()
     {
-
+        if (player.IsDie() == true || GameManager.Instance.GetClear())
+        {
+            return;
+        }
     }
 }
