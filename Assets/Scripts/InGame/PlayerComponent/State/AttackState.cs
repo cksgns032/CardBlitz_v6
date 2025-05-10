@@ -45,12 +45,20 @@ public class AttackState : MonoBehaviour, IState
         enemyList = player.GetEnemyList();
         ani.SetTrigger("Attack");
     }
-    public void EndAttackEvent()// 애니메이션 이벤트트
+    public void EndAttackEvent()// 애니메이션 이벤트
     {
-        stateCom.TransState(StateType.Idle);
+        if(player.GetEnemyList().Count <= 0)
+        {
+            stateCom.TransState(StateType.Move);
+        }
+        else
+        {
+            stateCom.TransState(StateType.Idle);    
+        }
     }
     public void AttackEvent()// 애니메이션 이벤트
     {
+        List<Player> newEnemyList = new List<Player>();
         for (int i = 0; i < enemyList.Count; i++)
         {
             stat = player.GetStat();
@@ -78,7 +86,12 @@ public class AttackState : MonoBehaviour, IState
                         enemy.Hit(stat.attack);
                     }
                 }
+                if(enemyList[i].IsDie() == false)
+                {
+                    newEnemyList.Add(enemyList[i]);
+                }
             }
         }
+        player.SetEnemyList(newEnemyList);
     }
 }

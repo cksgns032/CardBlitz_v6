@@ -19,7 +19,7 @@ public class PlayerAttackRange : MonoBehaviour
             return;
         Player player = other.GetComponent<Player>();
         LayerMask enemyLayer = LayerMask.NameToLayer("ENEMY");
-        if (player && other.gameObject.tag == "Player" && other.gameObject.layer == enemyLayer)
+        if (player && player.IsDie() == false && other.gameObject.tag == "Player" && other.gameObject.layer == enemyLayer)
         {
             playerCom.AddEemyList(player);
         }

@@ -47,4 +47,8 @@ public class DieState : MonoBehaviour, IState
         }
         ani.SetTrigger("Die");
     }
+    public void EndDieEvent()
+    {
+        player.gameObject.SetActive(false);
+    }
 }

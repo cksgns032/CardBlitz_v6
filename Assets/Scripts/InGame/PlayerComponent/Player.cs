@@ -89,6 +89,9 @@ public class Player : MonoBehaviour
     {
         return enemyList;
     }
+    public void SetEnemyList(List<Player> enemyList){
+        this.enemyList = enemyList;
+    }
     public void SetStat()
     {
         info.hp = 100;
