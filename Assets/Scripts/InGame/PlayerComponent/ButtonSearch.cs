@@ -10,7 +10,8 @@ public class ButtonSearch : MonoBehaviour
         {
             return;
         }
-        if (other.gameObject.tag == "EVENTBUTTON")
+        int layerNum = LayerMask.NameToLayer("EVENTBUTTON");
+        if (other.gameObject.layer == layerNum)
         {
             EventButton btn = other.gameObject.GetComponent<EventButton>();
             if (btn && btn.CheckState() == false && btn.GetColor() != UserData.team)
