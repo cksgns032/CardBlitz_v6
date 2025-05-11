@@ -90,7 +90,8 @@ public class Player : MonoBehaviour
     {
         return enemyList;
     }
-    public void SetEnemyList(List<Player> enemyList){
+    public void SetEnemyList(List<Player> enemyList)
+    {
         this.enemyList = enemyList;
     }
     public void SetStat()
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour
         info.attackCnt = 1;
         info.attackRange = 10;
         agent.stoppingDistance = info.attackRange;
-        info.moveSpeed = isTest ? 0f : 1f;
+        info.moveSpeed = isTest ? 0f : 3f;
         agent.speed = info.moveSpeed;
         agent.stoppingDistance = info.attackRange;
         ani.SetFloat("Blend", agent.speed);
@@ -183,7 +184,7 @@ public class Player : MonoBehaviour
             enemyList.Add(enemyPlayer);
             // 내 위치 기준으로 sort
             enemyList.Sort(EnemySort);
-            if(attackCoroutine == null)
+            if (attackCoroutine == null)
             {
                 AttackCoolTime();
             }
@@ -282,7 +283,7 @@ public class Player : MonoBehaviour
         {
             stateCom.TransState(StateType.Attack);
         }
-        else 
+        else
         {
             stateCom.TransState(StateType.Move);
         }
