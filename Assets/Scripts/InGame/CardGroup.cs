@@ -195,23 +195,51 @@ public class CardGroup : MonoBehaviour
             select[k].gameObject.SetActive(false);
         }
         // �̻�� ī�� ����
-        for (int j = 0; j < cards.Count - 1; j++)//
+        // for (int j = 0; j < cards.Count - 1; j++)//
+        // {
+        //     if (cards[j].gameObject.activeSelf == true && cards[j + 1].gameObject.activeSelf == false)
+        //     {
+        //         cards[j + 1].SetUse(true);
+        //         cards[j + 1].gameObject.SetActive(true);
+        //         cards[j + 1].Setting(cards[j].GetCardInfo(), true);
+        //         UserData.HandCards[j + 1] = cards[j].GetCardInfo();
+        //         cards[j].SetUse(false);
+        //         cards[j].gameObject.SetActive(false);
+        //         cards[j].ResetCardInfo();
+        //         for (int i = j; i >= 0; i--)
+        //         {
+        //             if (cards[i].gameObject.activeSelf == true)
+        //             {
+        //                 cards[i + 1].SetUse(true);
+        //                 cards[i + 1].gameObject.SetActive(true);
+        //                 cards[i + 1].Setting(cards[i].GetCardInfo(), true);
+        //                 UserData.HandCards[i + 1] = cards[i].GetCardInfo();
+        //                 cards[i].SetUse(false);
+        //                 cards[i].gameObject.SetActive(false);
+        //                 cards[i].ResetCardInfo();
+        //             }
+        //         }
+        //     }
+        // }
+        for (int j = cards.Count - 1; j >= 1; j--)//
         {
-            if (cards[j].gameObject.activeSelf == true && cards[j + 1].gameObject.activeSelf == false)
+            if (cards[j].gameObject.activeSelf == true && cards[j - 1].gameObject.activeSelf == false)
             {
-                cards[j + 1].SetUse(true);
-                cards[j + 1].gameObject.SetActive(true);
-                cards[j + 1].Setting(cards[j].GetCardInfo(), true);
-                UserData.HandCards[j + 1] = cards[j].GetCardInfo();
+                cards[j - 1].SetUse(true);
+                cards[j - 1].gameObject.SetActive(true);
+                cards[j - 1].Setting(cards[j].GetCardInfo(), true);
+                UserData.HandCards[j - 1] = cards[j].GetCardInfo();
+                cards[j].SetUse(false);
                 cards[j].gameObject.SetActive(false);
                 cards[j].ResetCardInfo();
-                for (int i = j; i >= 0; i--)
+                for (int i = j; i < cards.Count; i++)
                 {
                     if (cards[i].gameObject.activeSelf == true)
                     {
-                        cards[i + 1].gameObject.SetActive(true);
-                        cards[i + 1].Setting(cards[i].GetCardInfo(), true);
-                        UserData.HandCards[i + 1] = cards[i].GetCardInfo();
+                        cards[i - 1].SetUse(true);
+                        cards[i - 1].gameObject.SetActive(true);
+                        cards[i - 1].Setting(cards[i].GetCardInfo(), true);
+                        UserData.HandCards[i - 1] = cards[i].GetCardInfo();
                         cards[i].SetUse(false);
                         cards[i].gameObject.SetActive(false);
                         cards[i].ResetCardInfo();

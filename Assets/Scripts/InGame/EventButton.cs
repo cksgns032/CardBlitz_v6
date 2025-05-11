@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class EventButton : MonoBehaviour
 {
     Image img;
-    MeshRenderer mesh;
+    //MeshRenderer mesh;
 
     bool charging = false;
     Team getColor = Team.None;
@@ -43,10 +43,13 @@ public class EventButton : MonoBehaviour
                 break;
         }
 
-        mesh = gameObject.transform.Find("Button 01").GetComponent<MeshRenderer>();
+        //mesh = gameObject.transform.Find("Button 01").GetComponent<MeshRenderer>();
         img = gameObject.GetComponentInChildren<Canvas>(true).GetComponentInChildren<Image>(true);
-        img.enabled = true;
-        img.fillAmount = 0;
+        if(img)
+        {
+            img.enabled = true;
+            img.fillAmount = 0;    
+        }
     }
     public bool ChargeImage(float num, string team)
     {
@@ -69,12 +72,12 @@ public class EventButton : MonoBehaviour
                 case "ENEMY":
                     if (UserData.team == Team.Blue)
                     {
-                        mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
+                        //mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
                         getColor = Team.Red;
                     }
                     else
                     {
-                        mesh.material = Resources.Load<Material>("Prefabs/Material/BlueButton");
+                        //mesh.material = Resources.Load<Material>("Prefabs/Material/BlueButton");
                         getColor = Team.Blue;
 
                     }
@@ -82,12 +85,12 @@ public class EventButton : MonoBehaviour
                 case "HERO":
                     if (UserData.team == Team.Blue)
                     {
-                        mesh.material = Resources.Load<Material>("Prefabs/Material/BlueButton");
+                        //mesh.material = Resources.Load<Material>("Prefabs/Material/BlueButton");
                         getColor = Team.Blue;
                     }
                     else
                     {
-                        mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
+                        //mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
                         getColor = Team.Red;
                     }
                     break;

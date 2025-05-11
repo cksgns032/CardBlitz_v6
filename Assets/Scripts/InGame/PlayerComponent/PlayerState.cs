@@ -113,5 +113,6 @@ public class PlayerState
     public void Damage(float damage)
     {
         hitState.Damage(damage);
+        TransState(StateType.Hit);
     }
 }

@@ -205,7 +205,6 @@ public class Player : MonoBehaviour
     {
         if (stateCom != null)
         {
-            stateCom.TransState(StateType.Hit);
             stateCom.Damage(damage);
         }
     }
