@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System;
+using Unity.VisualScripting;
 
 public class Player : MonoBehaviour
 {
@@ -96,7 +97,7 @@ public class Player : MonoBehaviour
     {
         info.hp = 100;
         info.defence = 1;
-        info.attack = 100;
+        info.attack = 0;
         info.attackSpeed = 5;
         info.attackSpeed = 10;
         info.attackCnt = 1;
@@ -182,7 +183,10 @@ public class Player : MonoBehaviour
             enemyList.Add(enemyPlayer);
             // 내 위치 기준으로 sort
             enemyList.Sort(EnemySort);
-            stateCom.TransState(StateType.Attack);
+            if(attackCoroutine == null)
+            {
+                AttackCoolTime();
+            }
         }
     }
     public void RemoveEnemyList(Player enemyPlayer)
@@ -274,12 +278,20 @@ public class Player : MonoBehaviour
         while (elapsedTime < Math.Max(0, info.attackSpeed - buffAttackSpeed))
         {
             elapsedTime += Time.deltaTime;
-            yield return null;
         }
         if (enemyList.Count > 0)
         {
             stateCom.TransState(StateType.Attack);
         }
+        else 
+        {
+            stateCom.TransState(StateType.Move);
+        }
+        yield return null;
+    }
+    public void Update()
+    {
+        stateCom.Update();
     }
     // public void EditorGizmo(Transform transform)
 
