@@ -62,6 +62,7 @@ public class PlayerState
         }
         currentState = GetCurrentState(state);
         currentState.Enter();
+        Debug.Log(currentState);
     }
     public void Update()
     {

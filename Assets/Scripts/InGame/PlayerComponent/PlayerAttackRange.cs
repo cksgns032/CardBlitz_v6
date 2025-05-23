@@ -12,6 +12,14 @@ public class PlayerAttackRange : MonoBehaviour
         playerCom = GetComponentInParent<Player>();
         state = playerCom.GetState();
     }
+    public void SetRadius(float radius)
+    {
+        if (sphereCollider)
+        {
+        sphereCollider.radius = radius;    
+        }
+        
+    }
     // 들어왔을 때 리스트에 넣어줌
     private void OnTriggerEnter(Collider other)
     {

@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     // hero
     EventButton btnEvent;
     [SerializeField] HeroData info = new HeroData();
-    PlayerState stateCom;
+    [SerializeField]PlayerState stateCom = new PlayerState();
     // attack
     [SerializeField] PlayerAttackRange attackRangeCom;
     Coroutine attackCoroutine;
@@ -43,8 +43,6 @@ public class Player : MonoBehaviour
         }
 
         // todo : �� ���� �̸��� ������ ���� ���̺� �о �ɷ�ġ ����
-        SetStat();
-        stateCom = new PlayerState();
         if (stateCom != null)
         {
             stateCom.Init(this);
@@ -54,6 +52,7 @@ public class Player : MonoBehaviour
         {
             attackRangeCom.Init();
         }
+                SetStat();
     }
     public void TestInit()
     {
@@ -73,8 +72,6 @@ public class Player : MonoBehaviour
         {
             rigid.isKinematic = true;
         }
-
-        SetStat();
         stateCom = new PlayerState();
         if (stateCom != null)
         {
@@ -85,6 +82,7 @@ public class Player : MonoBehaviour
         {
             attackRangeCom.gameObject.SetActive(false);
         }
+        SetStat();
     }
     public List<Player> GetEnemyList()
     {
@@ -101,10 +99,11 @@ public class Player : MonoBehaviour
         info.attackSpeed = 5;
         info.attackSpeed = 10;
         info.attackCnt = 1;
-        info.attackRange = 10;
+        info.attackRange = 3;
+        attackRangeCom.SetRadius(info.attackRange);
         agent.stoppingDistance = info.attackRange;
         info.moveSpeed = isTest ? 0f : 1f;
-        agent.speed = info.moveSpeed;
+        agent.speed = 5;//info.moveSpeed;
         agent.stoppingDistance = info.attackRange;
         ani.SetFloat("Blend", agent.speed);
     }
