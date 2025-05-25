@@ -22,7 +22,7 @@ public class PoolingManager : SingleTon<PoolingManager>
     private GameObject CreatePooledItem()
     {
         Transform parant = FindFirstObjectByType<GameUI>().transform.Find("DamageTextGroup");
-        GameObject poolGo = Instantiate(Resources.Load<GameObject>("Prefabs/DamageTxt"), parant);
+        GameObject poolGo = Instantiate(Resources.Load<GameObject>("Prefabs/InGame/DamageTxt"), parant);
         poolGo.GetComponent<DamageTxt>().Pool = this.Pool;
         return poolGo;
     }

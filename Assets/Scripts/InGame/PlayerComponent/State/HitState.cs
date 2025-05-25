@@ -4,13 +4,13 @@ using UnityEngine.AI;
 public class HitState : MonoBehaviour, IState
 {
     GameObject damageObj;
-    Player player;
+    Monster player;
     HeroData stat;
     Animator ani;
     NavMeshAgent agent;
     PlayerState stateCom;
 
-    public void Init(Player data)
+    public void Init(Monster data)
     {
         player = data;
         stateCom = data.GetState();

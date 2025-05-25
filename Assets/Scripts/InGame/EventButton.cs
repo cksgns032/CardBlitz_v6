@@ -43,12 +43,11 @@ public class EventButton : MonoBehaviour
                 break;
         }
 
-        //mesh = gameObject.transform.Find("Button 01").GetComponent<MeshRenderer>();
         img = gameObject.GetComponentInChildren<Canvas>(true).GetComponentInChildren<Image>(true);
-        if(img)
+        if (img)
         {
             img.enabled = true;
-            img.fillAmount = 0;    
+            img.fillAmount = 0;
         }
     }
     public bool ChargeImage(float num, string team)
@@ -70,29 +69,10 @@ public class EventButton : MonoBehaviour
             switch (team)
             {
                 case "ENEMY":
-                    if (UserData.team == Team.Blue)
-                    {
-                        //mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
-                        getColor = Team.Red;
-                    }
-                    else
-                    {
-                        //mesh.material = Resources.Load<Material>("Prefabs/Material/BlueButton");
-                        getColor = Team.Blue;
-
-                    }
+                    getColor = UserData.team == Team.Blue ? Team.Red : Team.Blue;
                     break;
                 case "HERO":
-                    if (UserData.team == Team.Blue)
-                    {
-                        //mesh.material = Resources.Load<Material>("Prefabs/Material/BlueButton");
-                        getColor = Team.Blue;
-                    }
-                    else
-                    {
-                        //mesh.material = Resources.Load<Material>("Prefabs/Material/RedButton");
-                        getColor = Team.Red;
-                    }
+                    getColor = UserData.team == Team.Blue ? Team.Blue : Team.Red;
                     break;
             }
             charging = false;

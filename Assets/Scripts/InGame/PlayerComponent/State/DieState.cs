@@ -3,11 +3,11 @@ using UnityEngine.AI;
 
 public class DieState : MonoBehaviour, IState
 {
-    Player player;
+    Monster player;
     NavMeshAgent agent;
     PlayerState stateCom;
     Animator ani;
-    public void Init(Player data)
+    public void Init(Monster data)
     {
         player = data;
         stateCom = data.GetState();

@@ -3,10 +3,10 @@ using UnityEngine.AI;
 
 public class ChargeState : MonoBehaviour, IState
 {
-    Player player;
+    Monster player;
     NavMeshAgent agent;
     PlayerState stateCom;
-    public void Init(Player data)
+    public void Init(Monster data)
     {
         player = data;
         stateCom = data.GetState();

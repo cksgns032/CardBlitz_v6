@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,8 +8,8 @@ public class GameManager : SingleTon<GameManager>
     GameUI gameUI;
     Fade fade;
 
-    List<Player> myList = new List<Player>();
-    List<Player> enemyList = new List<Player>();
+    List<Monster> myList = new List<Monster>();
+    List<Monster> enemyList = new List<Monster>();
 
     bool isClaer = false;
     float gameTime = 100;
@@ -37,7 +36,7 @@ public class GameManager : SingleTon<GameManager>
         }
         // Map
         GameObject mapPos = GameObject.Find("MapPos");
-        GameObject mapObj = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Map"), mapPos.GetComponent<Transform>());
+        GameObject mapObj = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Map/Map"), mapPos.GetComponent<Transform>());
         map = mapObj.GetComponent<GameMap>();
         map.Init();
     }
@@ -68,7 +67,7 @@ public class GameManager : SingleTon<GameManager>
     // 몬스터 생성(todo : 몬스터 풀링을 만들어서 거기서 관리)
     public void CreateHero(string objTag, string objName, Team team, int useCost)
     {
-        Player monObj = Instantiate<Player>(Resources.Load<Player>("Prefabs/Monster/" + objName));
+        Monster monObj = Instantiate<Monster>(Resources.Load<Monster>("Prefabs/Monster/" + objName));
         switch (objTag)
         {
             case "TOP":
@@ -103,11 +102,11 @@ public class GameManager : SingleTon<GameManager>
         }
         gameUI.UseCost(team, -useCost);
     }
-    public List<Player> GetMyList()
+    public List<Monster> GetMyList()
     {
         return myList;
     }
-    public List<Player> GetEnemyList()
+    public List<Monster> GetEnemyList()
     {
         return enemyList;
     }
@@ -151,13 +150,13 @@ public class GameManager : SingleTon<GameManager>
         cardTime = 1.5f;
         gaugeTime = 1.5f;
 
-        List<Player> allObject = new List<Player>();
+        List<Monster> allObject = new List<Monster>();
         allObject.AddRange(myList);
         allObject.AddRange(enemyList);
 
         for (int i = 0; i < allObject.Count; i++)
         {
-            if (allObject[i].GetComponent<Player>())
+            if (allObject[i].GetComponent<Monster>())
             {
                 BuffData data = new BuffData();
                 allObject[i].AddBuff(data);

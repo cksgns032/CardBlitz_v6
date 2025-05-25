@@ -1,10 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Net;
 using System.Net.Sockets;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting.Antlr3.Runtime;
 
 public class TCPClient : SingleTon<TCPClient>
 {
@@ -25,7 +22,7 @@ public class TCPClient : SingleTon<TCPClient>
     }
     private void OnApplicationQuit()
     {
-        if(client != null)
+        if (client != null)
         {
             client.Shutdown(SocketShutdown.Both);
             client.Close();
@@ -44,7 +41,7 @@ public class TCPClient : SingleTon<TCPClient>
     public void Init()
     {
         isConnect = true;
-        Connect("127.0.0.1", 80,"Kim Chan Hun");
+        Connect("127.0.0.1", 80, "Kim Chan Hun");
     }
 
     // Update is called once per frame
@@ -56,12 +53,12 @@ public class TCPClient : SingleTon<TCPClient>
     }
     public void UpdateClient()
     {
-        if(client != null && client.Poll(0,SelectMode.SelectRead))
+        if (client != null && client.Poll(0, SelectMode.SelectRead))
         {
             byte[] buffer = new byte[1024];
             int recvLen = client.Receive(buffer);
 
-            // Ã¹¹øÂ° µ¥ÀÌÅÍ°¡ ¸ðµåÇü½Ä
+            // Ã¹ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             string packetStr = System.Text.Encoding.UTF8.GetString(buffer);
 
             packetStr = packetStr.Replace("\0", "");
@@ -92,7 +89,7 @@ public class TCPClient : SingleTon<TCPClient>
                     break;
                 case GameProtocolType.END:
                     RESULT resultType;
-                    if(System.Enum.TryParse(arr[1], out resultType) == false) return;
+                    if (System.Enum.TryParse(arr[1], out resultType) == false) return;
                     GameManager.Instance.ResultGame(resultType);
                     break;
                 case GameProtocolType.USERINFO:
@@ -102,12 +99,12 @@ public class TCPClient : SingleTon<TCPClient>
                     if (System.Enum.TryParse(arr[3], out team) == false) return;
                     if (team == UserData.team)
                         return;
-                    // arr[1] = À§Ä¡
-                    // arr[2] = ¿ÀºêÁ§Æ® ÀÌ¸§ 
-                    Player player = Instantiate(Resources.Load<Player>("Prefabs/" + arr[2]));
+                    // arr[1] = ï¿½ï¿½Ä¡
+                    // arr[2] = ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ì¸ï¿½ 
+                    Monster player = Instantiate(Resources.Load<Monster>("Prefabs/" + arr[2]));
                     player.gameObject.layer = LayerMask.NameToLayer("ENEMY");
                     //player.Init();
-                    player.AgentMaskSet(arr[1],team);
+                    player.AgentMaskSet(arr[1], team);
                     break;
             }
         }

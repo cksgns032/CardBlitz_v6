@@ -1,10 +1,9 @@
-using UnityEngine;
 using UnityEngine.AI;
 
 public class IdleState : ButtonSearch, IState
 {
     NavMeshAgent agent;
-    public void Init(Player data)
+    public void Init(Monster data)
     {
         player = data;
         stateCom = data.GetState();

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ButtonSearch : MonoBehaviour
 {
-    protected Player player;
+    protected Monster player;
     protected PlayerState stateCom;
     private void OnTriggerEnter(Collider other)
     {

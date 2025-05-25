@@ -1,19 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AttackState : MonoBehaviour, IState
 {
-    Player player;
+    Monster player;
 
     PlayerState stateCom;
-    List<Player> enemyList;
+    List<Unit> enemyList;
     Animator ani;
     HeroData stat;
     NavMeshAgent agent;
-    public void Init(Player data)
+    public void Init(Monster data)
     {
         player = data;
         stateCom = data.GetState();
@@ -23,7 +24,6 @@ public class AttackState : MonoBehaviour, IState
     public void Enter()
     {
         Attack();
-        agent.isStopped = true;
     }
     public void Exit()
     {
@@ -41,24 +41,26 @@ public class AttackState : MonoBehaviour, IState
         {
             return;
         }
+        agent.speed = 0;
+        agent.isStopped = true;
         // 공격 가능 유닛체크 공격
         enemyList = player.GetEnemyList();
         ani.SetTrigger("Attack");
     }
     public void EndAttackEvent()// 애니메이션 이벤트
     {
-        if(player.GetEnemyList().Count <= 0)
+        if (player.GetEnemyList().Count <= 0)
         {
             stateCom.TransState(StateType.Move);
         }
         else
         {
-            stateCom.TransState(StateType.Idle);    
+            stateCom.TransState(StateType.Idle);
         }
     }
     public void AttackEvent()// 애니메이션 이벤트
     {
-        List<Player> newEnemyList = new List<Player>();
+        List<Unit> newEnemyList = new List<Unit>();
         for (int i = 0; i < enemyList.Count; i++)
         {
             stat = player.GetStat();
@@ -79,19 +81,19 @@ public class AttackState : MonoBehaviour, IState
                 // 몬스터 공격
                 else if (enemyList[i].gameObject.tag == "Player")
                 {
-                    Player enemy = enemyList[i].GetComponent<Player>();
+                    Monster enemy = enemyList[i].GetComponent<Monster>();
                     if (!enemy.IsDie())
                     {
                         Debug.Log($"Damage : {stat.attack}");
                         enemy.Hit(stat.attack);
                     }
                 }
-                if(enemyList[i].IsDie() == false)
-                {
-                    newEnemyList.Add(enemyList[i]);
-                }
+                // if (enemyList[i].IsDie() == false)
+                // {
+                //     newEnemyList.Add(enemyList[i]);
+                // }
             }
         }
-        player.SetEnemyList(newEnemyList);
+        // player.SetEnemyList(newEnemyList);
     }
 }

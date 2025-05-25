@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System;
-using Unity.VisualScripting;
 
-public class Player : MonoBehaviour
+public class Monster : Unit
 {
     // component
     NavMeshAgent agent;
@@ -19,12 +18,12 @@ public class Player : MonoBehaviour
     // attack
     [SerializeField] PlayerAttackRange attackRangeCom;
     Coroutine attackCoroutine;
-    [SerializeField] List<Player> enemyList = new List<Player>();
+    [SerializeField] List<Unit> enemyList = new List<Unit>();
     [SerializeField] List<Buff> buffList = new List<Buff>();
     bool isDie = false;
     bool isTest = false;
 
-    public void Init()
+    public override void Init()
     {
         agent = GetComponent<NavMeshAgent>();
         if (agent)
@@ -84,11 +83,11 @@ public class Player : MonoBehaviour
         }
         SetStat();
     }
-    public List<Player> GetEnemyList()
+    public List<Unit> GetEnemyList()
     {
         return enemyList;
     }
-    public void SetEnemyList(List<Player> enemyList)
+    public void SetEnemyList(List<Unit> enemyList)
     {
         this.enemyList = enemyList;
     }
@@ -97,8 +96,7 @@ public class Player : MonoBehaviour
         info.hp = 100;
         info.defence = 1;
         info.attack = 0;
-        info.attackSpeed = 5;
-        info.attackSpeed = 10;
+        info.attackSpeed = 60;
         info.attackCnt = 1;
         info.attackRange = 3;
         attackRangeCom.SetRadius(info.attackRange);
@@ -148,9 +146,9 @@ public class Player : MonoBehaviour
         stateCom.TransState(StateType.Move);
     }
     // 중복체크
-    public bool CheckList(Player player)
+    public bool CheckList(Unit player)
     {
-        foreach (Player data in enemyList)
+        foreach (Unit data in enemyList)
         {
             if (data == player)
             {
@@ -159,7 +157,7 @@ public class Player : MonoBehaviour
         }
         return true;
     }
-    int EnemySort(Player left, Player right)
+    int EnemySort(Unit left, Unit right)
     {
         float leftDis = Vector3.Distance(this.gameObject.transform.position, left.transform.position);
         float rightDis = Vector3.Distance(this.gameObject.transform.position, right.transform.position);
@@ -176,7 +174,7 @@ public class Player : MonoBehaviour
             return 1;
         }
     }
-    public void AddEemyList(Player enemyPlayer)
+    public void AddEemyList(Unit enemyPlayer)
     {
         if (CheckList(enemyPlayer))
         {
@@ -189,9 +187,9 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public void RemoveEnemyList(Player enemyPlayer)
+    public void RemoveEnemyList(Unit enemyPlayer)
     {
-        foreach (Player player in enemyList)
+        foreach (Unit player in enemyList)
         {
             if (player == enemyPlayer)
             {
@@ -270,13 +268,16 @@ public class Player : MonoBehaviour
         float elapsedTime = 0f;
         float buffAttackSpeed = 0f;
         List<Buff> attackSpeedBuffList = buffList.Where(x => x.attackSpeed > 0).ToList();
+        // 버프 상태 확인
         foreach (var buff in attackSpeedBuffList)
         {
             buffAttackSpeed += info.attackSpeed * buff.attackSpeed;
         }
+        // 공격 쿨타임
         while (elapsedTime < Math.Max(0, info.attackSpeed - buffAttackSpeed))
         {
             elapsedTime += Time.deltaTime;
+            //Debug.Log(elapsedTime);
         }
         if (enemyList.Count > 0)
         {

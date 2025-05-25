@@ -19,9 +19,9 @@ public class Buff : MonoBehaviour
 
     //WaitForSeconds wait = new WaitForSeconds(0.1f);
     WaitForSecondsRealtime waitReal = new WaitForSecondsRealtime(0.1f);
-    Player player;
+    Monster player;
 
-    public void SetBuff(BuffData data, Player player)
+    public void SetBuff(BuffData data, Monster player)
     {
         buffData = data;
         this.player = player;

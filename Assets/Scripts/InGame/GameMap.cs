@@ -8,7 +8,7 @@ public class GameMap : MonoBehaviour
     List<GameObject> MiddleList = new List<GameObject>();
     List<GameObject> BottomList = new List<GameObject>();
 
-    public Player testMon;
+    public Monster testMon;
 
     string currentTag = string.Empty;
     Color currentColor;

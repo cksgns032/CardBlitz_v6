@@ -1,6 +1,6 @@
 public interface IState
 {
-    public void Init(Player player);
+    public void Init(Monster player);
     public void Enter();
     public void Exit();
     public void StateUpdate();

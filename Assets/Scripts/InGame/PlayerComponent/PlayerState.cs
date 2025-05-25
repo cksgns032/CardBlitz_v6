@@ -13,9 +13,9 @@ public class PlayerState
     private HitState hitState;
     private ChargeState chargeState;
     private DieState dieState;
-    private Player player;
+    private Monster player;
 
-    public void Init(Player playerCom)
+    public void Init(Monster playerCom)
     {
         player = playerCom;
         idleState = player.AddComponent<IdleState>();

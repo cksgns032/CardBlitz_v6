@@ -6,7 +6,7 @@ public class MoveState : ButtonSearch, IState
 {
     NavMeshAgent agent;
 
-    public void Init(Player data)
+    public void Init(Monster data)
     {
         player = data;
         stateCom = data.GetState();
@@ -36,7 +36,7 @@ public class MoveState : ButtonSearch, IState
         // 목표 지점 설정 및 이동
         if (agent.enabled == true)
         {
-            List<Player> enemyList = player.GetEnemyList();
+            List<Unit> enemyList = player.GetEnemyList();
             if (enemyList.Count > 0)
             {
                 agent.SetDestination(enemyList[0].transform.position);
