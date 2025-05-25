@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     // hero
     EventButton btnEvent;
     [SerializeField] HeroData info = new HeroData();
-    [SerializeField]PlayerState stateCom = new PlayerState();
+    [SerializeField] PlayerState stateCom = new PlayerState();
     // attack
     [SerializeField] PlayerAttackRange attackRangeCom;
     Coroutine attackCoroutine;
@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         {
             attackRangeCom.Init();
         }
-                SetStat();
+        SetStat();
     }
     public void TestInit()
     {

@@ -16,13 +16,13 @@ public class HitState : MonoBehaviour, IState
         stateCom = data.GetState();
         ani = player.gameObject.GetComponentInChildren<Animator>();
         agent = player.gameObject.GetComponent<NavMeshAgent>();
-    }
-    public void Enter()
-    {
         if (damageObj == null)
         {
             damageObj = transform.Find("DamagePos").gameObject;
         }
+    }
+    public void Enter()
+    {
         stat = player.GetStat();
     }
 
