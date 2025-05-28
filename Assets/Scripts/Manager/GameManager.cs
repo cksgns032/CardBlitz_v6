@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Pool;
 
 public class GameManager : SingleTon<GameManager>
 {
@@ -10,17 +11,25 @@ public class GameManager : SingleTon<GameManager>
 
     List<Monster> myList = new List<Monster>();
     List<Monster> enemyList = new List<Monster>();
+    private UserGameData myGameData = new UserGameData();
+    private UserGameData otherGameData = new UserGameData();
 
     bool isClaer = false;
     float gameTime = 100;
     float cardTime = 3;
     float gaugeTime = 3;
 
+    // todo : ai test용
+
     void Start()
     {
+        // todo : 하드 코딩 > 서버 데이터 변경
+        myGameData.Init();
+        otherGameData.Init();
         // Audio
         AudioManager.Instance.LoadSound(AudioManager.Type.BGM, "BattleSound");
         AudioManager.Instance.PlayBgm(true, "BattleSound");
+        // Pool
         PoolingManager.Instance.Init();
         // Fade
         fade = GameObject.FindAnyObjectByType<Fade>();
@@ -39,6 +48,14 @@ public class GameManager : SingleTon<GameManager>
         GameObject mapObj = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Map/Map"), mapPos.GetComponent<Transform>());
         map = mapObj.GetComponent<GameMap>();
         map.Init();
+    }
+    public UserGameData GetMyGameData()
+    {
+        return myGameData;
+    }
+    public UserGameData GetOtherGameData()
+    {
+        return otherGameData;
     }
     public GameMap GetGameMap()
     {
@@ -67,38 +84,26 @@ public class GameManager : SingleTon<GameManager>
     // 몬스터 생성(todo : 몬스터 풀링을 만들어서 거기서 관리)
     public void CreateHero(string objTag, string objName, Team team, int useCost)
     {
-        Monster monObj = Instantiate<Monster>(Resources.Load<Monster>("Prefabs/Monster/" + objName));
-        switch (objTag)
+        // 딕셔너리 체크
+        if (PoolingManager.Instance.MonsterPoolList.TryGetValue(objName, out IObjectPool<GameObject> obj) == false)
         {
-            case "TOP":
-                Vector3 pos = map.transform.Find("SpawnPos/TopPotal").transform.position;
-                monObj.gameObject.transform.position = new Vector3(pos.x, 1.2f, pos.z);
-                break;
-            case "MIDDLE":
-                pos = map.transform.Find("SpawnPos/MiddlePotal").transform.position;
-                monObj.gameObject.transform.position = new Vector3(pos.x, 1.2f, pos.z);
-                break;
-            case "BOTTOM":
-                pos = map.transform.Find("SpawnPos/BottomPotal").transform.position;
-                monObj.gameObject.transform.position = new Vector3(pos.x, 1.2f, pos.z);
-                break;
+            PoolingManager.Instance.SetPool(objName);
         }
-        monObj.gameObject.layer = LayerMask.NameToLayer("HERO");
-        monObj.gameObject.tag = "Player";
-        monObj.Init();
-        monObj.AgentMaskSet(objTag, team);
-        // ������Ʈ�� ��ġ, ������ ����
+        GameObject poolObj = PoolingManager.Instance.MonsterPoolList[objName].Get();
+        Monster monCom = poolObj.GetComponent<Monster>();
+        monCom.Init();
+        monCom.AgentMaskSet(objTag, team);
+
+        // todo : 서버 활성화 후
         //TCPClient.Instance.CreateObj(MonName, tagName);
 
-        // �� ���� ��ȯ�� ���� ��
-        if (team == UserData.team)
+        if (team == myGameData.team)
         {
-            myList.Add(monObj);
+            myList.Add(monCom);
         }
-        // �� ���� ��ȯ�� ���� ��
         else
         {
-            enemyList.Add(monObj);
+            enemyList.Add(monCom);
         }
         gameUI.UseCost(team, -useCost);
     }
@@ -177,5 +182,5 @@ public class GameManager : SingleTon<GameManager>
     {
         return gameTime;
     }
-    #endregion
+    #endregion Any Time
 }

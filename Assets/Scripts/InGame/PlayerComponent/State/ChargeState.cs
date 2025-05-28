@@ -6,8 +6,10 @@ public class ChargeState : MonoBehaviour, IState
     Monster player;
     NavMeshAgent agent;
     PlayerState stateCom;
+    UserGameData userData;
     public void Init(Monster data)
     {
+        userData = GameManager.Instance.GetMyGameData();
         player = data;
         stateCom = data.GetState();
         agent = player.gameObject.GetComponent<NavMeshAgent>();
@@ -38,9 +40,9 @@ public class ChargeState : MonoBehaviour, IState
 
         EventButton btn = player.GetEventButton();
         if (btn != null &&
-            btn.GetColor() != UserData.team)
+            btn.GetColor() != userData.team)
         {
-            if (btn.ChargeImage(1 * Time.deltaTime, LayerMask.LayerToName(gameObject.layer)))
+            if (btn.ChargeImage(1 * Time.deltaTime, LayerMask.LayerToName(gameObject.layer), userData.team))
             {
                 player.SetEventButton(btn);
                 stateCom.TransState(StateType.Move);

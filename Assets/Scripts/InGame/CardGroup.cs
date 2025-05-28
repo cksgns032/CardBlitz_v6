@@ -5,15 +5,10 @@ public class CardGroup : MonoBehaviour
 {
     List<Card> cards = new List<Card>();
     List<Card> select;
+    UserGameData userData;
     public void Init()
     {
-        for (int i = 0; i < 3; i++)
-        {
-            CardInfo cardInfo = new CardInfo();
-            cardInfo.level = 1;
-            cardInfo.id = i.ToString();
-            UserData.gameDeck.Add(cardInfo);
-        }
+        userData = GameManager.Instance.GetMyGameData();
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             Transform child = gameObject.transform.GetChild(i);
@@ -31,6 +26,7 @@ public class CardGroup : MonoBehaviour
             card.Init();
         }
     }
+    // todo : 서버 생기면 연결
     public void Shuffle()
     {
         GameUI gameUI = GameManager.Instance.GetGameUI();
@@ -39,9 +35,9 @@ public class CardGroup : MonoBehaviour
         {
             if (cards[i].gameObject.activeSelf == true && cards[i].GetIsUse())
             {
-                int num = Random.Range(0, UserData.gameDeck.Count);
-                cards[i].Setting(UserData.gameDeck[num], false);
-                UserData.HandCards[i] = UserData.gameDeck[num];
+                int num = Random.Range(0, userData.gameDeck.Count);
+                cards[i].Setting(userData.gameDeck[num], false);
+                userData.HandCards[i] = userData.gameDeck[num];
                 cards[i].PlayAni(i * 100);
             }
         }
@@ -51,7 +47,7 @@ public class CardGroup : MonoBehaviour
     public void AddCard()
     {
         bool isFull = true;
-        foreach (CardInfo i in UserData.HandCards)
+        foreach (CardInfo i in userData.HandCards)
         {
             if (i == null)
             {
@@ -66,9 +62,9 @@ public class CardGroup : MonoBehaviour
                 if (cards[i].gameObject.activeSelf == false && cards[i].GetIsUse() == false)
                 {
                     cards[i].gameObject.SetActive(true);
-                    int num = UnityEngine.Random.Range(0, UserData.gameDeck.Count);
-                    cards[i].Setting(UserData.gameDeck[num], false);
-                    UserData.HandCards[i] = UserData.gameDeck[num];
+                    int num = UnityEngine.Random.Range(0, userData.gameDeck.Count);
+                    cards[i].Setting(userData.gameDeck[num], false);
+                    userData.HandCards[i] = userData.gameDeck[num];
                     cards[i].PlayAni(0);
                     break;
                 }
@@ -202,7 +198,7 @@ public class CardGroup : MonoBehaviour
                 cards[j - 1].SetUse(true);
                 cards[j - 1].gameObject.SetActive(true);
                 cards[j - 1].Setting(cards[j].GetCardInfo(), true);
-                UserData.HandCards[j - 1] = cards[j].GetCardInfo();
+                userData.HandCards[j - 1] = cards[j].GetCardInfo();
                 cards[j].SetUse(false);
                 cards[j].gameObject.SetActive(false);
                 cards[j].ResetCardInfo();
@@ -213,7 +209,7 @@ public class CardGroup : MonoBehaviour
                         cards[i - 1].SetUse(true);
                         cards[i - 1].gameObject.SetActive(true);
                         cards[i - 1].Setting(cards[i].GetCardInfo(), true);
-                        UserData.HandCards[i - 1] = cards[i].GetCardInfo();
+                        userData.HandCards[i - 1] = cards[i].GetCardInfo();
                         cards[i].SetUse(false);
                         cards[i].gameObject.SetActive(false);
                         cards[i].ResetCardInfo();
@@ -225,7 +221,7 @@ public class CardGroup : MonoBehaviour
         {
             if (cards[i].gameObject.activeSelf == false)
             {
-                UserData.HandCards[i] = null;
+                userData.HandCards[i] = null;
             }
         }
     }

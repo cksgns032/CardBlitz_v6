@@ -50,7 +50,7 @@ public class EventButton : MonoBehaviour
             img.fillAmount = 0;
         }
     }
-    public bool ChargeImage(float num, string team)
+    public bool ChargeImage(float num, string layer, Team team)
     {
         img.enabled = true;
         img.fillAmount += num;
@@ -66,13 +66,13 @@ public class EventButton : MonoBehaviour
                 GameManager.Instance.GetEnemyList()[i].SetStat();
             }
             // ����ġ �� ������ ����
-            switch (team)
+            switch (layer)
             {
                 case "ENEMY":
-                    getColor = UserData.team == Team.Blue ? Team.Red : Team.Blue;
+                    getColor = team == Team.Blue ? Team.Red : Team.Blue;
                     break;
                 case "HERO":
-                    getColor = UserData.team == Team.Blue ? Team.Blue : Team.Red;
+                    getColor = team == Team.Blue ? Team.Blue : Team.Red;
                     break;
             }
             charging = false;

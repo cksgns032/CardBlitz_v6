@@ -68,8 +68,8 @@ public enum AttackType
 public enum EventButtonType
 {
     NONE,
-    TOP,// ����ӵ� ����(�Ʊ�)
-    MIDDLE,// �̼� ���(�Ʊ�)
-    BOTTOM,// ���� ����(��)
+    TOP,
+    MIDDLE,
+    BOTTOM,
 }
 #endregion

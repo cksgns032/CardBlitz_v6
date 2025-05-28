@@ -13,6 +13,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     string cardName;
     int selectCardNum;
 
+    UserGameData userData;
     CardInfo cardinfo;
     Image charImg;
     CardGroup cardGroup;
@@ -47,6 +48,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     }
     public void Init()
     {
+        userData = GameManager.Instance.GetMyGameData();
         cardGroup = GetComponentInParent<CardGroup>();
         rectCom = GetComponent<RectTransform>();
         rectVec2 = new Vector2(rectCom.anchoredPosition.x, rectCom.anchoredPosition.y);
@@ -142,7 +144,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layerMask = 1 << LayerMask.NameToLayer("TEAMLOAD");
         Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask);
-        if (UserData.gauge - selectCardNum >= 0)
+        if (userData.gauge - selectCardNum >= 0)
         {
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
@@ -161,8 +163,8 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
                 }
                 // test
                 monName = "Unit_Test";
-
-                GameManager.Instance.CreateHero(hit.transform.gameObject.tag, monName, UserData.team, selectCardNum);
+                // todo : 서버 연결 후 수정
+                GameManager.Instance.CreateHero(hit.transform.gameObject.tag, monName, userData.team, selectCardNum);
                 cardGroup.UseCard();
             }
         }

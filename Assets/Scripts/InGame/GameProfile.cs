@@ -9,16 +9,19 @@ public class GameProfile : MonoBehaviour
     public Slider hp;
     public Slider gauge;
     public Text gaugeNum;
+    UserGameData userData;
 
     // Start is called before the first frame update
     public void Init()
     {
+        userData = GameManager.Instance.GetMyGameData();
         // todo : hard coding delete
         hp.value = 1;// hard code
         gauge.maxValue = 5;// hard code
-        gauge.value = UserData.gauge;// hard code
+        gauge.value = userData.gauge;// hard code
         gaugeNum.text = gauge.value.ToString();
     }
+    // todo : 서버 생기면 서버 연결
     public void GetColor(Team team)
     {
         if (team == Team.Red)
@@ -49,6 +52,6 @@ public class GameProfile : MonoBehaviour
         }
         gauge.value += cost;
         gaugeNum.text = gauge.value.ToString();
-        UserData.gauge = gauge.value;
+        userData.gauge = gauge.value;
     }
 }

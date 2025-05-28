@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public struct HeroData
 {
     public int hp;

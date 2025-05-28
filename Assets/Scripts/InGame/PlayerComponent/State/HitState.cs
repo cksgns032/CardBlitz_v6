@@ -37,7 +37,7 @@ public class HitState : MonoBehaviour, IState
     }
     public void Damage(float damage)
     {
-        GameObject obj = PoolingManager.Instance.Pool.Get();
+        GameObject obj = PoolingManager.Instance.DamageTxtPool.Get();
         DamageTxt txt = obj.GetComponent<DamageTxt>();
         if (txt != null)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System;
+using UnityEngine.Pool;
 
 public class Monster : Unit
 {
@@ -20,11 +21,16 @@ public class Monster : Unit
     Coroutine attackCoroutine;
     [SerializeField] List<Unit> enemyList = new List<Unit>();
     [SerializeField] List<Buff> buffList = new List<Buff>();
+
+    public IObjectPool<GameObject> Pool { get; set; }
     bool isDie = false;
     bool isTest = false;
 
     public override void Init()
     {
+        userData = GameManager.Instance.GetMyGameData();
+        gameObject.layer = LayerMask.NameToLayer("HERO");
+        gameObject.tag = "Player";
         agent = GetComponent<NavMeshAgent>();
         if (agent)
         {
@@ -118,7 +124,7 @@ public class Monster : Unit
             case "TOP":
                 areaNum = NavMesh.GetAreaFromName("TOP");
                 agent.areaMask = 1 << areaNum;
-                if (UserData.team == team)
+                if (userData.team == team)
                     transform.position = GameObject.FindGameObjectWithTag("TOPSPAWN").transform.position;
                 else
                     transform.position = GameObject.FindGameObjectWithTag("ETOPSPAWN").transform.position;
@@ -126,7 +132,7 @@ public class Monster : Unit
             case "MIDDLE":
                 areaNum = NavMesh.GetAreaFromName("MIDDLE");
                 agent.areaMask = 1 << areaNum;
-                if (UserData.team == team)
+                if (userData.team == team)
                     transform.position = GameObject.FindGameObjectWithTag("MIDDLESPAWN").transform.position;
                 else
                     transform.position = GameObject.FindGameObjectWithTag("EMIDDLESPAWN").transform.position;
@@ -135,7 +141,7 @@ public class Monster : Unit
             case "BOTTOM":
                 areaNum = NavMesh.GetAreaFromName("BOTTOM");
                 agent.areaMask = 1 << areaNum;
-                if (UserData.team == team)
+                if (userData.team == team)
                     transform.position = GameObject.FindGameObjectWithTag("BOTTOMSPAWN").transform.position;
                 else
                     transform.position = GameObject.FindGameObjectWithTag("EBOTTOMSPAWN").transform.position;

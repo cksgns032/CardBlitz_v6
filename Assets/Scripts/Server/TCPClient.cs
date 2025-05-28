@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TCPClient : SingleTon<TCPClient>
 {
+    UserGameData userData;
     Socket client;
     int clientID;
     string nickName;
@@ -41,6 +42,7 @@ public class TCPClient : SingleTon<TCPClient>
     public void Init()
     {
         isConnect = true;
+        userData = GameManager.Instance.GetMyGameData();
         Connect("127.0.0.1", 80, "Kim Chan Hun");
     }
 
@@ -78,8 +80,8 @@ public class TCPClient : SingleTon<TCPClient>
                     client.Send(sendPack);
                     break;
                 case GameProtocolType.GoGame:
-                    UserData.team = (Team)int.Parse(arr[1]);
-                    Debug.Log(UserData.team);
+                    userData.team = (Team)int.Parse(arr[1]);
+                    Debug.Log(userData.team);
                     StartCoroutine(IENextScene());
                     Debug.Log("GameScene Go");
                     break;
@@ -97,7 +99,7 @@ public class TCPClient : SingleTon<TCPClient>
                 case GameProtocolType.CLIENTOBJ:
                     Team team;
                     if (System.Enum.TryParse(arr[3], out team) == false) return;
-                    if (team == UserData.team)
+                    if (team == userData.team)
                         return;
                     // arr[1] = ��ġ
                     // arr[2] = ������Ʈ �̸� 
@@ -113,7 +115,7 @@ public class TCPClient : SingleTon<TCPClient>
     {
         if (isConnect == false)
             return;
-        string pack = string.Format($"{GameProtocolType.CREATEOBJ},{pos},{player},{UserData.team}");
+        string pack = string.Format($"{GameProtocolType.CREATEOBJ},{pos},{player},{userData.team}");
         byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
         client.Send(sendArr);
     }

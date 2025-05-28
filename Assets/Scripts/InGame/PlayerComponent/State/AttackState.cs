@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class AttackState : MonoBehaviour, IState
 {
     Monster player;
-
+    UserGameData userData;
     PlayerState stateCom;
     List<Unit> enemyList;
     Animator ani;
@@ -16,6 +16,7 @@ public class AttackState : MonoBehaviour, IState
     NavMeshAgent agent;
     public void Init(Monster data)
     {
+        userData = GameManager.Instance.GetMyGameData();
         player = data;
         stateCom = data.GetState();
         ani = player.gameObject.GetComponentInChildren<Animator>();
@@ -71,7 +72,7 @@ public class AttackState : MonoBehaviour, IState
                 // 타워 공격
                 if (enemyList[i].gameObject.tag == "EnemyTower")
                 {
-                    Team hitTeam = Team.Red == UserData.team ? Team.Blue : Team.Red;
+                    Team hitTeam = Team.Red == userData.team ? Team.Blue : Team.Red;
                     GameUI gameUI = GameManager.Instance.GetGameUI();
                     if (gameUI)
                     {
