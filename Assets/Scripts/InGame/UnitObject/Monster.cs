@@ -25,6 +25,7 @@ public class Monster : Unit
     public IObjectPool<GameObject> Pool { get; set; }
     bool isDie = false;
     bool isTest = false;
+    short uniqueID;
 
     public override void Init()
     {
@@ -111,6 +112,10 @@ public class Monster : Unit
         agent.speed = 5;//info.moveSpeed;
         agent.stoppingDistance = info.attackRange;
         ani.SetFloat("Blend", agent.speed);
+    }
+    public void SetUniqueID(short uniqueID)
+    {
+        this.uniqueID = uniqueID;
     }
     public HeroData GetStat()
     {

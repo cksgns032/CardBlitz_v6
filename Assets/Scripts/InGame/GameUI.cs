@@ -15,25 +15,19 @@ public class GameUI : MonoBehaviour
     GameTimer Timer;
     Team enemyColor;
     Coroutine cardChargeCoroutine;
-    UserGameData userData;
 
     public void Init()
     {
-        // result
-        resultTxt = gameObject.transform.Find("ResultText").GetComponent<Text>();
-        resultTxt.gameObject.SetActive(false);
-        resultAni = resultTxt.gameObject.GetComponent<Animation>();
-
         // my data
         myProfile = gameObject.transform.Find("MyProfile").GetComponentInChildren<GameProfile>();
         if (myProfile)
         {
             myProfile.Init();
-            myProfile.GetColor(userData.team);
+            myProfile.GetColor(GameManager.Instance.GetMyGameData().team);
         }
 
         // enemy data
-        enemyColor = userData.team == Team.Red ? Team.Blue : Team.Red;
+        enemyColor = GameManager.Instance.GetMyGameData().team == Team.Red ? Team.Blue : Team.Red;
         enemyProfile = gameObject.transform.Find("EnemyProfile").GetComponentInChildren<GameProfile>();
         if (enemyProfile)
         {
@@ -121,7 +115,7 @@ public class GameUI : MonoBehaviour
     #region Cost 
     public void UseCost(Team team, int useCost)
     {
-        if (team == userData.team)
+        if (team == GameManager.Instance.GetMyGameData().team)
         {
             myProfile.UpdateGauge(useCost);
         }
@@ -165,7 +159,7 @@ public class GameUI : MonoBehaviour
     #region Tower
     public void UpdateTower(Team hitTeam, float attack)
     {
-        if (hitTeam == userData.team)
+        if (hitTeam == GameManager.Instance.GetMyGameData().team)
         {
             myProfile.SetTowerHp(attack);
         }

@@ -32,3 +32,9 @@ public struct BuffData
     public float criDamageInt;
     public float criDamagePercent;
 }
+public struct UnitPositionData
+{
+    public short UnitId; // 2 bytes
+    public short PosX;   // 2 bytes (양자화된 값)
+    public short PosY;   // 2 bytes (양자화된 값)
+}
