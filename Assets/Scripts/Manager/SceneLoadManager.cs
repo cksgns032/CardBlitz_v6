@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoadManager : SingleTon<SceneLoadManager>
 {
-    Fade fade;
+    FadeUI fade;
     bool isLoading = false;
     public void LoadSceneMode(string sceneName)
     {
         if (!isLoading)
         {
-            fade = (Fade)UIManager.Instance.GetPopUp(PopUp_Name.Fade, true);
+            fade = (FadeUI)UIManager.Instance.GetUI(UI_Name.FadeUI);
             isLoading = true;
             StartCoroutine(IENextScene(sceneName));
         }

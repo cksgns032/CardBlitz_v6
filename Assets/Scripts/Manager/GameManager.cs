@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Pool;
@@ -7,12 +10,11 @@ public class GameManager : SingleTon<GameManager>
 {
     GameMap map;
     GameUI gameUI;
-    Fade fade;
+    FadeUI fade;
 
     List<Monster> myList = new List<Monster>();
     List<Monster> enemyList = new List<Monster>();
     private UserGameData myGameData = new UserGameData();
-    private UserGameData otherGameData = new UserGameData();
 
     bool isClaer = false;
     float gameTime = 100;
@@ -25,14 +27,13 @@ public class GameManager : SingleTon<GameManager>
     {
         // todo : 하드 코딩 > 서버 데이터 변경
         myGameData.Init();
-        otherGameData.Init();
         // Audio
         AudioManager.Instance.LoadSound(AudioManager.Type.BGM, "BattleSound");
         AudioManager.Instance.PlayBgm(true, "BattleSound");
         // Pool
         PoolingManager.Instance.Init();
         // Fade
-        fade = GameObject.FindAnyObjectByType<Fade>();
+        fade = GameObject.FindAnyObjectByType<FadeUI>();
         if (fade != null)
         {
             fade.FadeIn();
@@ -52,10 +53,6 @@ public class GameManager : SingleTon<GameManager>
     public UserGameData GetMyGameData()
     {
         return myGameData;
-    }
-    public UserGameData GetOtherGameData()
-    {
-        return otherGameData;
     }
     public GameMap GetGameMap()
     {
@@ -81,9 +78,56 @@ public class GameManager : SingleTon<GameManager>
             gameUI.Result(RESULT.DRAW);
         }
     }
+    void FixedUpdate()
+    {
+        // 주기적으로 유닛의 위치를 보냄
+        List<Monster> totalMonsterList = enemyList.Concat<Monster>(myList).ToList();
+        List<UnitPositionData> monPosDataList = new List<UnitPositionData>();
+        foreach (Monster obj in totalMonsterList)
+        {
+            double posX = Math.Round(obj.gameObject.transform.position.x * 100);
+            double posY = Math.Round(obj.gameObject.transform.position.y * 100);
+            UnitPositionData data = new UnitPositionData() { UnitId = 1, PosX = (short)posX, PosY = (short)posY };
+            monPosDataList.Add(data);
+        }
+        SendBatchedUnitPositions(monPosDataList);
+    }
+    public byte[] SerializePosition(UnitPositionData data)
+    {
+        byte[] buffer = new byte[6]; // 데이터 크기
+        Buffer.BlockCopy(BitConverter.GetBytes(data.UnitId), 0, buffer, 0, 2);
+        Buffer.BlockCopy(BitConverter.GetBytes(data.PosX), 0, buffer, 2, 2);
+        Buffer.BlockCopy(BitConverter.GetBytes(data.PosY), 0, buffer, 4, 2);
+        return buffer;
+    }
+    public void SendBatchedUnitPositions(List<UnitPositionData> positions)
+    {
+        if (positions == null || positions.Count == 0) return;
+
+        // 메시지 타입 (1 byte) + 유닛 개수 (1 byte, 최대 255개 유닛 가정)
+        int headerSize = 2;
+        int dataPerUnitSize = 6; // UnitPositionData 크기
+        int totalDataSize = headerSize + positions.Count * dataPerUnitSize;
+        byte[] batchedData = new byte[totalDataSize];
+
+        batchedData[0] = 0x01; // 메시지 타입: 유닛 위치 배치 업데이트
+        batchedData[1] = (byte)positions.Count;
+
+        int offset = headerSize;
+        foreach (var posData in positions)
+        {
+            byte[] unitDataBytes = SerializePosition(posData); // 위에서 정의한 직렬화 함수
+            Buffer.BlockCopy(unitDataBytes, 0, batchedData, offset, unitDataBytes.Length);
+            offset += unitDataBytes.Length;
+        }
+
+        TestTCP.Instance.SendMessageToServer(batchedData);
+    }
     // 몬스터 생성(todo : 몬스터 풀링을 만들어서 거기서 관리)
     public void CreateHero(string objTag, string objName, Team team, int useCost)
     {
+        // todo : 서버에 생성 패킷 보냄
+
         // 딕셔너리 체크
         if (PoolingManager.Instance.MonsterPoolList.TryGetValue(objName, out IObjectPool<GameObject> obj) == false)
         {
@@ -100,10 +144,12 @@ public class GameManager : SingleTon<GameManager>
         if (team == myGameData.team)
         {
             myList.Add(monCom);
+            monCom.SetUniqueID((short)myList.Count);
         }
         else
         {
             enemyList.Add(monCom);
+            monCom.SetUniqueID((short)enemyList.Count);
         }
         gameUI.UseCost(team, -useCost);
     }

@@ -20,13 +20,13 @@ public class Home : MonoBehaviour
     LobbyScene lobbyScene;
     public void Init()
     {
-        // Äù½ºÆ® ¼¼ÆÃ
+        // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         lobbyScene = GetComponentInParent<LobbyScene>();
         btnGroup = gameObject.transform.Find("BtnGroup").gameObject;
 
         cardBtn = btnGroup.transform.Find("Card").GetComponent<ButtonExtension>();
-        
-        cardBtn.AddListener(()=> lobbyScene.ChangeScene(Enum.GetName(typeof(LobbyType), LobbyType.CARD)));
+
+        cardBtn.AddListener(() => lobbyScene.ChangeScene(Enum.GetName(typeof(LobbyType), LobbyType.CARD)));
 
         shopBtn = btnGroup.transform.Find("Shop").GetComponent<ButtonExtension>();
         shopBtn.AddListener(() => lobbyScene.ChangeScene(Enum.GetName(typeof(LobbyType), LobbyType.SHOP)));
@@ -47,6 +47,7 @@ public class Home : MonoBehaviour
     }
     public void Option()
     {
-        UIManager.Instance.OpenPopUp(PopUp_Name.Option);
+        UIBase option = UIManager.Instance.GetPopUp(PopUp_Name.OptionPopup);
+        option.Draw();
     }
 }

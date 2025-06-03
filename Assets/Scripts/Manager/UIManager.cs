@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : SingleTon<UIManager>
 {
     Dictionary<int, UIBase> popUpDictionary = new Dictionary<int, UIBase>();
+    Dictionary<int, UIBase> UIDictionary = new Dictionary<int, UIBase>();
     SceneBaseManager sceneBase;
     public void Init()
     {
@@ -12,42 +13,34 @@ public class UIManager : SingleTon<UIManager>
     }
     public void LoadPrefabs()
     {
-        int totalCnt = (int)PopUp_Name.Count;
-        for (int i = 0; i < totalCnt; i++)
+        int PopupCnt = (int)PopUp_Name.Count;
+        for (int i = 0; i < PopupCnt; i++)
         {
             if (popUpDictionary.ContainsKey(i) == false)
             {
                 popUpDictionary.Add(i, Resources.Load<UIBase>($"Prefabs/PopUpPrefabs/{Enum.GetName(typeof(PopUp_Name), i)}"));
             }
         }
-    }
-    public void OpenPopUp(PopUp_Name key)
-    {
-        if (popUpDictionary.TryGetValue((int)key, out UIBase obj))
+        int UICnt = (int)UI_Name.Count;
+        for (int i = 0; i < UICnt; i++)
         {
-            Transform findObject = CheckNew(Enum.GetName(typeof(PopUp_Name), key));
-            if (findObject == null)
+            if (popUpDictionary.ContainsKey(i) == false)
             {
-                GameObject popUp = sceneBase.GetPopUpLayer();
-                UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
-                clone.name = Enum.GetName(typeof(PopUp_Name), key);
-                clone.Init(key);
+                UIDictionary.Add(i, Resources.Load<UIBase>($"Prefabs/UIPrefabs/{Enum.GetName(typeof(UI_Name), i)}"));
             }
-            findObject.GetComponent<UIBase>().Draw(true);
         }
     }
-    public UIBase GetPopUp(PopUp_Name key, bool active)
+    public UIBase GetUI(UI_Name key)
     {
-        if (popUpDictionary.TryGetValue((int)key, out UIBase obj))
+        if (UIDictionary.TryGetValue((int)key, out UIBase obj))
         {
-            Transform findObject = CheckNew(Enum.GetName(typeof(PopUp_Name), key));
+            Transform findObject = CheckNew(Enum.GetName(typeof(UI_Name), key));
             if (findObject == null)
             {
-                GameObject popUp = sceneBase.GetPopUpLayer();
+                GameObject popUp = sceneBase.GetUILayer();
                 UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
-                clone.name = Enum.GetName(typeof(PopUp_Name), key);
-                clone.Init(key);
-                clone.Draw(active);
+                clone.name = Enum.GetName(typeof(UI_Name), key);
+                clone.Init(Layer_Type.UI, clone.name);
                 return clone;
             }
             else
@@ -55,7 +48,30 @@ public class UIManager : SingleTon<UIManager>
                 UIBase baseObject = findObject.GetComponent<UIBase>();
                 if (baseObject != null)
                 {
-                    baseObject.Draw(active);
+                    return baseObject;
+                }
+            }
+        }
+        return null;
+    }
+    public UIBase GetPopUp(PopUp_Name key)
+    {
+        if (popUpDictionary.TryGetValue((int)key, out UIBase obj))
+        {
+            Transform findObject = CheckNew(Enum.GetName(typeof(PopUp_Name), key));
+            if (findObject == null)
+            {
+                GameObject popUp = sceneBase.GetPopUpLayer();
+                UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
+                clone.name = Enum.GetName(typeof(PopUp_Name), key);
+                clone.Init(Layer_Type.Popup, clone.name);
+                return clone;
+            }
+            else
+            {
+                UIBase baseObject = findObject.GetComponent<UIBase>();
+                if (baseObject != null)
+                {
                     return baseObject;
                 }
             }
@@ -80,7 +96,7 @@ public class UIManager : SingleTon<UIManager>
     {
         foreach (var key in popUpDictionary)
         {
-            if (key.Value.GetState() == PopUp_State.Open)
+            if (key.Value.GetState() == Active_State.Open)
             {
                 key.Value.Close();
             }

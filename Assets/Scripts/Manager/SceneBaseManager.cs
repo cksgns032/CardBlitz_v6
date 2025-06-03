@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class SceneBaseManager : MonoBehaviour
 {
     GameObject popUpLayer;
+    GameObject uiLayer;
     public virtual void SetScale()
     {
         int setWidth = 1920;
@@ -23,9 +24,14 @@ public class SceneBaseManager : MonoBehaviour
             canvas.matchWidthOrHeight = 0;
         }
         popUpLayer = GameObject.Find("PopUpLayer");
+        uiLayer = GameObject.Find("UILayer");
     }
     public GameObject GetPopUpLayer()
     {
         return popUpLayer;
+    }
+    public GameObject GetUILayer()
+    {
+        return uiLayer;
     }
 }

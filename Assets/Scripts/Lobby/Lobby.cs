@@ -19,7 +19,7 @@ public class Lobby : SceneBaseManager, Observer
 {
     LobbyScene lobbyScene;
     UserSetting userInfo;
-    Fade fade;
+    FadeUI fade;
 
     Mission[] missionList;
     private void OnEnable()
@@ -38,7 +38,7 @@ public class Lobby : SceneBaseManager, Observer
         UIManager.Instance.Init();
         UIManager.Instance.AllClose();
 
-        // Áö¿ï °Í 
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ 
         UIManager.Instance.LoadPrefabs();
 
         AudioManager.Instance.LoadSound(AudioManager.Type.BGM, "TitleSound");
@@ -53,7 +53,7 @@ public class Lobby : SceneBaseManager, Observer
 
         LoadJson();
 
-        fade = (Fade)UIManager.Instance.GetPopUp(PopUp_Name.Fade, true);
+        fade = (FadeUI)UIManager.Instance.GetUI(UI_Name.FadeUI);
         fade.FadeIn();
     }
 

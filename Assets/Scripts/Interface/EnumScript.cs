@@ -13,6 +13,14 @@ public enum ObserveData
     ChangeMain,
 }
 
+
+public enum PacketType : ushort
+{
+    None = 0,
+    PlayerMove = 1,
+    Chat = 2,
+    // ... 기타 패킷 타입
+}
 #region lobby
 public enum LobbyType
 {
@@ -23,13 +31,24 @@ public enum LobbyType
 #endregion
 
 #region common
-public enum PopUp_Name
+public enum Layer_Type
 {
-    Option,
-    Fade,
+    UI,
+    Popup,
+    Count
+}
+public enum UI_Name
+{
+    FadeUI,
     Count,
 }
-public enum PopUp_State
+public enum PopUp_Name
+{
+    OptionPopup,
+    ResultPopup,
+    Count,
+}
+public enum Active_State
 {
     Open,
     Close,

@@ -84,14 +84,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 410113125972771573}
-  - component: {fileID: 7891860600569786111}
+  - component: {fileID: 2615614715824171973}
   m_Layer: 5
-  m_Name: Fade
+  m_Name: FadePopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &410113125972771573
 RectTransform:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7891860600569786111
+--- !u!114 &2615614715824171973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,6 +121,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 9083926849568688955}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f798a27522f005a4fb39a29a620e9c37, type: 3}
+  m_Script: {fileID: 11500000, guid: c7ec56a9867fe6a4ab83ac834976fa1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

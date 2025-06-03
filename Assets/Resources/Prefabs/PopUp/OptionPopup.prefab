@@ -1059,7 +1059,7 @@ GameObject:
   - component: {fileID: 8600156293357484914}
   - component: {fileID: 8600156293357484912}
   m_Layer: 5
-  m_Name: Option
+  m_Name: OptionPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

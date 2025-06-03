@@ -5,36 +5,31 @@ using UnityEngine;
 
 public class UIBase : MonoBehaviour
 {
-    protected PopUp_Name uiName;
-    protected PopUp_State state;
-    public PopUp_State GetState()
+    protected Layer_Type type;
+    protected string uiName;
+    protected Active_State state;
+    public Active_State GetState()
     {
         return state;
     }
-    public void SetState(PopUp_State state)
+    public void SetState(Active_State state)
     {
         this.state = state;
     }
-    public virtual void Init(PopUp_Name uiName)
+    public virtual void Init(Layer_Type type, string name)
     {
-        this.uiName = uiName;
-        state = PopUp_State.Open;
+        this.type = type;
+        this.uiName = name;
+        state = Active_State.Open;
     }
-    public virtual void Draw(bool active)
+    public virtual void Draw()
     {
-        gameObject.SetActive(active);
-        if (active)
-        {
-            state = PopUp_State.Open;
-        }
-        else
-        {
-            state = PopUp_State.Close;
-        }
+        gameObject.SetActive(true);
+        state = Active_State.Open;
     }
     public virtual void Close()
     {
-        state = PopUp_State.Close;
+        state = Active_State.Close;
         gameObject.SetActive(false);
     }
 }

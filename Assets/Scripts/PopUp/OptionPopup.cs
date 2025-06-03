@@ -2,26 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class Option : UIBase
+public class OptionPopup : UIBase
 {
     public ButtonExtension exit;
     Slider bgmSlider;
     Slider soundSlider;
     // Start is called before the first frame update
-    public override void Init(PopUp_Name uiname)
-   {
-        base.Init(uiname);
+    public override void Init(Layer_Type type, string uiname)
+    {
+        base.Init(type, uiname);
 
         exit = gameObject.transform.Find("ExitBtn").GetComponent<ButtonExtension>();
-        exit.AddListener(()=>Close());
+        exit.AddListener(() => Close());
         bgmSlider = gameObject.transform.Find("BGMSlider").GetComponent<Slider>();
         soundSlider = gameObject.transform.Find("SoundSlider").GetComponent<Slider>();
         bgmSlider.value = UserData.bgmVolume;
         soundSlider.value = UserData.soundVolume;
     }
-    public override void Draw(bool active)
+    public override void Draw()
     {
-        base.Draw(active);
+        base.Draw();
 
     }
     public override void Close()
