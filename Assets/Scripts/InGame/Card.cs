@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using MessagePack;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -137,7 +138,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     {
         cardinfo = null;
     }
-    void BtnClick()
+    public void BtnClick()
     {
         GameMap map = GameManager.Instance.GetGameMap();
         RaycastHit hit;
@@ -164,7 +165,11 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
                 // test
                 monName = "Unit_Test";
                 // todo : 서버 연결 후 수정
-                GameManager.Instance.CreateHero(hit.transform.gameObject.tag, monName, userData.team, selectCardNum);
+                new CreateUnitPacket() { packID = (ushort)PacketType.CreateUnit, lineID = 1, unitID = 2 };
+                CreateUnitPacket data = new CreateUnitPacket();
+                data.SetData((ushort)PacketType.CreateUnit, 1, 2, 1, (ushort)GameManager.Instance.GetMyGameData().team);
+                SncyTcp.Instance.SendMessage(MessagePackSerializer.Serialize(data));
+                // GameManager.Instance.CreateHero(hit.transform.gameObject.tag, monName, userData.team, selectCardNum);
                 cardGroup.UseCard();
             }
         }

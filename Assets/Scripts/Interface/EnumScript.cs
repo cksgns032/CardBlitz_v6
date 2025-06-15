@@ -1,26 +1,21 @@
-public struct SendData
+public enum DataTable
 {
-    public ObserveData observeData;
-    public string data;
-    public void SetData(ObserveData observeData, string data)
-    {
-        this.observeData = observeData;
-        this.data = data;
-    }
+    MissionData,
+    UnitData,
 }
 public enum ObserveData
 {
     ChangeMain,
 }
-
-
 public enum PacketType : ushort
 {
     None = 0,
-    PlayerMove = 1,
-    Chat = 2,
-    // ... 기타 패킷 타입
+    UnitPos = 1,
+    CreateUnit = 2,
+    Chat,
+
 }
+
 #region lobby
 public enum LobbyType
 {
@@ -56,17 +51,17 @@ public enum Active_State
 #endregion
 
 #region game
-public enum RESULT
+public enum ResultType
 {
     WIN,
     LOSE,
     DRAW,
 }
-public enum Team
+public enum TeamType
 {
-    Red = 0,
-    Blue = 1,
-    None = 2,
+    None = 0,
+    Red = 1,
+    Blue = 2,
 }
 public enum StateType
 {
@@ -84,11 +79,12 @@ public enum AttackType
     Midair,
     All,
 }
-public enum EventButtonType
+public enum LineType
 {
-    NONE,
-    TOP,
-    MIDDLE,
-    BOTTOM,
+    NONE = 0,
+    TOP = 1,
+    MIDDLE = 2,
+    BOTTOM = 3,
+    COUNT
 }
 #endregion

@@ -5,3 +5,8 @@ public interface IState
     public void Exit();
     public void StateUpdate();
 }
+
+public interface Observer
+{
+    public void Notify(byte[] buffer);
+}

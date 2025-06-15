@@ -4,7 +4,6 @@ public class ButtonSearch : MonoBehaviour
 {
     protected Monster player;
     protected PlayerState stateCom;
-    UserGameData userData;
     private void OnTriggerEnter(Collider other)
     {
         if (GameManager.Instance.GetClear() && player.IsDie())
@@ -15,7 +14,7 @@ public class ButtonSearch : MonoBehaviour
         if (other.gameObject.layer == layerNum)
         {
             EventButton btn = other.gameObject.GetComponent<EventButton>();
-            if (btn && btn.CheckState() == false && btn.GetColor() != userData.team)
+            if (btn && btn.CheckState() == false && btn.GetColor() != GameManager.Instance.GetMyGameData().team)
             {
                 player.SetEventButton(btn);
                 btn.Charging(true);

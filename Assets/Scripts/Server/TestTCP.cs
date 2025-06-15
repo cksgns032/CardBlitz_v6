@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class TestTCP : SingleTon<TestTCP>
 {
-    public string serverAddress = "127.0.0.1"; // 접속할 서버 IP 주소
+    public string serverAddress = "192.168.219.100"; // 접속할 서버 IP 주소
     public int serverPort = 8888;             // 접속할 서버 포트
 
     private TcpClient _client;
@@ -16,7 +16,7 @@ public class TestTCP : SingleTon<TestTCP>
     private bool _isConnected = false;
 
     // 메시지 큐 (메인 스레드에서 처리하기 위함)
-    private readonly Queue<string> _receivedMessages = new Queue<string>();
+    private readonly Queue<byte[]> _receivedMessages = new Queue<byte[]>();
     private readonly object _messageQueueLock = new object();
 
     void Start()
@@ -38,7 +38,7 @@ public class TestTCP : SingleTon<TestTCP>
 
             // 메시지 수신을 위한 별도 스레드 시작
             _receiveThread = new Thread(new ThreadStart(ReceiveMessages));
-            _receiveThread.IsBackground = true;
+            // _receiveThread.IsBackground = true;
             _receiveThread.Start();
         }
         catch (SocketException ex)
@@ -91,10 +91,10 @@ public class TestTCP : SingleTon<TestTCP>
                     break;
                 }
 
-                string receivedMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                // string receivedMessage = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                 lock (_messageQueueLock)
                 {
-                    _receivedMessages.Enqueue(receivedMessage);
+                    _receivedMessages.Enqueue(buffer);
                 }
             }
         }
@@ -123,10 +123,14 @@ public class TestTCP : SingleTon<TestTCP>
         {
             while (_receivedMessages.Count > 0)
             {
-                string message = _receivedMessages.Dequeue();
-                Debug.Log("서버로부터 수신: " + message);
-                // 여기서 수신된 메시지를 기반으로 게임 로직 처리
-                // 예: if (message == "PLAYER_JUMP") { /* 플레이어 점프 로직 */ }
+                byte[] message = _receivedMessages.Dequeue();
+
+                Debug.Log($"서버로부터 수신: {message}");
+                // packetType = message[1];
+                // monId = [message[2], message[3]];
+                // posX = [message[4], message[5]];
+                // posY = [message[6], message[7]];
+
             }
         }
 

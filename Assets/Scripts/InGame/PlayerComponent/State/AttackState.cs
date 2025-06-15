@@ -72,7 +72,7 @@ public class AttackState : MonoBehaviour, IState
                 // 타워 공격
                 if (enemyList[i].gameObject.tag == "EnemyTower")
                 {
-                    Team hitTeam = Team.Red == userData.team ? Team.Blue : Team.Red;
+                    TeamType hitTeam = TeamType.Red == userData.team ? TeamType.Blue : TeamType.Red;
                     GameUI gameUI = GameManager.Instance.GetGameUI();
                     if (gameUI)
                     {

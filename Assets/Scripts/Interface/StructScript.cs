@@ -1,11 +1,22 @@
-using System.Collections.Generic;
-
+public struct UnitData
+{
+    public int hp;
+    public int defence;
+    public float moveSpeed;
+    public float attackSpeed;
+    public AttackType attackType;
+    public float attackRange;
+    public int attackCnt;
+    public float attack;
+    public float criPercent;
+    public float criAdd;
+}
 public struct HeroData
 {
     public int hp;
     public int defence;
     public float moveSpeed;
-    public Team team;
+    public TeamType team;
     public AttackType attackType;
     public float attackSpeed;
     public float attackRange;
@@ -31,10 +42,4 @@ public struct BuffData
     public float criPercent;
     public float criDamageInt;
     public float criDamagePercent;
-}
-public struct UnitPositionData
-{
-    public short UnitId; // 2 bytes
-    public short PosX;   // 2 bytes (양자화된 값)
-    public short PosY;   // 2 bytes (양자화된 값)
 }

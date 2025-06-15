@@ -13,7 +13,6 @@ public class GameUI : MonoBehaviour
     CardGroup cardGroup;
     Button shuffleBtn;
     GameTimer Timer;
-    Team enemyColor;
     Coroutine cardChargeCoroutine;
 
     public void Init()
@@ -27,12 +26,11 @@ public class GameUI : MonoBehaviour
         }
 
         // enemy data
-        enemyColor = GameManager.Instance.GetMyGameData().team == Team.Red ? Team.Blue : Team.Red;
         enemyProfile = gameObject.transform.Find("EnemyProfile").GetComponentInChildren<GameProfile>();
         if (enemyProfile)
         {
             enemyProfile.Init();
-            enemyProfile.GetColor(enemyColor);
+            enemyProfile.GetColor(GameManager.Instance.GetMyGameData().team == TeamType.Red ? TeamType.Blue : TeamType.Red);
         }
 
         shuffleBtn = gameObject.transform.Find("Shuffle").GetComponent<Button>();
@@ -113,7 +111,7 @@ public class GameUI : MonoBehaviour
         cardGroup.AddCard();
     }
     #region Cost 
-    public void UseCost(Team team, int useCost)
+    public void UseCost(TeamType team, int useCost)
     {
         if (team == GameManager.Instance.GetMyGameData().team)
         {
@@ -133,22 +131,22 @@ public class GameUI : MonoBehaviour
     #endregion Time
 
     #region result
-    public void Result(RESULT result)
+    public void Result(ResultType result)
     {
         resultTxt.gameObject.SetActive(true);
         resultTxt.color = new Color(255, 97, 97, 255);
         GameManager.Instance.SetClear(true);
         switch (result)
         {
-            case RESULT.WIN:
+            case ResultType.WIN:
                 resultTxt.text = "WIN!!";
                 resultAni.Play("ResultWin");
                 break;
-            case RESULT.LOSE:
+            case ResultType.LOSE:
                 resultTxt.text = "Lose..";
                 resultAni.Play("ResultLose");
                 break;
-            case RESULT.DRAW:
+            case ResultType.DRAW:
                 resultTxt.text = "Draw";
                 resultAni.Play("ResultDraw");
                 break;
@@ -157,7 +155,7 @@ public class GameUI : MonoBehaviour
     }
     #endregion result
     #region Tower
-    public void UpdateTower(Team hitTeam, float attack)
+    public void UpdateTower(TeamType hitTeam, float attack)
     {
         if (hitTeam == GameManager.Instance.GetMyGameData().team)
         {

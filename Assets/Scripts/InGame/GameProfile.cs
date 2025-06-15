@@ -22,9 +22,9 @@ public class GameProfile : MonoBehaviour
         gaugeNum.text = gauge.value.ToString();
     }
     // todo : 서버 생기면 서버 연결
-    public void GetColor(Team team)
+    public void GetColor(TeamType team)
     {
-        if (team == Team.Red)
+        if (team == TeamType.Red)
             thumbnail.color = Color.green;
         else
             thumbnail.color = Color.blue;
@@ -35,7 +35,7 @@ public class GameProfile : MonoBehaviour
         if (num <= 0)
         {
             num = 0;
-            GameManager.Instance.ResultGame(RESULT.LOSE);
+            GameManager.Instance.ResultGame(ResultType.LOSE);
         }
 
         hp.value = num;

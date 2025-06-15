@@ -1,153 +1,153 @@
-using System.Collections;
-using UnityEngine;
-using System.Net.Sockets;
-using UnityEngine.SceneManagement;
+// using System.Collections;
+// using UnityEngine;
+// using System.Net.Sockets;
+// using UnityEngine.SceneManagement;
 
-public class TCPClient : SingleTon<TCPClient>
-{
-    UserGameData userData;
-    Socket client;
-    int clientID;
-    string nickName;
-    bool connect = false;
-    bool isConnect = false;
+// public class TCPClient : SingleTon<TCPClient>
+// {
+//     UserGameData userData;
+//     Socket client;
+//     int clientID;
+//     string nickName;
+//     bool connect = false;
+//     bool isConnect = false;
 
-    public bool Connect(string ipAddress, int port, string nickName)
-    {
-        client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        client.Connect(ipAddress, port);
-        this.nickName = nickName;
-        connect = true;
+//     public bool Connect(string ipAddress, int port, string nickName)
+//     {
+//         client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+//         client.Connect(ipAddress, port);
+//         this.nickName = nickName;
+//         connect = true;
 
-        return connect;
-    }
-    private void OnApplicationQuit()
-    {
-        if (client != null)
-        {
-            client.Shutdown(SocketShutdown.Both);
-            client.Close();
-        }
-    }
+//         return connect;
+//     }
+//     private void OnApplicationQuit()
+//     {
+//         if (client != null)
+//         {
+//             client.Shutdown(SocketShutdown.Both);
+//             client.Close();
+//         }
+//     }
 
-    public void SendMsg(string msg)
-    {
-        if (msg.Equals(string.Empty) == false)
-        {
-            byte[] sendmsg = System.Text.Encoding.UTF8.GetBytes(msg);
-            client.Send(sendmsg);
-        }
-    }
-    // Start is called before the first frame update
-    public void Init()
-    {
-        isConnect = true;
-        userData = GameManager.Instance.GetMyGameData();
-        Connect("127.0.0.1", 80, "Kim Chan Hun");
-    }
+//     public void SendMsg(string msg)
+//     {
+//         if (msg.Equals(string.Empty) == false)
+//         {
+//             byte[] sendmsg = System.Text.Encoding.UTF8.GetBytes(msg);
+//             client.Send(sendmsg);
+//         }
+//     }
+//     // Start is called before the first frame update
+//     public void Init()
+//     {
+//         isConnect = true;
+//         userData = GameManager.Instance.GetMyGameData();
+//         Connect("127.0.0.1", 80, "Kim Chan Hun");
+//     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (isConnect == false)
-            return;
-        UpdateClient();
-    }
-    public void UpdateClient()
-    {
-        if (client != null && client.Poll(0, SelectMode.SelectRead))
-        {
-            byte[] buffer = new byte[1024];
-            int recvLen = client.Receive(buffer);
+//     // Update is called once per frame
+//     void Update()
+//     {
+//         if (isConnect == false)
+//             return;
+//         UpdateClient();
+//     }
+//     public void UpdateClient()
+//     {
+//         if (client != null && client.Poll(0, SelectMode.SelectRead))
+//         {
+//             byte[] buffer = new byte[1024];
+//             int recvLen = client.Receive(buffer);
 
-            // ù��° �����Ͱ� �������
-            string packetStr = System.Text.Encoding.UTF8.GetString(buffer);
+//             // ù��° �����Ͱ� �������
+//             string packetStr = System.Text.Encoding.UTF8.GetString(buffer);
 
-            packetStr = packetStr.Replace("\0", "");
-            string[] arr = packetStr.Split(",");
+//             packetStr = packetStr.Replace("\0", "");
+//             string[] arr = packetStr.Split(",");
 
-            GameProtocolType type;
+//             GameProtocolType type;
 
-            if (System.Enum.TryParse(arr[0], out type) == false) return;
-            Debug.Log(type);
-            switch (type)
-            {
-                case GameProtocolType.Init:
-                    int.TryParse(arr[1], out clientID);
-                    UserData.uniqueID = clientID;
-                    packetStr = string.Format($"{GameProtocolType.USERINFO},{clientID},{nickName}");
-                    byte[] sendPack = System.Text.Encoding.UTF8.GetBytes(packetStr);
-                    client.Send(sendPack);
-                    break;
-                case GameProtocolType.GoGame:
-                    userData.team = (Team)int.Parse(arr[1]);
-                    Debug.Log(userData.team);
-                    StartCoroutine(IENextScene());
-                    Debug.Log("GameScene Go");
-                    break;
-                case GameProtocolType.START:
-                    break;
-                case GameProtocolType.CHAT:
-                    break;
-                case GameProtocolType.END:
-                    RESULT resultType;
-                    if (System.Enum.TryParse(arr[1], out resultType) == false) return;
-                    GameManager.Instance.ResultGame(resultType);
-                    break;
-                case GameProtocolType.USERINFO:
-                    break;
-                case GameProtocolType.CLIENTOBJ:
-                    Team team;
-                    if (System.Enum.TryParse(arr[3], out team) == false) return;
-                    if (team == userData.team)
-                        return;
-                    // arr[1] = ��ġ
-                    // arr[2] = ������Ʈ �̸� 
-                    Monster player = Instantiate(Resources.Load<Monster>("Prefabs/" + arr[2]));
-                    player.gameObject.layer = LayerMask.NameToLayer("ENEMY");
-                    //player.Init();
-                    player.AgentMaskSet(arr[1], team);
-                    break;
-            }
-        }
-    }
-    public void CreateObj(string player, string pos)
-    {
-        if (isConnect == false)
-            return;
-        string pack = string.Format($"{GameProtocolType.CREATEOBJ},{pos},{player},{userData.team}");
-        byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
-        client.Send(sendArr);
-    }
-    public void EndGame(RESULT result)
-    {
-        string pack = string.Format($"{GameProtocolType.END},{result}");
-        byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
-        client.Send(sendArr);
-    }
-    public void SendPack<T>(GameProtocolType type, T content)
-    {
-        if (isConnect == false)
-            return;
-        string pack = string.Format($"{type},{content}");
-        byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
-        client.Send(sendArr);
-    }
-    IEnumerator IENextScene()
-    {
-        //yield return new WaitForSeconds(1);
+//             if (System.Enum.TryParse(arr[0], out type) == false) return;
+//             Debug.Log(type);
+//             switch (type)
+//             {
+//                 case GameProtocolType.Init:
+//                     int.TryParse(arr[1], out clientID);
+//                     UserData.uniqueID = clientID;
+//                     packetStr = string.Format($"{GameProtocolType.USERINFO},{clientID},{nickName}");
+//                     byte[] sendPack = System.Text.Encoding.UTF8.GetBytes(packetStr);
+//                     client.Send(sendPack);
+//                     break;
+//                 case GameProtocolType.GoGame:
+//                     userData.team = (Team)int.Parse(arr[1]);
+//                     Debug.Log(userData.team);
+//                     StartCoroutine(IENextScene());
+//                     Debug.Log("GameScene Go");
+//                     break;
+//                 case GameProtocolType.START:
+//                     break;
+//                 case GameProtocolType.CHAT:
+//                     break;
+//                 case GameProtocolType.END:
+//                     RESULT resultType;
+//                     if (System.Enum.TryParse(arr[1], out resultType) == false) return;
+//                     GameManager.Instance.ResultGame(resultType);
+//                     break;
+//                 case GameProtocolType.USERINFO:
+//                     break;
+//                 case GameProtocolType.CLIENTOBJ:
+//                     TeamType team;
+//                     if (System.Enum.TryParse(arr[3], out team) == false) return;
+//                     if (team == userData.team)
+//                         return;
+//                     // arr[1] = ��ġ
+//                     // arr[2] = ������Ʈ �̸� 
+//                     Monster player = Instantiate(Resources.Load<Monster>("Prefabs/" + arr[2]));
+//                     player.gameObject.layer = LayerMask.NameToLayer("ENEMY");
+//                     //player.Init();
+//                     player.AgentMaskSet(arr[1], team);
+//                     break;
+//             }
+//         }
+//     }
+//     public void CreateObj(string player, string pos)
+//     {
+//         if (isConnect == false)
+//             return;
+//         string pack = string.Format($"{GameProtocolType.CREATEOBJ},{pos},{player},{userData.team}");
+//         byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
+//         client.Send(sendArr);
+//     }
+//     public void EndGame(ResultType result)
+//     {
+//         string pack = string.Format($"{GameProtocolType.END},{result}");
+//         byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
+//         client.Send(sendArr);
+//     }
+//     public void SendPack<T>(GameProtocolType type, T content)
+//     {
+//         if (isConnect == false)
+//             return;
+//         string pack = string.Format($"{type},{content}");
+//         byte[] sendArr = System.Text.Encoding.UTF8.GetBytes(pack);
+//         client.Send(sendArr);
+//     }
+//     IEnumerator IENextScene()
+//     {
+//         //yield return new WaitForSeconds(1);
 
-        //fade.FadeOut();
+//         //fade.FadeOut();
 
-        yield return new WaitForSeconds(1);
+//         yield return new WaitForSeconds(1);
 
-        AsyncOperation asyn = SceneManager.LoadSceneAsync("GameScene");
-        //gameObject.SetActive(false);
-        while (!asyn.isDone)
-        {
-            //asyn.allowSceneActivation = false;
-            yield return null;
-        }
+//         AsyncOperation asyn = SceneManager.LoadSceneAsync("GameScene");
+//         //gameObject.SetActive(false);
+//         while (!asyn.isDone)
+//         {
+//             //asyn.allowSceneActivation = false;
+//             yield return null;
+//         }
 
-    }
-}
+//     }
+// }

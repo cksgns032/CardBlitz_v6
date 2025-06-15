@@ -4,7 +4,7 @@ using UnityEngine;
 public class UserGameData
 {
     public List<CardInfo> gameDeck = new List<CardInfo>();
-    public Team team;
+    public TeamType team;
     public CardInfo[] HandCards = new CardInfo[5];
     public float gauge;
 

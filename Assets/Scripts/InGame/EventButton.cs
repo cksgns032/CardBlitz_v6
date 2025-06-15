@@ -5,10 +5,8 @@ public class EventButton : MonoBehaviour
 {
     Image img;
     //MeshRenderer mesh;
-
     bool charging = false;
-    Team getColor = Team.None;
-    EventButtonType buttonType = EventButtonType.NONE;
+    TeamType getColor = TeamType.None;
     public void Init()
     {
         BuffData data = new BuffData();
@@ -19,27 +17,19 @@ public class EventButton : MonoBehaviour
                 {
                     // 공격력 증가
                     data.attackPercent = 1.5f;
-                    buttonType = EventButtonType.TOP;
                 }
                 break;
             case "MIDDLE":
                 {
                     // 방어력 증가
                     data.defencePercent = 1.5f;
-
-                    buttonType = EventButtonType.MIDDLE;
                 }
                 break;
             case "BOTTOM":
                 {
                     // 이속 증가가
                     data.moveSpeed = 2f;
-
-                    buttonType = EventButtonType.BOTTOM;
                 }
-                break;
-            default:
-                buttonType = EventButtonType.NONE;
                 break;
         }
 
@@ -50,7 +40,7 @@ public class EventButton : MonoBehaviour
             img.fillAmount = 0;
         }
     }
-    public bool ChargeImage(float num, string layer, Team team)
+    public bool ChargeImage(float num, string layer, TeamType team)
     {
         img.enabled = true;
         img.fillAmount += num;
@@ -69,10 +59,10 @@ public class EventButton : MonoBehaviour
             switch (layer)
             {
                 case "ENEMY":
-                    getColor = team == Team.Blue ? Team.Red : Team.Blue;
+                    getColor = team == TeamType.Blue ? TeamType.Red : TeamType.Blue;
                     break;
                 case "HERO":
-                    getColor = team == Team.Blue ? Team.Blue : Team.Red;
+                    getColor = team == TeamType.Blue ? TeamType.Blue : TeamType.Red;
                     break;
             }
             charging = false;
@@ -94,11 +84,11 @@ public class EventButton : MonoBehaviour
     {
         return charging;
     }
-    public Team GetColor()
+    public TeamType GetColor()
     {
         return getColor;
     }
-    public void SetColor(Team team)
+    public void SetColor(TeamType team)
     {
         getColor = team;
     }

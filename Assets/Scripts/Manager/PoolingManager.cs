@@ -6,10 +6,10 @@ public class PoolingManager : SingleTon<PoolingManager>
 {
     int defaultCapacity = 10;
     int maxPoolSize = 15;
-
     string objName;
+
     public IObjectPool<GameObject> DamageTxtPool { get; private set; }
-    public Dictionary<string, IObjectPool<GameObject>> MonsterPoolList = new Dictionary<string, IObjectPool<GameObject>>();
+    public Dictionary<ushort, IObjectPool<GameObject>> MonsterPoolList = new Dictionary<ushort, IObjectPool<GameObject>>();
 
     public void Init()
     {
@@ -23,12 +23,11 @@ public class PoolingManager : SingleTon<PoolingManager>
         }
     }
 
-    public void SetPool(string name)
+    public void SetPool(ushort unitID)
     {
-        if (name != null && name.Length > 0)
+        // objName
+        if (unitID >= 0)
         {
-            objName = name;
-
             ObjectPool<GameObject> monsterPool = new ObjectPool<GameObject>(CreateMonsterPoolItem, OnTakeFromPool, OnReturnedToPool,
             OnDestroyPoolObject, true, defaultCapacity, maxPoolSize);
             for (int i = 0; i < defaultCapacity; i++)
@@ -37,7 +36,7 @@ public class PoolingManager : SingleTon<PoolingManager>
                 monster.Pool = monsterPool;
                 monster.Pool.Release(monster.gameObject);
             }
-            MonsterPoolList.Add(name, monsterPool);
+            MonsterPoolList.Add(unitID, monsterPool);
         }
     }
 

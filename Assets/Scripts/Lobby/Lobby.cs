@@ -15,7 +15,7 @@ public class Mission
     public bool ISCLEAR;
 }
 
-public class Lobby : SceneBaseManager, Observer
+public class Lobby : SceneBaseManager
 {
     LobbyScene lobbyScene;
     UserSetting userInfo;
@@ -25,11 +25,9 @@ public class Lobby : SceneBaseManager, Observer
     private void OnEnable()
     {
         base.SetScale();
-        ObserverManager.Instance.AddObserver(this);
     }
     private void OnDisable()
     {
-        ObserverManager.Instance.RemoveObserver(this);
     }
 
     // Start is called before the first frame update
@@ -76,9 +74,5 @@ public class Lobby : SceneBaseManager, Observer
             mission.ISCLEAR = jsondata[i]["ISCLEAR"].ToString() == "TRUE" ? true : false;
             missionList[i] = mission;
         }*/
-    }
-
-    public void Notify(SendData data)
-    {
     }
 }

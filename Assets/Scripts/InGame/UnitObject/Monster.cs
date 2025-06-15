@@ -121,35 +121,40 @@ public class Monster : Unit
     {
         return info;
     }
-    public void AgentMaskSet(string type, Team team)
+    public void AgentMaskSet(LineType line, TeamType team)
     {
         int areaNum;
-        switch (type)
+        switch (line)
         {
-            case "TOP":
-                areaNum = NavMesh.GetAreaFromName("TOP");
-                agent.areaMask = 1 << areaNum;
-                if (userData.team == team)
-                    transform.position = GameObject.FindGameObjectWithTag("TOPSPAWN").transform.position;
-                else
-                    transform.position = GameObject.FindGameObjectWithTag("ETOPSPAWN").transform.position;
+            case LineType.TOP:
+                {
+                    areaNum = NavMesh.GetAreaFromName("TOP");
+                    agent.areaMask = 1 << areaNum;
+                    if (userData.team == team)
+                        transform.position = GameObject.FindGameObjectWithTag("TOPSPAWN").transform.position;
+                    else
+                        transform.position = GameObject.FindGameObjectWithTag("ETOPSPAWN").transform.position;
+                }
                 break;
-            case "MIDDLE":
-                areaNum = NavMesh.GetAreaFromName("MIDDLE");
-                agent.areaMask = 1 << areaNum;
-                if (userData.team == team)
-                    transform.position = GameObject.FindGameObjectWithTag("MIDDLESPAWN").transform.position;
-                else
-                    transform.position = GameObject.FindGameObjectWithTag("EMIDDLESPAWN").transform.position;
-
+            case LineType.MIDDLE:
+                {
+                    areaNum = NavMesh.GetAreaFromName("MIDDLE");
+                    agent.areaMask = 1 << areaNum;
+                    if (userData.team == team)
+                        transform.position = GameObject.FindGameObjectWithTag("MIDDLESPAWN").transform.position;
+                    else
+                        transform.position = GameObject.FindGameObjectWithTag("EMIDDLESPAWN").transform.position;
+                }
                 break;
-            case "BOTTOM":
-                areaNum = NavMesh.GetAreaFromName("BOTTOM");
-                agent.areaMask = 1 << areaNum;
-                if (userData.team == team)
-                    transform.position = GameObject.FindGameObjectWithTag("BOTTOMSPAWN").transform.position;
-                else
-                    transform.position = GameObject.FindGameObjectWithTag("EBOTTOMSPAWN").transform.position;
+            case LineType.BOTTOM:
+                {
+                    areaNum = NavMesh.GetAreaFromName("BOTTOM");
+                    agent.areaMask = 1 << areaNum;
+                    if (userData.team == team)
+                        transform.position = GameObject.FindGameObjectWithTag("BOTTOMSPAWN").transform.position;
+                    else
+                        transform.position = GameObject.FindGameObjectWithTag("EBOTTOMSPAWN").transform.position;
+                }
                 break;
         }
         agent.enabled = true;
