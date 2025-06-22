@@ -74,9 +74,9 @@ public enum StateType
 }
 public enum AttackType
 {
-    None,
+    None = 0,
     Ground,
-    Midair,
+    Midair,// 공중
     All,
 }
 public enum LineType

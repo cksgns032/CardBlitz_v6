@@ -167,9 +167,9 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
                 // todo : 서버 연결 후 수정
                 new CreateUnitPacket() { packID = (ushort)PacketType.CreateUnit, lineID = 1, unitID = 2 };
                 CreateUnitPacket data = new CreateUnitPacket();
-                data.SetData((ushort)PacketType.CreateUnit, 1, 2, 1, (ushort)GameManager.Instance.GetMyGameData().team);
+                // 패킷, 라인, 유닛 아이디, 등급, 팀
+                data.SetData((ushort)PacketType.CreateUnit, 1, 0, 1, (ushort)GameManager.Instance.GetMyGameData().team);
                 SncyTcp.Instance.SendMessage(MessagePackSerializer.Serialize(data));
-                // GameManager.Instance.CreateHero(hit.transform.gameObject.tag, monName, userData.team, selectCardNum);
                 cardGroup.UseCard();
             }
         }

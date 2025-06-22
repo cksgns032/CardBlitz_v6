@@ -28,6 +28,7 @@ public class PoolingManager : SingleTon<PoolingManager>
         // objName
         if (unitID >= 0)
         {
+            objName = DataTabelManager.Instance.GetUnitName(unitID);
             ObjectPool<GameObject> monsterPool = new ObjectPool<GameObject>(CreateMonsterPoolItem, OnTakeFromPool, OnReturnedToPool,
             OnDestroyPoolObject, true, defaultCapacity, maxPoolSize);
             for (int i = 0; i < defaultCapacity; i++)

@@ -8,13 +8,24 @@ public class DataTabelManager : SingleTon<DataTabelManager>
     public void LoadDataTable()
     {
         string[] names = Enum.GetNames(typeof(DataTable));
-        for (int i = 0; i < names.Length; i++)
+        for (int i = 1; i < names.Length; i++)
         {
             TextAsset tableData = Resources.Load<TextAsset>($"DataTable/{names[i]}");
             Debug.Log(tableData);
-            if (names[i] == "UnitData")
+            string[][] data = ReadText(tableData);
+            switch (names[i])
             {
-                ReadText(tableData);
+                case "UnitData":
+                    {
+                        for (int j = 0; j < data.Length; j++)
+                        {
+                            UnitData unit = new UnitData();
+                            unit.Setting(data[j]);
+                            int keyNum = int.Parse(data[j][0]);
+                            UnitDataTable.Add(keyNum, unit);
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -35,5 +46,16 @@ public class DataTabelManager : SingleTon<DataTabelManager>
             dataList[i - 1] = types;
         }
         return dataList;
+    }
+    public string GetUnitName(ushort id)
+    {
+        if (UnitDataTable.ContainsKey(id))
+        {
+            return UnitDataTable[id].name;
+        }
+        else
+        {
+            return null;
+        }
     }
 }
