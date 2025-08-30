@@ -31,7 +31,7 @@ public class LobbyScene : MonoBehaviour
 
         //UIManager.Instance.OpenPopUp(PopUp_Name.Loading);
 
-        SceneLoadManager.Instance.LoadSceneMode("GameScene");
+        SceneLoadManager.Instance.LoadSceneMode(SceneName.GameScene);
 
         //TCPClient.Instance.SendPack(GameProtocolType.Ready,UserData.uniqueID);
     }

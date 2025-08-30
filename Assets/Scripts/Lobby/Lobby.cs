@@ -31,9 +31,9 @@ public class Lobby : SceneBaseManager
     }
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        UIManager.Instance.Init();
+        base.Start();
         UIManager.Instance.AllClose();
 
         // ���� �� 

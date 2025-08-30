@@ -21,6 +21,7 @@ public class TestTCP : SingleTon<TestTCP>
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         ConnectToServer();
     }
     #region 서버연결

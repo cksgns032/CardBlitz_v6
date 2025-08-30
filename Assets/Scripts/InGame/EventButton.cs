@@ -47,13 +47,13 @@ public class EventButton : MonoBehaviour
         if (img.fillAmount == 1)
         {
             // 점령을 해서 버프를 주기 위해
-            for (int i = 0; i < GameManager.Instance.GetMyList().Count; i++)
+            for (int i = 0; i < GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyList().Count; i++)
             {
-                GameManager.Instance.GetMyList()[i].SetStat();
+                GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyList()[i].SetStat();
             }
-            for (int i = 0; i < GameManager.Instance.GetEnemyList().Count; i++)
+            for (int i = 0; i < GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetEnemyList().Count; i++)
             {
-                GameManager.Instance.GetEnemyList()[i].SetStat();
+                GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetEnemyList()[i].SetStat();
             }
             // ����ġ �� ������ ����
             switch (layer)

@@ -1,3 +1,9 @@
+public enum SceneName
+{
+    TitleScene,
+    LobbyScene,
+    GameScene,
+}
 public enum DataTable
 {
     MissionData,

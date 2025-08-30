@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +7,11 @@ public class SceneLoadManager : SingleTon<SceneLoadManager>
 {
     FadeUI fade;
     bool isLoading = false;
-    public void LoadSceneMode(string sceneName)
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+    public void LoadSceneMode(SceneName sceneName)
     {
         if (!isLoading)
         {
@@ -15,7 +20,7 @@ public class SceneLoadManager : SingleTon<SceneLoadManager>
             StartCoroutine(IENextScene(sceneName));
         }
     }
-    IEnumerator IENextScene(string sceneName)
+    IEnumerator IENextScene(SceneName sceneName)
     {
         if (fade)
         {
@@ -24,7 +29,8 @@ public class SceneLoadManager : SingleTon<SceneLoadManager>
 
         yield return new WaitForSeconds(1);
 
-        AsyncOperation asyn = SceneManager.LoadSceneAsync(sceneName);
+        string name = Enum.GetName(typeof(SceneName), sceneName);
+        AsyncOperation asyn = SceneManager.LoadSceneAsync(name);
         while (!asyn.isDone)
         {
             yield return null;

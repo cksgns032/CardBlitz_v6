@@ -22,7 +22,7 @@ public class GameUI : MonoBehaviour
         if (myProfile)
         {
             myProfile.Init();
-            myProfile.GetColor(GameManager.Instance.GetMyGameData().team);
+            myProfile.GetColor(GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team);
         }
 
         // enemy data
@@ -30,7 +30,7 @@ public class GameUI : MonoBehaviour
         if (enemyProfile)
         {
             enemyProfile.Init();
-            enemyProfile.GetColor(GameManager.Instance.GetMyGameData().team == TeamType.Red ? TeamType.Blue : TeamType.Red);
+            enemyProfile.GetColor(GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team == TeamType.Red ? TeamType.Blue : TeamType.Red);
         }
 
         shuffleBtn = gameObject.transform.Find("Shuffle").GetComponent<Button>();
@@ -57,11 +57,11 @@ public class GameUI : MonoBehaviour
     }
     public void GaugeFill()
     {
-        StartCoroutine(GaugeFill(GameManager.Instance.GetGaugeTime()));
+        StartCoroutine(GaugeFill(GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGaugeTime()));
     }
     IEnumerator GaugeFill(float gaugeTime)
     {
-        while (GameManager.Instance.GetClear() == false)
+        while (GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear() == false)
         {
             yield return new WaitForSeconds(gaugeTime);
             ChargeGauge();
@@ -93,9 +93,9 @@ public class GameUI : MonoBehaviour
     IEnumerator IECardFill()
     {
         float elapsedTime = 0f;
-        float cargeTime = GameManager.Instance.GetCardTime();
+        float cargeTime = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetCardTime();
 
-        while (elapsedTime < cargeTime && GameManager.Instance.GetClear() == false)
+        while (elapsedTime < cargeTime && GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear() == false)
         {
             elapsedTime += Time.deltaTime;
             if (elapsedTime >= cargeTime)
@@ -113,7 +113,7 @@ public class GameUI : MonoBehaviour
     #region Cost 
     public void UseCost(TeamType team, int useCost)
     {
-        if (team == GameManager.Instance.GetMyGameData().team)
+        if (team == GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team)
         {
             myProfile.UpdateGauge(useCost);
         }
@@ -135,7 +135,7 @@ public class GameUI : MonoBehaviour
     {
         resultTxt.gameObject.SetActive(true);
         resultTxt.color = new Color(255, 97, 97, 255);
-        GameManager.Instance.SetClear(true);
+        GameSceneManager.Instance.GetSceneManager<GameSceneManager>().SetClear(true);
         switch (result)
         {
             case ResultType.WIN:
@@ -157,7 +157,7 @@ public class GameUI : MonoBehaviour
     #region Tower
     public void UpdateTower(TeamType hitTeam, float attack)
     {
-        if (hitTeam == GameManager.Instance.GetMyGameData().team)
+        if (hitTeam == GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team)
         {
             myProfile.SetTowerHp(attack);
         }

@@ -21,6 +21,10 @@ public class AudioManager : SingleTon<AudioManager>
     public enum Type { BGM, SFX }
     public enum Sfx { Click, Dead, Hit, LevelUp, Lose, Select, Win }
 
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     private void OnEnable()
     {
         // ����� �÷��̾� �ʱ�ȭ

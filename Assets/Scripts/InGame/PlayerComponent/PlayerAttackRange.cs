@@ -8,6 +8,7 @@ public class PlayerAttackRange : MonoBehaviour
 
     public void Init()
     {
+        GameSceneManager.Instance.GetSceneManager<GameSceneManager>();
         sphereCollider = GetComponent<SphereCollider>();
         playerCom = GetComponentInParent<Monster>();
         state = playerCom.GetState();
@@ -23,7 +24,7 @@ public class PlayerAttackRange : MonoBehaviour
     // 들어왔을 때 리스트에 넣어줌
     private void OnTriggerEnter(Collider other)
     {
-        if (GameManager.Instance.GetClear())
+        if (GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear())
             return;
 
         LayerMask enemyLayer = LayerMask.NameToLayer("ENEMY");

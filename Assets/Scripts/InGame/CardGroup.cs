@@ -8,7 +8,7 @@ public class CardGroup : MonoBehaviour
     UserGameData userData;
     public void Init()
     {
-        userData = GameManager.Instance.GetMyGameData();
+        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             Transform child = gameObject.transform.GetChild(i);
@@ -29,7 +29,7 @@ public class CardGroup : MonoBehaviour
     // todo : 서버 생기면 연결
     public void Shuffle()
     {
-        GameUI gameUI = GameManager.Instance.GetGameUI();
+        GameUI gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameUI();
         gameUI.StopCardFill();
         for (var i = 0; i < cards.Count; i++)
         {

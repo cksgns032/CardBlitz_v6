@@ -165,6 +165,7 @@ public class SncyTcp : SingleTon<SncyTcp>
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         observerManager = ObserverManager.Instance;
         Application.quitting += OnApplicationQuitting;
         ConnectToServer();

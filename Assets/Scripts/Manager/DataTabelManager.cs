@@ -5,6 +5,10 @@ using UnityEngine;
 public class DataTabelManager : SingleTon<DataTabelManager>
 {
     Dictionary<int, UnitData> UnitDataTable = new Dictionary<int, UnitData>();
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     public void LoadDataTable()
     {
         string[] names = Enum.GetNames(typeof(DataTable));

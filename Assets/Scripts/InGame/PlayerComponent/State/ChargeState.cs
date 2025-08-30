@@ -9,7 +9,7 @@ public class ChargeState : MonoBehaviour, IState
     UserGameData userData;
     public void Init(Monster data)
     {
-        userData = GameManager.Instance.GetMyGameData();
+        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
         player = data;
         stateCom = data.GetState();
         agent = player.gameObject.GetComponent<NavMeshAgent>();
@@ -33,7 +33,7 @@ public class ChargeState : MonoBehaviour, IState
 
     public void StateUpdate()
     {
-        if (player.IsDie() == true || GameManager.Instance.GetClear())
+        if (player.IsDie() == true || GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear())
         {
             return;
         }

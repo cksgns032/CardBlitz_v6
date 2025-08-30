@@ -29,7 +29,7 @@ public class Monster : Unit
 
     public override void Init()
     {
-        userData = GameManager.Instance.GetMyGameData();
+        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
         gameObject.layer = LayerMask.NameToLayer("HERO");
         gameObject.tag = "Player";
         agent = GetComponent<NavMeshAgent>();

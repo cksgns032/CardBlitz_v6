@@ -26,7 +26,7 @@ public class MoveState : ButtonSearch, IState
     }
     public void StateUpdate()
     {
-        if (player.IsDie() == true || GameManager.Instance.GetClear())
+        if (player.IsDie() == true || GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear())
         {
             return;
         }

@@ -16,7 +16,7 @@ public class AttackState : MonoBehaviour, IState
     NavMeshAgent agent;
     public void Init(Monster data)
     {
-        userData = GameManager.Instance.GetMyGameData();
+        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
         player = data;
         stateCom = data.GetState();
         ani = player.gameObject.GetComponentInChildren<Animator>();
@@ -31,14 +31,14 @@ public class AttackState : MonoBehaviour, IState
     }
     public void StateUpdate()
     {
-        if (player.IsDie() == true || GameManager.Instance.GetClear())
+        if (player.IsDie() == true || GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear())
         {
             return;
         }
     }
     public void Attack()
     {
-        if (GameManager.Instance.GetClear() && player.IsDie())
+        if (GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear() && player.IsDie())
         {
             return;
         }
@@ -73,7 +73,7 @@ public class AttackState : MonoBehaviour, IState
                 if (enemyList[i].gameObject.tag == "EnemyTower")
                 {
                     TeamType hitTeam = TeamType.Red == userData.team ? TeamType.Blue : TeamType.Red;
-                    GameUI gameUI = GameManager.Instance.GetGameUI();
+                    GameUI gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameUI();
                     if (gameUI)
                     {
                         gameUI.UpdateTower(hitTeam, stat.attack);

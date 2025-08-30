@@ -7,8 +7,9 @@ public class UIManager : SingleTon<UIManager>
     Dictionary<int, UIBase> popUpDictionary = new Dictionary<int, UIBase>();
     Dictionary<int, UIBase> UIDictionary = new Dictionary<int, UIBase>();
     SceneBaseManager sceneBase;
-    public void Init()
+    void Start()
     {
+        DontDestroyOnLoad(gameObject);
         sceneBase = GameObject.FindFirstObjectByType<SceneBaseManager>();
     }
     public void LoadPrefabs()
@@ -24,7 +25,7 @@ public class UIManager : SingleTon<UIManager>
         int UICnt = (int)UI_Name.Count;
         for (int i = 0; i < UICnt; i++)
         {
-            if (popUpDictionary.ContainsKey(i) == false)
+            if (UIDictionary.ContainsKey(i) == false)
             {
                 UIDictionary.Add(i, Resources.Load<UIBase>($"Prefabs/UIPrefabs/{Enum.GetName(typeof(UI_Name), i)}"));
             }
@@ -34,11 +35,10 @@ public class UIManager : SingleTon<UIManager>
     {
         if (UIDictionary.TryGetValue((int)key, out UIBase obj))
         {
-            Transform findObject = CheckNew(Enum.GetName(typeof(UI_Name), key));
+            Transform findObject = CheckNew(Layer_Type.UI, Enum.GetName(typeof(UI_Name), key));
             if (findObject == null)
             {
-                GameObject popUp = sceneBase.GetUILayer();
-                UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
+                UIBase clone = Instantiate<UIBase>(obj, sceneBase.GetSceneUI().uiLayer.GetComponent<Transform>());
                 clone.name = Enum.GetName(typeof(UI_Name), key);
                 clone.Init(Layer_Type.UI, clone.name);
                 return clone;
@@ -58,11 +58,10 @@ public class UIManager : SingleTon<UIManager>
     {
         if (popUpDictionary.TryGetValue((int)key, out UIBase obj))
         {
-            Transform findObject = CheckNew(Enum.GetName(typeof(PopUp_Name), key));
+            Transform findObject = CheckNew(Layer_Type.Popup, Enum.GetName(typeof(PopUp_Name), key));
             if (findObject == null)
             {
-                GameObject popUp = sceneBase.GetPopUpLayer();
-                UIBase clone = Instantiate<UIBase>(obj, popUp.GetComponent<Transform>());
+                UIBase clone = Instantiate<UIBase>(obj, sceneBase.GetSceneUI().popUpLayer.GetComponent<Transform>());
                 clone.name = Enum.GetName(typeof(PopUp_Name), key);
                 clone.Init(Layer_Type.Popup, clone.name);
                 return clone;
@@ -78,10 +77,16 @@ public class UIManager : SingleTon<UIManager>
         }
         return null;
     }
-    public Transform CheckNew(string keyName)
+    public Transform CheckNew(Layer_Type type, string keyName)
     {
-        GameObject pop = sceneBase.GetPopUpLayer();
-        return pop.transform.Find(keyName);
+        if (type == Layer_Type.UI)
+        {
+            return sceneBase.GetSceneUI().uiLayer.transform.Find(keyName);
+        }
+        else
+        {
+            return sceneBase.GetSceneUI().popUpLayer.transform.Find(keyName);
+        }
     }
     public void Close(PopUp_Name popName)
     {

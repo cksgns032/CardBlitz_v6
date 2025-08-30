@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.Pool;
 
 
-public class GameManager : SingleTon<GameManager>, Observer
+public class GameSceneManager : SceneBaseManager, Observer
 {
     GameMap map;
     GameUI gameUI;
@@ -26,8 +26,9 @@ public class GameManager : SingleTon<GameManager>, Observer
     {
         ObserverManager.Instance.RemoveObserver(this);
     }
-    void Start()
+    public override void Start()
     {
+        base.Start();
         DataTabelManager.Instance.LoadDataTable();
         ObserverManager.Instance.AddObserver(this);
         // todo : 하드 코딩 > 서버 데이터 변경
@@ -104,7 +105,7 @@ public class GameManager : SingleTon<GameManager>, Observer
                 monPosDataList.Add((short)i, posList);
             }
 
-            SncyTcp.Instance.SendMessage(MessagePackSerializer.Serialize(new UnitPosPacket() { packID = (ushort)PacketType.UnitPos, posList = monPosDataList }));
+            // SncyTcp.Instance.SendMessage(MessagePackSerializer.Serialize(new UnitPosPacket() { packID = (ushort)PacketType.UnitPos, posList = monPosDataList }));
         }
     }
 
@@ -142,6 +143,7 @@ public class GameManager : SingleTon<GameManager>, Observer
     // }
     public void CreateUnit(LineType line, ushort unitId, ushort grade, TeamType team)
     {
+        Debug.Log("get Packet");
         // todo : 서버에 생성 패킷 보냄
         // 딕셔너리 체크
         if (PoolingManager.Instance.MonsterPoolList.TryGetValue(unitId, out IObjectPool<GameObject> obj) == false)
@@ -152,7 +154,7 @@ public class GameManager : SingleTon<GameManager>, Observer
         Monster monCom = poolObj.GetComponent<Monster>();
         monCom.Init();
         monCom.AgentMaskSet(line, team);
-
+        Debug.Log("create Unit");
         // todo : 서버 활성화 후
         //TCPClient.Instance.CreateObj(MonName, tagName);
 

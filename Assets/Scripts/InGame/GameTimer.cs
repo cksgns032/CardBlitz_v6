@@ -21,7 +21,7 @@ public class GameTimer : MonoBehaviour
         timeText.text = str1 + ":" + str2;
         if (timeNum == 60)
         {
-            GameManager.Instance.FeverTime();
+            GameSceneManager.Instance.GetSceneManager<GameSceneManager>().FeverTime();
         }
 
     }

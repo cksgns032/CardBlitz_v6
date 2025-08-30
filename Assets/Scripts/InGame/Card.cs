@@ -37,19 +37,19 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     // Ŭ��
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.Instance.GetClear())
+        if (GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear())
             return;
         selectCardNum = cardGroup.SelectCard(this);
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (GameManager.Instance.GetClear())
+        if (GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear())
             return;
         cardGroup.DeSelect();
     }
     public void Init()
     {
-        userData = GameManager.Instance.GetMyGameData();
+        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
         cardGroup = GetComponentInParent<CardGroup>();
         rectCom = GetComponent<RectTransform>();
         rectVec2 = new Vector2(rectCom.anchoredPosition.x, rectCom.anchoredPosition.y);
@@ -90,7 +90,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         }
         gameObject.SetActive(true);
         ani.Play(ani.clip.name);
-        GameUI gameUI = GameManager.Instance.GetGameUI();
+        GameUI gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameUI();
         if (gameUI != null)
         {
             Button shuffle = gameUI.GetShuffle();
@@ -140,7 +140,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     }
     public void BtnClick()
     {
-        GameMap map = GameManager.Instance.GetGameMap();
+        GameMap map = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameMap();
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layerMask = 1 << LayerMask.NameToLayer("TEAMLOAD");
@@ -149,26 +149,39 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         {
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
-                string monName = "";
-                switch (selectCardNum)
-                {
-                    case 1:
-                        monName = cardName + "_Small";
-                        break;
-                    case 2:
-                        monName = cardName + "_Medium";
-                        break;
-                    case 3:
-                        monName = cardName + "_Big";
-                        break;
-                }
-                // test
-                monName = "Unit_Test";
+                // string monName = "";
+                // switch (selectCardNum)
+                // {
+                //     case 1:
+                //         monName = cardName + "_Small";
+                //         break;
+                //     case 2:
+                //         monName = cardName + "_Medium";
+                //         break;
+                //     case 3:
+                //         monName = cardName + "_Big";
+                //         break;
+                // }
+                // // test
+                // monName = "Unit_Test";
+
                 // todo : 서버 연결 후 수정
                 new CreateUnitPacket() { packID = (ushort)PacketType.CreateUnit, lineID = 1, unitID = 2 };
                 CreateUnitPacket data = new CreateUnitPacket();
+                ushort LineNum = 0;
+                for (int i = 0; i < (int)LineType.COUNT; i++)
+                {
+                    string lineName = Enum.GetName(typeof(LineType), i);
+                    if (lineName.Equals(hit.transform.tag))
+                    {
+                        LineNum = (ushort)i;
+                        break;
+                    }
+                }
                 // 패킷, 라인, 유닛 아이디, 등급, 팀
-                data.SetData((ushort)PacketType.CreateUnit, 1, 0, 1, (ushort)GameManager.Instance.GetMyGameData().team);
+                // todo : 유닛 아이디 변경해야함
+                Debug.Log("Send Packet");
+                data.SetData((ushort)PacketType.CreateUnit, (ushort)LineNum, 0, (ushort)selectCardNum, (ushort)GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team);
                 SncyTcp.Instance.SendMessage(MessagePackSerializer.Serialize(data));
                 cardGroup.UseCard();
             }
@@ -182,7 +195,7 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
     }
     void SelectLine()
     {
-        GameMap map = GameManager.Instance.GetGameMap();
+        GameMap map = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameMap();
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         int layerMask = 1 << LayerMask.NameToLayer("TEAMLOAD");

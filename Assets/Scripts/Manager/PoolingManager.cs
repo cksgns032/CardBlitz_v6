@@ -39,6 +39,7 @@ public class PoolingManager : SingleTon<PoolingManager>
             }
             MonsterPoolList.Add(unitID, monsterPool);
         }
+        Debug.Log("setPool");
     }
 
     private GameObject CreateDamageTxtPoolItem()

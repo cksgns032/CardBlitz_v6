@@ -6,7 +6,7 @@ public class ButtonSearch : MonoBehaviour
     protected PlayerState stateCom;
     private void OnTriggerEnter(Collider other)
     {
-        if (GameManager.Instance.GetClear() && player.IsDie())
+        if (GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetClear() && player.IsDie())
         {
             return;
         }
@@ -14,7 +14,7 @@ public class ButtonSearch : MonoBehaviour
         if (other.gameObject.layer == layerNum)
         {
             EventButton btn = other.gameObject.GetComponent<EventButton>();
-            if (btn && btn.CheckState() == false && btn.GetColor() != GameManager.Instance.GetMyGameData().team)
+            if (btn && btn.CheckState() == false && btn.GetColor() != GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team)
             {
                 player.SetEventButton(btn);
                 btn.Charging(true);

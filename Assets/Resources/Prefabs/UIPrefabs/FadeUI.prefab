@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 410113125972771573}
   - component: {fileID: 2615614715824171973}
   m_Layer: 5
-  m_Name: FadePopup
+  m_Name: FadeUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

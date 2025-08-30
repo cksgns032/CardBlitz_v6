@@ -12,4 +12,6 @@ public static class UserData
     // 설정 데이터
     public static float soundVolume = 1;
     public static float bgmVolume = 1;
+    // 현재 신 
+    public static SceneName sceneName = SceneName.TitleScene;
 }
