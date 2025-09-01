@@ -5,14 +5,13 @@ public class TitleUIManager : SceneUIManager
     Animation tap;
     Animation titleIdle;
 
-    void Start()
+    public override void Init()
     {
         tap = GetComponentInChildren<Animation>(true);
         tap.Play();
 
         titleIdle = GetComponent<Animation>();
         titleIdle.Play();
-        TitleSceneManager cc = TitleSceneManager.Instance as TitleSceneManager;
     }
 
     // Update is called once per frame

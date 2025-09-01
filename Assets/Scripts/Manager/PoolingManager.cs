@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
 
 public class PoolingManager : SingleTon<PoolingManager>
 {
@@ -44,7 +45,9 @@ public class PoolingManager : SingleTon<PoolingManager>
 
     private GameObject CreateDamageTxtPoolItem()
     {
-        Transform parant = FindFirstObjectByType<GameUI>().transform.Find("DamageTextGroup");
+        GameSceneManager gameSceneManager = GameSceneManager.Instance.GetSceneManager<GameSceneManager>();
+        GameUIManager gameUIManager = gameSceneManager.GetUIManager<GameUIManager>();
+        Transform parant = gameUIManager.gameHud.transform.Find("DamageTextGroup");
         GameObject poolGo = Instantiate(Resources.Load<GameObject>("Prefabs/InGame/DamageTxt"), parant); poolGo.GetComponent<DamageTxt>().Pool = this.DamageTxtPool;
         return poolGo;
     }

@@ -41,6 +41,7 @@ public enum Layer_Type
 public enum UI_Name
 {
     FadeUI,
+    Result,
     Count,
 }
 public enum PopUp_Name

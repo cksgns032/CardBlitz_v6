@@ -10,13 +10,11 @@ public class GameProfile : MonoBehaviour
     public Slider gauge;
     public Text gaugeNum;
     UserGameData userData;
-    GameSceneManager sceneManager;
 
     // Start is called before the first frame update
     public void Init()
     {
-        sceneManager = GameSceneManager.Instance as GameSceneManager;
-        userData = sceneManager.GetMyGameData();
+        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
         // todo : hard coding delete
         hp.value = 1;// hard code
         gauge.maxValue = 5;// hard code
@@ -37,7 +35,7 @@ public class GameProfile : MonoBehaviour
         if (num <= 0)
         {
             num = 0;
-            sceneManager.ResultGame(ResultType.LOSE);
+            GameSceneManager.Instance.GetSceneManager<GameSceneManager>().ResultGame(ResultType.LOSE);
         }
 
         hp.value = num;

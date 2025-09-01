@@ -90,10 +90,10 @@ public class Card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndD
         }
         gameObject.SetActive(true);
         ani.Play(ani.clip.name);
-        GameUI gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameUI();
+        GameUIManager gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetSceneUI() as GameUIManager;
         if (gameUI != null)
         {
-            Button shuffle = gameUI.GetShuffle();
+            Button shuffle = gameUI.gameHud.GetShuffle();
             if (shuffle != null)
             {
                 if (cardCoroutine != null)

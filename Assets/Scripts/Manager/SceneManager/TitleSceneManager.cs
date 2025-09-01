@@ -14,6 +14,10 @@ public class TitleSceneManager : SceneBaseManager
         AudioManager.Instance.LoadSound(AudioManager.Type.SFX, "Click");
 
         UIManager.Instance.LoadPrefabs();
+
+        sceneUI = sceneUI as TitleUIManager;
+        sceneUI.Init();
+
         SetScale();
         //TCPClient.Instance.Init();
     }

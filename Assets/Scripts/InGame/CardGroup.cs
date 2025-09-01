@@ -6,9 +6,13 @@ public class CardGroup : MonoBehaviour
     List<Card> cards = new List<Card>();
     List<Card> select;
     UserGameData userData;
+    GameSceneManager sceneManager;
+    GameUIManager gameUIManager;
     public void Init()
     {
-        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
+        sceneManager = GameSceneManager.Instance.GetSceneManager<GameSceneManager>();
+        gameUIManager = sceneManager.GetUIManager<GameUIManager>();
+        userData = sceneManager.GetMyGameData();
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
             Transform child = gameObject.transform.GetChild(i);
@@ -29,8 +33,7 @@ public class CardGroup : MonoBehaviour
     // todo : 서버 생기면 연결
     public void Shuffle()
     {
-        GameUI gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameUI();
-        gameUI.StopCardFill();
+        gameUIManager.gameHud.StopCardFill();
         for (var i = 0; i < cards.Count; i++)
         {
             if (cards[i].gameObject.activeSelf == true && cards[i].GetIsUse())
@@ -41,7 +44,7 @@ public class CardGroup : MonoBehaviour
                 cards[i].PlayAni(i * 100);
             }
         }
-        gameUI.CardFill();
+        gameUIManager.gameHud.CardFill();
     }
     // ī�� �߰�
     public void AddCard()

@@ -31,6 +31,11 @@ public class SceneBaseManager : SingleTon<SceneBaseManager>
         }
 
     }
+    public T GetUIManager<T>() where T : SceneUIManager
+    {
+        Debug.Log($"{typeof(T).Name}");
+        return sceneUI as T;
+    }
     public SceneUIManager GetSceneUI()
     {
         return sceneUI;

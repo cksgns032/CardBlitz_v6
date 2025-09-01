@@ -9,7 +9,6 @@ using UnityEngine.Pool;
 public class GameSceneManager : SceneBaseManager, Observer
 {
     GameMap map;
-    GameUI gameUI;
     FadeUI fade;
 
     List<Monster> myList = new List<Monster>();
@@ -45,11 +44,7 @@ public class GameSceneManager : SceneBaseManager, Observer
             fade.FadeIn();
         }
         // UI
-        gameUI = GameObject.FindAnyObjectByType<GameUI>();
-        if (gameUI)
-        {
-            gameUI.Init();
-        }
+        GetUIManager<GameUIManager>()?.Init();
         // Map
         GameObject mapPos = GameObject.Find("MapPos");
         GameObject mapObj = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Map/Map"), mapPos.GetComponent<Transform>());
@@ -76,12 +71,13 @@ public class GameSceneManager : SceneBaseManager, Observer
         if (isClaer == false && gameTime > 0)
         {
             gameTime -= Time.deltaTime;
-            gameUI.UpdateTime(gameTime);
+            GetUIManager<GameUIManager>()?.gameHud.UpdateTime(gameTime);
         }
+        // 비김
         else if (isClaer == false && gameTime <= 0)
         {
             isClaer = true;
-            gameUI.Result(ResultType.DRAW);
+            UIManager.Instance.GetUI(UI_Name.Result);
         }
     }
     private void FixedUpdate()
@@ -193,7 +189,7 @@ public class GameSceneManager : SceneBaseManager, Observer
             if (enemyList[j].GetComponent<NavMeshAgent>())
                 enemyList[j].GetComponent<NavMeshAgent>().isStopped = true;
         }
-        gameUI.Result(result);
+        UIManager.Instance.GetUI(UI_Name.Result);
     }
     public void SetClear(bool state)
     {
@@ -204,13 +200,6 @@ public class GameSceneManager : SceneBaseManager, Observer
         return isClaer;
     }
     #endregion Game Result
-
-    #region Game UI
-    public GameUI GetGameUI()
-    {
-        return gameUI;
-    }
-    #endregion Game UI
 
     #region Fever Time
     // �̼� ���� ����

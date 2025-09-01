@@ -14,9 +14,13 @@ public class AttackState : MonoBehaviour, IState
     Animator ani;
     HeroData stat;
     NavMeshAgent agent;
+    GameSceneManager sceneManager;
+    GameUIManager gameUIManager;
     public void Init(Monster data)
     {
-        userData = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData();
+        sceneManager = GameSceneManager.Instance.GetSceneManager<GameSceneManager>();
+        gameUIManager = sceneManager.GetUIManager<GameUIManager>();
+        userData = sceneManager.GetMyGameData();
         player = data;
         stateCom = data.GetState();
         ani = player.gameObject.GetComponentInChildren<Animator>();
@@ -73,10 +77,9 @@ public class AttackState : MonoBehaviour, IState
                 if (enemyList[i].gameObject.tag == "EnemyTower")
                 {
                     TeamType hitTeam = TeamType.Red == userData.team ? TeamType.Blue : TeamType.Red;
-                    GameUI gameUI = GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetGameUI();
-                    if (gameUI)
+                    if (gameUIManager)
                     {
-                        gameUI.UpdateTower(hitTeam, stat.attack);
+                        gameUIManager.gameHud.UpdateTower(hitTeam, stat.attack);
                     }
                 }
                 // 몬스터 공격
