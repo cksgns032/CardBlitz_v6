@@ -71,7 +71,11 @@ public class GameSceneManager : SceneBaseManager, Observer
         if (isClaer == false && gameTime > 0)
         {
             gameTime -= Time.deltaTime;
-            GetUIManager<GameUIManager>()?.gameHud.UpdateTime(gameTime);
+            GameUIManager gameUIManager = GetUIManager<GameUIManager>();
+            if (gameUIManager)
+            {
+                gameUIManager.gameHud.UpdateTime(gameTime);
+            }
         }
         // 비김
         else if (isClaer == false && gameTime <= 0)

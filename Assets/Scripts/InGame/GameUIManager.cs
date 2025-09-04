@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class GameUIManager : SceneUIManager
 {
-    public GameHud gameHud;
+    public HudComponent gameHud;
     public override void Init()
     {
-        gameHud = GetComponentInChildren<GameHud>(true);
+        gameHud = GetComponentInChildren<HudComponent>(true);
         gameHud?.Init();
     }
 }

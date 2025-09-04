@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 68630924}
   - component: {fileID: 68630925}
   m_Layer: 5
-  m_Name: GameHudLayer
+  m_Name: HudLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -493,6 +493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popUpLayer: {fileID: 245967286}
   uiLayer: {fileID: 1311149012}
+  gameHud: {fileID: 68630925}
 --- !u!1 &245967286
 GameObject:
   m_ObjectHideFlags: 0

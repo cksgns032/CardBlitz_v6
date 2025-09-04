@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameHud : MonoBehaviour
+public class HudComponent : MonoBehaviour
 {
     GameProfile myProfile;
     GameProfile enemyProfile;

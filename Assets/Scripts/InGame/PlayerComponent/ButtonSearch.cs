@@ -20,6 +20,10 @@ public class ButtonSearch : MonoBehaviour
                 btn.Charging(true);
                 stateCom.TransState(StateType.Charge);
             }
+            else
+            {
+                Debug.Log("btn skip");
+            }
         }
     }
     // private void OnTriggerStay(Collider other)
