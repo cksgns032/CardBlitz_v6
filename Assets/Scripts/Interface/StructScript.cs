@@ -45,19 +45,40 @@ public struct HeroData
 }
 public struct BuffData
 {
+    public BuffName buffName;
+
     public float buffTime;
+    public float buffEndTime;
+
     public int hpInt;
     public float hpPercent;
+
     public int defenceInt;
     public float defencePercent;
+
     public float moveSpeed;
     public float attackSpeed;
     public float attackRange;
     public int attackCnt;
+
     public float attackInt;
     public float attackPercent;
+
     public float criInt;
     public float criPercent;
+
     public float criDamageInt;
     public float criDamagePercent;
+
+    public Action endCallBack;
+
+    public bool update(float deltaTime)
+    {
+        buffEndTime -= deltaTime;
+        if (buffTime != 999 && buffEndTime <= 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }

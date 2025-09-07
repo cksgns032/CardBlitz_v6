@@ -1,50 +1,66 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Buff : MonoBehaviour
 {
-    float buffTime;
-    BuffData buffData;
-    // ���� ����
-    int hp;// ��
-    int defence;// ����
-    float moveSpeed;// �̵��ӵ�
-    public float attackSpeed;// ���ݼӵ�
-    float attackRange;// ���ݹ���
-    int attackCnt;// ���ݰ��� ��
-    float attack;// ���ݷ�
-    float criPercent;// ũ��Ƽ�� Ȯ��
-    float criAdd;// ũ��Ƽ�� ������ ����
-    float currentTime;
+    [SerializeField] List<BuffData> buffList = new List<BuffData>();
 
     //WaitForSeconds wait = new WaitForSeconds(0.1f);
     WaitForSecondsRealtime waitReal = new WaitForSecondsRealtime(0.1f);
     Monster player;
 
-    public void SetBuff(BuffData data, Monster player)
+    public void Init()
     {
-        buffData = data;
-        this.player = player;
+        player = GetComponent<Monster>();
     }
-    public void StartActivation()
+    void Update()
     {
-        StartCoroutine(Activation());
-    }
-    IEnumerator Activation()
-    {
-        while (currentTime > 0)
+        if (buffList.Count > 0)
         {
-            currentTime -= 0.1f;
-            yield return waitReal;
+            float deltaTime = Time.deltaTime;
+            for (int i = buffList.Count - 1; i >= 0; i--)
+            {
+                if (buffList[i].update(deltaTime))
+                {
+                    buffList.RemoveAt(i);
+                    break;
+                }
+            }
         }
-        currentTime = 0;
-        DeActivation();
     }
-    void DeActivation()
+    public void ReMoveBuff(BuffData buff)
     {
-        if (player && !player.IsDie())
+        for (int i = buffList.Count - 1; i >= 0; i--)
         {
-            player.ReMoveBuff(this);
+            if (buffList[i].buffName == buff.buffName)
+            {
+                buffList.RemoveAt(i);
+                break;
+            }
         }
+        Debug.Log(buffList);
+    }
+    public void AddBuff(BuffData data)
+    {
+
+        buffList.Add(data);
+        foreach (var a in buffList)
+        {
+            Debug.Log($"{a}");
+        }
+    }
+
+    public float BuffAttackCoolTime()
+    {
+        List<BuffData> attackSpeedBuffList = buffList.Where(x => x.attackSpeed > 0).ToList();
+        float attackCoolTimebuff = 0;
+        foreach (var buff in attackSpeedBuffList)
+        {
+            attackCoolTimebuff += player.GetHeroData().attackSpeed * buff.attackSpeed;
+        }
+        return attackCoolTimebuff;
     }
 }

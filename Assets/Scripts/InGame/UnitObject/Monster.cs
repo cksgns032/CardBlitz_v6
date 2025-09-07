@@ -20,7 +20,8 @@ public class Monster : Unit
     [SerializeField] PlayerAttackRange attackRangeCom;
     Coroutine attackCoroutine;
     [SerializeField] List<Unit> enemyList = new List<Unit>();
-    [SerializeField] List<Buff> buffList = new List<Buff>();
+    // Buff
+    private Buff buff;
 
     public IObjectPool<GameObject> Pool { get; set; }
     bool isDie = false;
@@ -47,6 +48,7 @@ public class Monster : Unit
         {
             rigid.isKinematic = true;
         }
+        buff = GetComponent<Buff>();
 
         // todo : �� ���� �̸��� ������ ���� ���̺� �о �ɷ�ġ ����
         if (stateCom != null)
@@ -89,6 +91,10 @@ public class Monster : Unit
             attackRangeCom.gameObject.SetActive(false);
         }
         SetStat();
+    }
+    public HeroData GetHeroData()
+    {
+        return info;
     }
     public List<Unit> GetEnemyList()
     {
@@ -223,24 +229,13 @@ public class Monster : Unit
         }
     }
     #region buff
-    public void ReMoveBuff(Buff buff)
+    public void ReMoveBuff(BuffData buffData)
     {
-        foreach (Buff bf in buffList)
-        {
-            if (buff == bf)
-            {
-                buffList.Remove(bf);
-                break;
-            }
-        }
-        Debug.Log(buffList);
+        buff.ReMoveBuff(buffData);
     }
-    public void AddBuff(BuffData data)
+    public void AddBuff(BuffData buffData)
     {
-        Buff buff = new Buff();
-        buff.SetBuff(data, this);
-        buffList.Add(buff);
-        Debug.Log(buffList);
+        buff.AddBuff(buffData);
     }
     #endregion buff
     public void SetEventButton(EventButton button)
@@ -282,13 +277,7 @@ public class Monster : Unit
     IEnumerator IEAttackCoolTime()
     {
         float elapsedTime = 0f;
-        float buffAttackSpeed = 0f;
-        List<Buff> attackSpeedBuffList = buffList.Where(x => x.attackSpeed > 0).ToList();
-        // 버프 상태 확인
-        foreach (var buff in attackSpeedBuffList)
-        {
-            buffAttackSpeed += info.attackSpeed * buff.attackSpeed;
-        }
+        float buffAttackSpeed = buff.BuffAttackCoolTime();
         // 공격 쿨타임
         while (elapsedTime < Math.Max(0, info.attackSpeed - buffAttackSpeed))
         {

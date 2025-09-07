@@ -94,4 +94,11 @@ public enum LineType
     BOTTOM = 3,
     COUNT
 }
+public enum BuffName
+{
+    TopBuff,
+    MiddleBuff,
+    BottomBuff,
+    FiverBuff,
+}
 #endregion

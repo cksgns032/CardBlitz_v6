@@ -14,7 +14,8 @@ public class ButtonSearch : MonoBehaviour
         if (other.gameObject.layer == layerNum)
         {
             EventButton btn = other.gameObject.GetComponent<EventButton>();
-            if (btn && btn.CheckState() == false && btn.GetColor() != GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team)
+            // todo : 서버 연결 후 주석 조건문에 넣어주기
+            if (btn && btn.CheckState() == false)//&& btn.GetColor() != GameSceneManager.Instance.GetSceneManager<GameSceneManager>().GetMyGameData().team
             {
                 player.SetEventButton(btn);
                 btn.Charging(true);

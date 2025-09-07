@@ -39,8 +39,8 @@ public class ChargeState : MonoBehaviour, IState
         }
 
         EventButton btn = player.GetEventButton();
-        if (btn != null &&
-            btn.GetColor() != userData.team)
+        // todo : 서버 연결 후 주석 조건문에 넣주기
+        if (btn != null)//&& btn.GetColor() != userData.team
         {
             if (btn.ChargeImage(1 * Time.deltaTime, LayerMask.LayerToName(gameObject.layer), userData.team))
             {
