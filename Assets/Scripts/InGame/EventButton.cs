@@ -59,12 +59,10 @@ public class EventButton : MonoBehaviour
             for (int i = 0; i < myList.Count; i++)
             {
                 myList[i].AddBuff(buffData);
-                myList[i].SetStat();
             }
             for (int i = 0; i < enemyList.Count; i++)
             {
                 enemyList[i].ReMoveBuff(buffData);
-                enemyList[i].SetStat();
             }
             // ����ġ �� ������ ����
             switch (layer)

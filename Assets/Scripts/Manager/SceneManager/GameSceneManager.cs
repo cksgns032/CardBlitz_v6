@@ -16,7 +16,7 @@ public class GameSceneManager : SceneBaseManager, Observer
     private UserGameData myGameData = new UserGameData();
 
     bool isClaer = false;
-    float gameTime = 100;
+    float gameTime = 65;
     float cardTime = 3;
     float gaugeTime = 3;
 
@@ -71,6 +71,10 @@ public class GameSceneManager : SceneBaseManager, Observer
         if (isClaer == false && gameTime > 0)
         {
             gameTime -= Time.deltaTime;
+            if (gameTime == 60)
+            {
+                FeverTime();
+            }
             GameUIManager gameUIManager = GetUIManager<GameUIManager>();
             if (gameUIManager)
             {
@@ -209,18 +213,23 @@ public class GameSceneManager : SceneBaseManager, Observer
     // �̼� ���� ����
     public void FeverTime()
     {
+        Debug.Log("Fever");
         cardTime = 1.5f;
         gaugeTime = 1.5f;
 
         List<Monster> allObject = new List<Monster>();
         allObject.AddRange(myList);
         allObject.AddRange(enemyList);
-
+        BuffData data = new BuffData();
+        data.buffName = BuffName.FeverBuff;
+        data.buffTime = 999;
+        data.buffEndTime = 10000;
+        data.attackPercent = 1.5f;
+        data.moveSpeed = 1.5f;
         for (int i = 0; i < allObject.Count; i++)
         {
             if (allObject[i].GetComponent<Monster>())
             {
-                BuffData data = new BuffData();
                 allObject[i].AddBuff(data);
             }
         }

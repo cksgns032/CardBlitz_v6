@@ -49,6 +49,10 @@ public class Monster : Unit
             rigid.isKinematic = true;
         }
         buff = GetComponent<Buff>();
+        if (buff)
+        {
+            buff.Init();
+        }
 
         // todo : �� ���� �̸��� ������ ���� ���̺� �о �ɷ�ġ ����
         if (stateCom != null)
@@ -106,17 +110,22 @@ public class Monster : Unit
     }
     public void SetStat()
     {
-        info.hp = 100;
-        info.defence = 1;
-        info.attack = 0;
-        info.attackSpeed = 60;
-        info.attackCnt = 1;
-        info.attackRange = 3;
+        info.hp = 100 + buff.BuffHp();
+        info.defence = 1 + buff.BuffDefence();
+        info.attack = 0 + buff.BuffDamage();
+        info.attackSpeed = 60 + buff.BuffAttackSpeed();
+        info.attackCnt = 1 + buff.BuffAttackCnt();
+        info.attackRange = 3 + buff.BuffAttackRange();
+        info.moveSpeed = isTest ? 0f : 5f + buff.BuffMoveSpeed();
+        info.criPercent = 0 + buff.BuffCri();
+        info.criDamage = 0 + buff.BuffCriDamage();
+        Debug.Log($"add stat : {info}");
+
+        agent.stoppingDistance = info.attackRange;
+        agent.speed = info.moveSpeed;
+        agent.stoppingDistance = info.attackRange;
+
         attackRangeCom.SetRadius(info.attackRange);
-        agent.stoppingDistance = info.attackRange;
-        info.moveSpeed = isTest ? 0f : 3f;
-        agent.speed = 5;//info.moveSpeed;
-        agent.stoppingDistance = info.attackRange;
         ani.SetFloat("Blend", agent.speed);
     }
     public void SetUniqueID(short uniqueID)
@@ -277,9 +286,8 @@ public class Monster : Unit
     IEnumerator IEAttackCoolTime()
     {
         float elapsedTime = 0f;
-        float buffAttackSpeed = buff.BuffAttackCoolTime();
         // 공격 쿨타임
-        while (elapsedTime < Math.Max(0, info.attackSpeed - buffAttackSpeed))
+        while (elapsedTime < Math.Max(0, info.attackSpeed))
         {
             elapsedTime += Time.deltaTime;
             //Debug.Log(elapsedTime);

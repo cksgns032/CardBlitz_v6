@@ -99,6 +99,6 @@ public enum BuffName
     TopBuff,
     MiddleBuff,
     BottomBuff,
-    FiverBuff,
+    FeverBuff,
 }
 #endregion

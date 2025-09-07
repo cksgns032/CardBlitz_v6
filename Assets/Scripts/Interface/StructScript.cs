@@ -41,7 +41,7 @@ public struct HeroData
     public int attackCnt;
     public float attack;
     public float criPercent;
-    public float criAdd;
+    public float criDamage;
 }
 public struct BuffData
 {
@@ -51,12 +51,12 @@ public struct BuffData
     public float buffEndTime;
 
     public int hpInt;
-    public float hpPercent;
+    public float hpPercent;// %
 
     public int defenceInt;
-    public float defencePercent;
+    public float defencePercent;// %
 
-    public float moveSpeed;
+    public float moveSpeed;// %
     public float attackSpeed;
     public float attackRange;
     public int attackCnt;
@@ -67,7 +67,6 @@ public struct BuffData
     public float criInt;
     public float criPercent;
 
-    public float criDamageInt;
     public float criDamagePercent;
 
     public Action endCallBack;
